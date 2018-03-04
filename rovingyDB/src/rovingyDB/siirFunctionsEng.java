@@ -26,7 +26,7 @@ public class siirFunctionsEng {
 		dbMobile.connectToDB(dbType.POEMS);
 
 		BufferedReader br = new BufferedReader(
-				new FileReader("C:\\Users\\hp p\\workspace\\repliklerDatabase\\src\\repliklerDatabase\\id3.txt"));
+				new FileReader("C:\\Users\\rasim-pc\\git\\rovingyDB\\rovingyDB\\src\\rovingyDB\\id6.txt"));
 
 		String line = br.readLine();
 
@@ -209,7 +209,7 @@ public class siirFunctionsEng {
 		return quote;
 	}
 
-	int authorID = 288;
+	int authorID = 500;
 	
 	public void getDataFromAuthorID(String authorPageURL) throws Exception {
 
@@ -292,7 +292,7 @@ public class siirFunctionsEng {
 
 	public Boolean isPoemAdded(String text) {
 
-		ResultSet rs = dbMobile.executeQuery("SELECT Text FROM Poems Where Text='" + text + "'");
+		ResultSet rs = dbMobile.executeQuery("SELECT Text FROM Poems Where Text='" + text.replace("'", "''") + "'");
 		//ResultSet rs2 = dbMobile.executeQuery("SELECT Text FROM Quotes Where Text='" + text + "'");
 
 		try {
