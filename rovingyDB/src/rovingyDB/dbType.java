@@ -6,5 +6,7 @@ public enum dbType {
 	KITAPP,
 	BOOK,
 	SIIR,
-	POEMS;
+	POEMS,
+	QUOTES_EN,
+	QUOTES_TR;
 }

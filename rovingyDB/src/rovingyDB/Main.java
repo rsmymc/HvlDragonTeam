@@ -20,10 +20,14 @@ public class Main {
 	
 	static siirFunctionsEng siirFunctionsEng = new siirFunctionsEng();
 	
+	static sozlerFunctionsEng sozlerFunctionsEng = new sozlerFunctionsEng();
+	
+	static sozlerFunctionsTr sozlerFunctionsTr = new sozlerFunctionsTr();
+	
 	public static void main(String[] args){
 	
 		try {
-			siirFunctionsEng.readDataFromAuthorID();
+			sozlerFunctionsTr.readData();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

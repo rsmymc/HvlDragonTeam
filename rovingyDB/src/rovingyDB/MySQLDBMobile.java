@@ -66,6 +66,20 @@ public class MySQLDBMobile {
 		
 					password = "Rovingy.6878!";
 					break;
+				case QUOTES_EN:
+					url = "jdbc:mysql://46.101.106.121/alintilarEng?useUnicode=true&characterEncoding=utf-8";
+					
+					username = "rovingy";
+		
+					password = "Rovingy.6878!";
+					break;
+				case QUOTES_TR:
+					url = "jdbc:mysql://46.101.106.121/alintilarTr?useUnicode=true&characterEncoding=utf-8";
+					
+					username = "rovingy";
+		
+					password = "Rovingy.6878!";
+					break;
 			}
 			
 			con = DriverManager.getConnection(url, username, password);
