@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/bgColor">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/txt_new_update"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginVertical="@dimen/components_top_margin"
+            android:text="@string/announcement"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/txtWarning"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="@color/textColor"
+            android:lineSpacingExtra="5dp"
+            android:layout_marginVertical="@dimen/components_top_margin"
+            android:text="text"
+            android:gravity="left" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_top_margin"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btnOk"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:text="@string/ok"
+                android:layout_gravity="right"
+                android:background="@drawable/button_action"
+                android:textColor="@color/secondaryTextColor"/>
+        </LinearLayout>
+        <CheckBox
+            android:id="@+id/checkbox_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_top_margin"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/textColor"
+            android:text="@string/dont_show"
+            android:layout_marginLeft="-4.5dp"
+            />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+    android:layout_marginBottom="@dimen/components_bottom_margin"
+    android:gravity="right">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_chat_me"
+                android:orientation="horizontal"
+                android:layout_margin="2dp"
+                android:paddingVertical="@dimen/components_top_margin"
+                android:paddingLeft="@dimen/components_left_margin"
+                android:paddingRight="5dp"
+                android:elevation="2dp"
+                android:minWidth="100dp">
+
+                    <TextView
+                        android:id="@+id/textview_message"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:lineSpacingExtra="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textIsSelectable="true"
+                        android:text="tccccccsssssssssssssssssssssssssssssssssssh"
+                        android:textColor="@color/secondaryTextColor" />
+
+                <TextView
+                    android:id="@+id/textview_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:gravity="right|bottom"
+                    android:text="00:00"
+                    android:textColor="@color/chat_time_color_me"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            </LinearLayout>
+</LinearLayout>

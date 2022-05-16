@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+    android:layout_marginBottom="@dimen/components_bottom_margin"
+    android:gravity="left"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/lyt_img"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:paddingVertical="@dimen/components_top_margin"
+        android:paddingHorizontal="@dimen/components_left_margin"
+        android:layout_margin="5dp"
+        android:background="@drawable/background_chat_other">
+
+        <TextView
+            android:id="@+id/textview_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Yaşar Andaç Efe"
+            android:textColor="@color/colorPrimary" />
+
+        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_below="@id/textview_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="5dp"
+            app:cardUseCompatPadding="false">
+            <ImageView
+                android:id="@+id/img_message"
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:scaleType="center"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/textview_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view"
+            android:layout_alignParentRight="true"
+            android:text="00:00"
+            android:textColor="@color/chat_time_color_other"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"></RelativeLayout>
+
+
+</LinearLayout>

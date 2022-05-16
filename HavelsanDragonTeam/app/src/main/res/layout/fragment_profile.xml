@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginVertical="@dimen/components_top_margin"
+        android:orientation="vertical">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <LinearLayout
+            android:id="@+id/layoutChat"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_alignEnd="@id/img_profile"
+            android:layout_alignBottom="@id/img_profile"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/imgChat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/camera"
+                app:tint="@color/bgColor" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lytName"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/name"
+            android:textColor="@color/colorPrimary" />
+
+        <com.hvl.dragonteam.Utilities.CustomTypingEditText
+            android:id="@+id/txt_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text_border"
+            android:elevation="-1dp"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/bordered_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lytPhone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/phone"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/txt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text_border"
+            android:elevation="-1dp"
+            android:gravity="center"
+            android:inputType="phone"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/bordered_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lyt_height"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/height"
+            android:textColor="@color/colorPrimary" />
+
+        <com.hvl.dragonteam.Utilities.CustomTypingEditText
+            android:id="@+id/txt_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text_border"
+            android:elevation="-1dp"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/bordered_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lyt_weight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/weight"
+            android:textColor="@color/colorPrimary" />
+
+        <com.hvl.dragonteam.Utilities.CustomTypingEditText
+            android:id="@+id/txt_weight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text_border"
+            android:elevation="-1dp"
+            android:gravity="center"
+            android:inputType="numberSigned"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/bordered_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginVertical="@dimen/components_top_margin"
+        android:background="@drawable/edit_text_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/side"
+            android:textColor="@color/colorPrimary" />
+
+        <Spinner
+            android:id="@+id/spinner_side"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:spinnerMode="dropdown">
+        </Spinner>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginTop="@dimen/components_top_margin"
+        android:background="@drawable/button_action"
+        android:textColor="@color/secondaryTextColor"
+        android:text="@string/save"></Button>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginTop="@dimen/components_top_margin"
+        android:orientation="vertical">
+
+        <Switch
+            android:id="@+id/switchNotification1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/components_bottom_margin"
+            android:textSize="@dimen/switch_text_size"
+            android:text="@string/notifications" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/components_bottom_margin"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:text="@string/privacy"
+        android:visibility="gone"
+        android:textSize="@dimen/switch_text_size"
+        android:textStyle="italic|bold"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center"
+        android:text="@string/logout"
+        android:textSize="@dimen/action_button_text_size"
+        android:textColor="@color/red" />
+</LinearLayout>
+</ScrollView>

@@ -46,23 +46,23 @@ public class siirFunctions {
 
 	public void readData() {
 
-		dbMobile.connectToDB(dbType.KITAPP);
+		dbMobile.connectToDB(dbType.SIIR);
 
-		try {
-
-			for (int i = 1; i <= 18; i++) {
-
-				String pagedURL = MAIN_URL + i + "/";
-
-				String content = getHTML(pagedURL);
-
-				getSair(content);
-			}
-
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-		}
+//		try {
+//
+//			for (int i = 1; i <= 18; i++) {
+//
+//				String pagedURL = MAIN_URL + i + "/";
+//
+//				String content = getHTML(pagedURL);
+//
+//				getSair(content);
+//			}
+//
+//		} catch (Exception e) {
+//		
+//			e.printStackTrace();
+//		}
 
 		dbMobile.conClose();
 	}

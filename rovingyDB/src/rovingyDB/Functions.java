@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,10 +19,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Functions {
 
@@ -45,9 +51,16 @@ public class Functions {
 
 		try {
 			ResultSet rs = db.executeStatament(
-					"SELECT ID,post_content,post_title,post_name FROM rpl_posts where post_status='publish' and post_type='post' and post_date > '2016-09-23' ");//post_date > '2016-09-23' bundan sonrakiler çekilecek gelece sefere
+					"SELECT ID,post_content,post_title,post_name FROM rpl_posts where post_status='publish' and post_type='post' and post_date > '2016-09-23' ");// post_date
+																																									// >
+																																									// '2016-09-23'
+																																									// bundan
+																																									// sonrakiler
+																																									// çekilecek
+																																									// gelece
+																																									// sefere
 			while (rs.next()) {
-				
+
 				if (!isAdded(rs.getString("ID"))) {
 
 					isSeries = false;
@@ -228,7 +241,7 @@ public class Functions {
 					+ string.replace("'", "''") + "')");
 		}
 	}
-	
+
 	public void insertToEnglishQuoteTable() throws SQLException {
 
 		for (String string : quotes) {
@@ -247,88 +260,90 @@ public class Functions {
 		}
 	}
 
-	public void getPosterbyID() {
-		db.connectToDB();
-		try {
-			ResultSet rs = db.executeStatament(
-					"SELECT post_content,ID FROM rpl_posts where post_status='publish' and post_type='post' and post_content like '%imdb.com%'");
-			while (rs.next()) {
-				try {
-					String imdbID = getImdbID(rs.getString("post_content"));
-
-					String poster = decodeJson(imdbID);
-
-					savePoster(poster, rs.getString("ID"));
-
-					System.out.println(this.moiveName);
-
-				} catch (Exception e) {
-
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		db.conClose();
-	}
-
-	public void getPosterbyName() {
-		db.connectToDB();
-		
-		try {
-			ResultSet rs = db.executeStatament(
-					"SELECT post_content,ID,post_title FROM rpl_posts where post_status='publish' and post_type='post' and post_content not like '%imdb.com%'");
-			while (rs.next()) {
-				try {
-					getNameAndYear(rs.getString("post_title"));
-
-					String poster = decodeJsonbyName();
-
-					savePoster(poster, rs.getString("ID"));
-
-					System.out.println(this.moiveName);
-
-				} catch (Exception e) {
-
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		db.conClose();
-	}
+	// public void getPosterbyID() {
+	// db.connectToDB();
+	// try {
+	// ResultSet rs = db.executeStatament(
+	// "SELECT post_content,ID FROM rpl_posts where post_status='publish' and
+	// post_type='post' and post_content like '%imdb.com%'");
+	// while (rs.next()) {
+	// try {
+	// String imdbID = getImdbID(rs.getString("post_content"));
+	//
+	// String poster = decodeJson(imdbID);
+	//
+	// savePoster(poster, rs.getString("ID"));
+	//
+	// System.out.println(this.moiveName);
+	//
+	// } catch (Exception e) {
+	//
+	// }
+	// }
+	//
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// db.conClose();
+	// }
+	//
+	// public void getPosterbyName() {
+	// db.connectToDB();
+	//
+	// try {
+	// ResultSet rs = db.executeStatament(
+	// "SELECT post_content,ID,post_title FROM rpl_posts where post_status='publish'
+	// and post_type='post' and post_content not like '%imdb.com%'");
+	// while (rs.next()) {
+	// try {
+	// getNameAndYear(rs.getString("post_title"));
+	//
+	// String poster = decodeJsonbyName();
+	//
+	// savePoster(poster, rs.getString("ID"));
+	//
+	// System.out.println(this.moiveName);
+	//
+	// } catch (Exception e) {
+	//
+	// }
+	// }
+	//
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// db.conClose();
+	// }
 
 	public void getEnglishQuote() {
 		db.connectToDB();
 		dbMobile.connectToDB(dbType.REPLIKLER);
 		try {
-			
-			quotes=new ArrayList<>();
+
+			quotes = new ArrayList<>();
 			ResultSet rs = db.executeStatament(
 					"SELECT post_content,ID,post_title FROM rpl_posts where post_status='publish' and post_type='post' and post_content  like '%imdb.com%'");
 			while (rs.next()) {
 				try {
-					
-					quotes=new ArrayList<>();
-					
+
+					quotes = new ArrayList<>();
+
 					this.id = rs.getString("ID");
-					
+
 					getNameAndYear(rs.getString("post_title"));
 
-					String URL="http://www.imdb.com/title/"+getImdbID(rs.getString("post_content"))+"/quotes";
-					
+					String URL = "http://www.imdb.com/title/" + getImdbID(rs.getString("post_content")) + "/quotes";
+
 					String urlSource = getHTML(URL);
-					
+
 					getQuotesFromIMDB(urlSource);
-					
+
 					insertToEnglishQuoteTable();
-					
+
 					System.out.println(this.moiveName);
-					
+
 				} catch (Exception e) {
 
 				}
@@ -345,17 +360,17 @@ public class Functions {
 
 		while (urlSource.indexOf("<div class=\"sodatext\">") > -1) {
 
-			String quote = urlSource.substring(urlSource.indexOf("<div class=\"sodatext\">") +"<div class=\"sodatext\">".length(),
+			String quote = urlSource.substring(
+					urlSource.indexOf("<div class=\"sodatext\">") + "<div class=\"sodatext\">".length(),
 					urlSource.indexOf("<div class=\"did-you-know-actions\">"));
 
-			quote=quote.replace("</p>", "\n").replace(":", ": ");
-			
-			
+			quote = quote.replace("</p>", "\n").replace(":", ": ");
+
 			for (String tag : tags) {
 
 				quote = quote.replace("<" + tag + ">", "").replace("</" + tag + ">", "");
 			}
-			
+
 			while (quote.indexOf("[") > -1) {
 
 				String tag = quote.substring(quote.indexOf("[") + 1, quote.indexOf("]"));
@@ -371,12 +386,14 @@ public class Functions {
 
 				quote = quote.replace("<" + tag + ">", "").replace("</" + tag + ">", "").trim();
 			}
-			
+
 			quotes.add(quote);
-			
-			urlSource = urlSource.substring(urlSource.indexOf("<div class=\"did-you-know-actions\">") + "<div class=\"did-you-know-actions\">".length());
+
+			urlSource = urlSource.substring(urlSource.indexOf("<div class=\"did-you-know-actions\">")
+					+ "<div class=\"did-you-know-actions\">".length());
 		}
 	}
+
 	public String getImdbID(String content) throws Exception {
 
 		content = content.substring(content.lastIndexOf("title/") + 6);
@@ -384,30 +401,31 @@ public class Functions {
 		return content;
 	}
 
-	public String decodeJson(String id) throws Exception {
-		String url = "http://www.omdbapi.com/?i=" + id + "&plot=short&r=json";
-
-		String result = getHTML(url);
-
-		JSONObject jsonObj = new JSONObject(result);
-
-		String poster = jsonObj.getString("Poster");
-
-		return poster;
-	}
-
-	public String decodeJsonbyName() throws Exception {
-		String url = "http://www.omdbapi.com/?t=" + this.moiveName.split("/")[0].trim().replace(" ", "+") + "&y="
-				+ this.year + "&plot=short&r=json";
-
-		String result = getHTML(url);
-
-		JSONObject jsonObj = new JSONObject(result);
-
-		String poster = jsonObj.getString("Poster");
-
-		return poster;
-	}
+	// public String decodeJson(String id) throws Exception {
+	// String url = "http://www.omdbapi.com/?i=" + id + "&plot=short&r=json";
+	//
+	// String result = getHTML(url);
+	//
+	// JSONObject jsonObj = new JSONObject(result);
+	//
+	// String poster = jsonObj.getString("Poster");
+	//
+	// return poster;
+	// }
+	//
+	// public String decodeJsonbyName() throws Exception {
+	// String url = "http://www.omdbapi.com/?t=" +
+	// this.moiveName.split("/")[0].trim().replace(" ", "+") + "&y="
+	// + this.year + "&plot=short&r=json";
+	//
+	// String result = getHTML(url);
+	//
+	// JSONObject jsonObj = new JSONObject(result);
+	//
+	// String poster = jsonObj.getString("Poster");
+	//
+	// return poster;
+	// }
 
 	public String getHTML(String urlToRead) throws Exception {
 		StringBuilder result = new StringBuilder();
@@ -441,32 +459,31 @@ public class Functions {
 		fos.close();
 	}
 
-	public void insertToRandomDaily(){
-		int index=0;
+	public void insertToRandomDaily() {
+		int index = 0;
 		dbMobile.connectToDB(dbType.REPLIKLER);
-		for(int i=101;i<29000;i=i+71){
-		
-			//String s="Delete From `Daily_Quotes_ENG`where QuoteID= "+i;
-			String s="INSERT INTO `Daily_Quotes_ENG` VALUES(NOW() + INTERVAL "+index+" DAY, "+i+")";
-			
+		for (int i = 101; i < 29000; i = i + 71) {
+
+			// String s="Delete From `Daily_Quotes_ENG`where QuoteID= "+i;
+			String s = "INSERT INTO `Daily_Quotes_ENG` VALUES(NOW() + INTERVAL " + index + " DAY, " + i + ")";
+
 			index++;
 			dbMobile.executeUpdate(s);
 		}
 	}
-	
+
 	public void checkPoster() {
 		dbMobile.connectToDB(dbType.REPLIKLER);
 
 		String result = "";
-		String id="";
-		
-		
+		String id = "";
+
 		try {
 			ResultSet rs = dbMobile.executeQuery("SELECT ID,name1 FROM Movies");
 			while (rs.next()) {
 
 				try {
-					id=rs.getString("ID") ;
+					id = rs.getString("ID");
 					URL url;
 
 					url = new URL("http://replikler.net/quiz/moviequiz/images/" + rs.getString("ID") + ".jpg");
@@ -474,7 +491,7 @@ public class Functions {
 					BufferedImage c = ImageIO.read(url);
 				} catch (IOException e) {
 					e.printStackTrace();
-					result+=id+",";
+					result += id + ",";
 					System.out.println(result);
 				}
 			}
@@ -484,6 +501,70 @@ public class Functions {
 		}
 
 		db.conClose();
+	}
+
+	@SuppressWarnings("unchecked")
+	public void fetchJSON() {
+
+		JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(
+					new FileReader("C:\\Users\\lenovo\\Downloads\\kitapsozleri-148919-MessagesTable-en-export.json"));
+
+			List<String> keys = new ArrayList<String>();
+
+			JSONObject messageList = new JSONObject();
+
+			JSONObject snapshotFrom = (JSONObject) obj;
+
+		
+
+			snapshotFrom.keySet().forEach(fromUserId -> {
+				JSONObject snapshotTo = (JSONObject) (snapshotFrom.get(fromUserId));
+
+				snapshotTo.keySet().forEach(chatUserId -> {
+					JSONObject snapshotMessages = (JSONObject) (snapshotTo.get(chatUserId));
+
+					String key = createMessageTableKey(fromUserId.toString(), chatUserId.toString());
+
+					if (!keys.contains(key)) {
+
+						keys.add(key);
+
+						JSONObject jsonMessageKey = new JSONObject();
+
+						snapshotMessages.keySet().forEach(messageKey -> {
+							JSONObject message = (JSONObject) (snapshotMessages.get(messageKey));
+
+							jsonMessageKey.put(messageKey, message);
+
+						});
+
+						messageList.put(key, jsonMessageKey);
+					}
+
+				});
+
+			});
+
+			String s = messageList.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static String createMessageTableKey(String userId1, String userId2) {
+
+		String channelName = "";
+
+		if (userId1.compareToIgnoreCase(userId2) > -1) {
+			channelName = (userId1.concat(userId2)).toLowerCase();
+		} else {
+			channelName = (userId2.concat(userId1)).toLowerCase();
+		}
+		return channelName;
 	}
 
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+    android:layout_marginBottom="@dimen/components_bottom_margin"
+    android:gravity="left">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="left">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:background="@drawable/background_chat_other"
+            android:elevation="5dp"
+            android:layout_margin="5dp"
+            android:paddingVertical="@dimen/components_top_margin"
+            android:paddingLeft="@dimen/components_left_margin"
+            android:paddingRight="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textview_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Yaşar Andaç Efe"
+                android:textColor="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textview_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="@dimen/components_left_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:lineSpacingExtra="5dp"
+                    android:text="ttttttttttt"
+                    android:textIsSelectable="true"
+                    android:textColor="@color/textColor" />
+
+                <TextView
+                    android:id="@+id/textview_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:gravity="right|bottom"
+                    android:text="00:00"
+                    android:textColor="@color/chat_time_color_other"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"></LinearLayout>
+</LinearLayout>

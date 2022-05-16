@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_training"
+        android:enabled="true"
+        android:icon="@drawable/oars"
+        android:title="@string/training"
+        app:showAsAction="withText" />
+   <!-- <item
+        android:id="@+id/action_equipment"
+        android:enabled="true"
+        android:icon="@drawable/sportswear"
+        android:title="@string/equipment"
+        app:showAsAction="withText" />-->
+      <item
+        android:id="@+id/action_team"
+        android:enabled="true"
+        android:icon="@drawable/team"
+        android:title="@string/team"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_stats"
+        android:enabled="true"
+        android:icon="@drawable/stats"
+        android:title="@string/stats"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_chat"
+        android:enabled="true"
+        android:icon="@drawable/chat"
+        android:title="@string/chat"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="@string/profile"
+        app:showAsAction="withText" />
+</menu>
