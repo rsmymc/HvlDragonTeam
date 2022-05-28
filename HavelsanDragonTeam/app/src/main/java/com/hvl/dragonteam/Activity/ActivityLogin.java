@@ -27,12 +27,14 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonService;
+import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LanguageEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonNotification;
+import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Util;
@@ -299,7 +301,7 @@ public class ActivityLogin extends AppCompatActivity {
                 0,
                0,
                 SideEnum.RIGHT.getValue(),
-                RoleEnum.DEFAULT.getValue());
+                null);
 
         try {
             personService.savePerson(this,
@@ -310,6 +312,7 @@ public class ActivityLogin extends AppCompatActivity {
                             Constants.person = person;
                             PersonNotification personNotification = new PersonNotification(mAuth.getCurrentUser().getUid(), FirebaseInstanceId.getInstance().getToken(), true, LanguageEnum.getLocaleEnumValue());
                             saveNotification(personNotification);
+                            savePersonTeam();//TODO takıma katılım ekranında yapılacak
                             progressDialog.dismiss();
                             goToIntent();
                         }
@@ -371,6 +374,35 @@ public class ActivityLogin extends AppCompatActivity {
         NotificationService notificationService = new NotificationService();
         try {
             notificationService.saveNotification(ActivityLogin.this, personNotification, null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Util.toastError(ActivityLogin.this);
+        }
+    }
+
+    private void savePersonTeam(){
+        PersonTeamService personTeamService = new PersonTeamService();
+        PersonTeam personTeam = new PersonTeam(mAuth.getCurrentUser().getUid(), Constants.TEAM_ID, RoleEnum.DEFAULT.getValue());
+
+        try {
+            personTeamService.savePersonTeam(ActivityLogin.this,
+                    personTeam,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            PersonTeam _personTeam = new Gson().fromJson(result.toString(), PersonTeam.class);
+                            Constants.personTeam = _personTeam;
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Util.toastError(ActivityLogin.this);
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
         } catch (JSONException e) {
             e.printStackTrace();
             Util.toastError(ActivityLogin.this);

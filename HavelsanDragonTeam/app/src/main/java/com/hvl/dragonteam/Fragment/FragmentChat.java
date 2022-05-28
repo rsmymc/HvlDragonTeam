@@ -48,6 +48,7 @@ import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.ImageUploadResult;
 import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.PersonNotification;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Redis.ChatHistory;
 import com.hvl.dragonteam.Redis.ChatMessage;
@@ -278,7 +279,11 @@ public class FragmentChat extends Fragment {
 
         NotificationService notificationService = new NotificationService();
         try {
-            notificationService.getPersonsNotificationList(context,
+
+            Team team = new Team();
+            team.setId(Constants.personTeam.getTeamId());
+
+            notificationService.getPersonsNotificationList(context, team,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {

@@ -20,10 +20,22 @@ public class URLs {
     //personService
     public static String urlSavePerson = urlPrefix + "personservice/save";
     public static String urlGetPerson = urlPrefix + "personservice/get";
+    public static String urlGetPersonList = urlPrefix + "personservice/getpersonlist";
 
     //trainingService
     public static String urlSaveTraining = urlPrefix + "trainingservice/save";
-    public static String urlGetTrainingList = urlPrefix + "trainingservice/gettrainings";
+
+    //teamService
+    public static String urlSaveTeam = urlPrefix + "teamservice/save";
+    public static String urlGetTeam = urlPrefix + "teamservice/get";
+
+    public static String urlDeleteTeam = urlPrefix + "teamservice/delete";
+
+    //personTeamService
+    public static String urlSavePersonTeam = urlPrefix + "personteamservice/save";
+    public static String urlGetPersonTeam = urlPrefix + "personteamservice/get";
+    public static String urlGetPersonTeamList = urlPrefix + "personteamservice/getextendedteampersons";
+    public static String urlDeletePersonTeam = urlPrefix + "personteamservice/delete";
 
     //attendanceService
     public static String urlGetAttendance = urlPrefix + "attendanceservice/get";

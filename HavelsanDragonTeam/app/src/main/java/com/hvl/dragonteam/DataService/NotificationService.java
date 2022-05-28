@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.hvl.dragonteam.Interface.CustomJsonArrayRequest;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.PersonNotification;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Utilities.URLs;
 
 import org.json.JSONArray;
@@ -129,11 +130,13 @@ public class NotificationService {
         queue.add(postRequest);
     }
 
-    public void getPersonsNotificationList(Context context, final VolleyCallback callback) throws JSONException {
+    public void getPersonsNotificationList(Context context, Team team, final VolleyCallback callback) throws JSONException {
+
+        String json = new Gson().toJson(team, Team.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetPersonsNotification, null,
+        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetPersonsNotification, new JSONObject(json),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {

@@ -5,15 +5,17 @@ public class Training {
     private int id;
     private String time;
     private int location;
+    private String teamId;
 
     public Training() {
     }
 
-    public Training(int id, String time, int location) {
+	public Training(int id, String time, int location, String teamId) {
 		super();
 		this.id = id;
 		this.time = time;
 		this.location = location;
+		this.teamId = teamId;
 	}
 
 	public int getId() {
@@ -38,6 +40,14 @@ public class Training {
 
 	public void setLocation(int location) {
 		this.location = location;
+	}
+
+	public String getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
 	}
 	
 

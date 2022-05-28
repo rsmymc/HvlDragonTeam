@@ -187,14 +187,6 @@ public class Util {
         return path;
     }
 
-    public static String getProfilePictureURL(String personId) {
-
-        String url  = URLs.urlProfilePicture + personId +".jpg";
-
-        return url;
-    }
-
-
     public static String getCurrentVersion(Context context) {
         PackageManager pm = context.getPackageManager();
         PackageInfo pInfo = null;

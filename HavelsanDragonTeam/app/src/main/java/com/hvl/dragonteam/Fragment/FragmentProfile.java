@@ -123,11 +123,11 @@ public class FragmentProfile extends Fragment {
         txtLogout = (TextView) view.findViewById(R.id.btnLogout);
 
         Glide.with(context)
-                .load(firebaseUser.getPhotoUrl())
+                .load(Constants.person.getProfilePictureUrl())
                 .apply(new RequestOptions()
                         .centerInside()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .skipMemoryCache(false)
                         .placeholder(R.drawable.user_placeholder)
                         .error(R.drawable.user_placeholder))
                 .into(imgProfile);
@@ -349,12 +349,13 @@ public class FragmentProfile extends Fragment {
                             .load(Uri.parse("deleted"))
                             .apply(new RequestOptions()
                                     .centerInside()
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                    .skipMemoryCache(false)
                                     .placeholder(R.drawable.user_placeholder)
                                     .error(R.drawable.user_placeholder))
                             .into(imgProfile);
-
-                    saveUser();//TODO
+                    Constants.person.setProfilePictureUrl("deleted");
+                    saveUser();
                 } else {
                     Util.toastError(context, task.getException().getMessage());
                 }
@@ -371,7 +372,7 @@ public class FragmentProfile extends Fragment {
                 Integer.parseInt(editTextHeight.getText().toString()),
                 Integer.parseInt(editTextWeight.getText().toString()),
                 spinnerSide.getSelectedItemPosition(),
-                Constants.person.getRole());
+                Constants.person.getProfilePictureUrl());
         try {
             personService.savePerson(context,
                     person,
@@ -537,7 +538,7 @@ public class FragmentProfile extends Fragment {
         params.put("name", imageName);
         params.put("image_data", convertImage);
         params.put("type", Constants.UPLOAD_IMAGE_TYPE_PROFILE);
-        params.put("path", "/");
+        params.put("path", Util.setDirectoryFromFileName(userId));
         params.put("user_id", userId);
 
         progressDialog = ProgressDialog.show(getActivity(), getString(R.string.processing), getString(R.string.wait), false, false);
@@ -561,12 +562,13 @@ public class FragmentProfile extends Fragment {
                                         .load(Uri.parse(imageUploadResult.getUrl()))
                                         .apply(new RequestOptions()
                                                 .centerInside()
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .skipMemoryCache(true)
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .skipMemoryCache(false)
                                                 .placeholder(R.drawable.user_placeholder)
                                                 .error(R.drawable.user_placeholder))
                                         .into(imgProfile);
-                                //saveUser();
+                                Constants.person.setProfilePictureUrl(imageUploadResult.getUrl());
+                                saveUser();
                             } else {
                                 Util.toastError(context, task.getException().getMessage());
                             }

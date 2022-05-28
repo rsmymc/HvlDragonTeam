@@ -50,28 +50,4 @@ public class TrainingService {
         ) ;
         queue.add(postRequest);
     }
-
-    public void getTrainingList(Context context, final VolleyCallback callback) throws JSONException {
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetTrainingList, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("successGetTrainingList", response.toString());
-                        callback.onSuccessList(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("errGetTrainingList", error.toString());
-                        callback.onError(error.toString());
-                    }
-                }
-        ) ;
-        queue.add(postRequest);
-    }
-
 }

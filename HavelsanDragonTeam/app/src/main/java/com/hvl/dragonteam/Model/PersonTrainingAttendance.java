@@ -1,8 +1,10 @@
 package com.hvl.dragonteam.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PersonTrainingAttendance {
 
-	//person Table
+	//from personTeam
     private String personId;
     private String name;
     private String phone;
@@ -10,20 +12,23 @@ public class PersonTrainingAttendance {
     private int weight;
     private int side;
     private int role;
+    private String profilePictureUrl;
     
     //from Training
     private int trainingId;
     private String time;
     private int location;
+    private String teamId;
     
     //from Attendance
-    private boolean attend;
-
-    public PersonTrainingAttendance() {
-    }
+	@SerializedName(value = "attend", alternate = {"isAttend"})
+    private boolean isAttend;
+    
+    public PersonTrainingAttendance() {}
     
     public PersonTrainingAttendance(String personId, String name, String phone, int height, int weight, int side,
-			int role, int trainingId, String time, int location, boolean isAttend) {
+			int role, String profilePictureUrl, int trainingId, String time, int location, String teamId,
+			boolean isAttend) {
 		super();
 		this.personId = personId;
 		this.name = name;
@@ -32,10 +37,27 @@ public class PersonTrainingAttendance {
 		this.weight = weight;
 		this.side = side;
 		this.role = role;
+		this.profilePictureUrl = profilePictureUrl;
 		this.trainingId = trainingId;
 		this.time = time;
 		this.location = location;
-		this.attend = isAttend;
+		this.teamId = teamId;
+		this.isAttend = isAttend;
+	}
+
+    public PersonTrainingAttendance(String personId, String name, String phone, int height, int weight, int side, String profilePictureUrl,
+			int role, int trainingId, boolean isAttend) {
+		super();
+		this.personId = personId;
+		this.name = name;
+		this.phone = phone;
+		this.height = height;
+		this.weight = weight;
+		this.side = side;
+		this.profilePictureUrl = profilePictureUrl;
+		this.role = role;
+		this.trainingId = trainingId;
+		this.isAttend = isAttend;
 	}
 
 	public PersonTrainingAttendance(String personId, int trainingId, String time, int location, boolean isAttend) {
@@ -44,7 +66,7 @@ public class PersonTrainingAttendance {
 		this.trainingId = trainingId;
 		this.time = time;
 		this.location = location;
-		this.attend = isAttend;
+		this.isAttend = isAttend;
 	}
 
 	public String getPersonId() {
@@ -95,6 +117,14 @@ public class PersonTrainingAttendance {
 		this.side = side;
 	}
 
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
+
+	public void setProfilePictureUrl(String profilePictureUrl) {
+		this.profilePictureUrl = profilePictureUrl;
+	}
+	
 	public int getRole() {
 		return role;
 	}
@@ -126,17 +156,21 @@ public class PersonTrainingAttendance {
 	public void setLocation(int location) {
 		this.location = location;
 	}
+	
+	public String getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
+	}
 
 	public boolean isAttend() {
-		return attend;
+		return isAttend;
 	}
 
 	public void setAttend(boolean isAttend) {
-		this.attend = isAttend;
+		this.isAttend = isAttend;
 	}
-
-	@Override
-	public String toString(){
-		return  this.getName();
-	}
+	
 }

@@ -84,11 +84,11 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
 
         holder.txtPersonName.setText(listLineup.get(position).getPersonTrainingAttendance().getName());
         Glide.with(context)
-                .load(Util.getProfilePictureURL(listLineup.get(position).getPersonTrainingAttendance().getPersonId()))
+                .load(listLineup.get(position).getPersonTrainingAttendance().getProfilePictureUrl())
                 .apply(new RequestOptions()
                         .centerInside()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .skipMemoryCache(false)
                         .placeholder(R.drawable.uniform2)
                         .error(R.drawable.uniform2))
                 .into( holder.imgProfile);

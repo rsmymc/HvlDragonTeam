@@ -10,14 +10,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.hvl.dragonteam.Interface.CustomJsonArrayRequest;
 import com.hvl.dragonteam.Interface.VolleyCallback;
-import com.hvl.dragonteam.Model.Attendance;
-import com.hvl.dragonteam.Model.PersonNotification;
-import com.hvl.dragonteam.Model.Training;
+import com.hvl.dragonteam.Model.Person;
+import com.hvl.dragonteam.Model.PersonTeam;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Utilities.URLs;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,26 +23,26 @@ import org.json.JSONObject;
  * Created by rasim-pc on 10.10.2018.
  */
 
-public class AttendanceService {
+public class TeamService {
 
-    public void saveAttendance(Context context, final Attendance attendance, final VolleyCallback callback) throws JSONException {
+    public void saveTeam(Context context, final Team team, final VolleyCallback callback) throws JSONException {
 
-        String json = new Gson().toJson(attendance, Attendance.class);
+        String json = new Gson().toJson(team, Team.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlSaveAttendance,new JSONObject(json),
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlSaveTeam,new JSONObject(json),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("successSaveAttendance", response.toString());
+                        Log.d("successSaveTeam", response.toString());
                         callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("errorSaveAttendance", error.toString());
+                        Log.d("errorSaveTeam", error.toString());
                         callback.onError(error.toString());
                     }
                 }
@@ -52,29 +50,28 @@ public class AttendanceService {
         queue.add(postRequest);
     }
 
-    public void deleteAttendance(Context context, Attendance attendance, final VolleyCallback callback) throws JSONException {
+    public void getTeam(Context context, Team team, final VolleyCallback callback) throws JSONException {
 
-        String json = new Gson().toJson(attendance, Attendance.class);
+        String json = new Gson().toJson(team, Team.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlDeleteAttendance,new JSONObject(json),
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlGetTeam,new JSONObject(json),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("successDelAttendance", response.toString());
+                        Log.d("successGetTeam", response.toString());
                         callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("errorDelAttendance", error.toString());
+                        Log.d("errorGetTeam", error.toString());
                         callback.onError(error.toString());
                     }
                 }
         ) ;
         queue.add(postRequest);
-
     }
 }

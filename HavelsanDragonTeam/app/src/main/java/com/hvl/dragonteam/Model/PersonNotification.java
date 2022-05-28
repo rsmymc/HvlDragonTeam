@@ -7,43 +7,36 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 public class PersonNotification {
 
 	private String personId;
+	
+	private int role;
 
 	private String token;
 
 	private boolean loggedIn;
-
+	
 	private Integer languageType;
 
 	private boolean notification1;
-
+	
 	private boolean notification2;
-
+	
 	private boolean notification3;
-
+	
 	private boolean notification4;
-
+	
 	private boolean notification5;
-
+	
 	private boolean notification6;
-
+	
 	private boolean notification7;
-
+	
 	private boolean notification8;
-
+	
 	private boolean notification9;
-
+	
 	private boolean notification10;
 
 	public PersonNotification() {}
-
-	public PersonNotification(String personId, String token, boolean isLoggedIn, int languageType) {
-		this.personId = personId;
-		this.token = token;
-		this.loggedIn = isLoggedIn;
-		this.languageType = languageType;
-		setNotification1(true);
-	}
-
 
 	public PersonNotification(String token, boolean loggedIn, Integer languageType, boolean notification1, boolean notification2, boolean notification3, boolean notification4
 			, boolean notification5, boolean notification6, boolean notification7, boolean notification8, boolean notification9, boolean notification10) {
@@ -69,17 +62,36 @@ public class PersonNotification {
 		this.notification10 = notification10;
 	}
 
+	public PersonNotification(String personId, String token, boolean isLoggedIn, int languageType) {
+		this.personId = personId;
+		this.token = token;
+		this.loggedIn = isLoggedIn;
+		this.languageType = languageType;
+		setNotification1(true);
+	}
+
+
 	public PersonNotification(String personId, String token) {
 		this.personId = personId;
 		this.token = token;
 	}
-
+	
 	public String getPersonId() {
 		return personId;
 	}
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+	
+	
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 	public String getToken() {
@@ -97,7 +109,7 @@ public class PersonNotification {
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
-
+	
 	public Integer getLanguageType() {
 		return this.languageType;
 	}
@@ -105,7 +117,7 @@ public class PersonNotification {
 	public void setLanguageType(Integer languageType) {
 		this.languageType = languageType;
 	}
-
+	
 	public boolean getNotification1() {
 		return notification1;
 	}
@@ -185,7 +197,7 @@ public class PersonNotification {
 	public void setNotification10(boolean notification10) {
 		this.notification10 = notification10;
 	}
-
+	
 	@Override
 	public boolean equals(Object that) {
 		boolean isEqual = EqualsBuilder.reflectionEquals(this, that);

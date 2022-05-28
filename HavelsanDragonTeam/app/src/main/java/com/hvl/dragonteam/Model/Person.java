@@ -8,23 +8,22 @@ public class Person {
     private int height;
     private int weight;
     private int side;
-    private int role;
+    private String profilePictureUrl;
+    
+    public Person() {}
+    
+    public Person(String id, String name, String phone, int height, int weight, int side, String profilePictureUrl) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.height = height;
+		this.weight = weight;
+		this.side = side;
+		this.profilePictureUrl = profilePictureUrl;
+	}
 
-    public Person() {
-    }
-
-    public Person(String id, String name, String phone, int height, int weight, int side, int role) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
-        this.height = height;
-        this.weight = weight;
-        this.side = side;
-        this.role = role;
-    }
-
-    public String getId() {
+	public String getId() {
         return id;
     }
 
@@ -63,25 +62,21 @@ public class Person {
     public void setWeight(int weight) {
         this.weight = weight;
     }
-
+    
     public int getSide() {
-        return side;
-    }
+		return side;
+	}
 
-    public void setSide(int side) {
-        this.side = side;
-    }
+	public void setSide(int side) {
+		this.side = side;
+	}
 
-    public int getRole() {
-        return role;
-    }
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
 
-    public void setRole(int role) {
-        this.role = role;
-    }
-
-    @Override
-    public String toString(){
-        return  this.getName();
-    }
+	public void setProfilePictureUrl(String profilePictureUrl) {
+		this.profilePictureUrl = profilePictureUrl;
+	}
+	
 }

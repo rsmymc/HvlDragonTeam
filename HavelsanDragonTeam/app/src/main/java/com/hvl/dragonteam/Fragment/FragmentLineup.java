@@ -43,11 +43,13 @@ import com.hvl.dragonteam.Model.LineupItem;
 import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
+import com.lambdaworks.redis.models.role.RedisInstance;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +84,6 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private LinearLayout layoutActionButtons;
     private ArrayList<LineupItem> lineupList = new ArrayList<>();
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
-    private ArrayList<PersonTrainingAttendance> unfilteredList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
@@ -151,7 +152,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         layoutTeam = view.findViewById(R.id.layout_team);
         layoutActionButtons = view.findViewById(R.id.layout_action_buttons);
 
-        if (Constants.person.getRole() != RoleEnum.ADMIN.getValue()){
+        if (Constants.personTeam.getRole() != RoleEnum.ADMIN.getValue()){
             layoutTeam.setVisibility(View.GONE);
             layoutActionButtons.setVisibility(View.GONE);
         }
@@ -179,27 +180,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     }
 
     private void filterListByAttendees (boolean showOnlyAttendees){
-//TODO lineup check
-        if (showOnlyAttendees) {
-            List<PersonTrainingAttendance> filteredList = personTrainingAttendanceList.stream().filter(item -> item.isAttend()).collect(Collectors.toList());
-            lineupTeamAdapter.updateListLineupPerson((ArrayList<PersonTrainingAttendance>) filteredList);
-        } else {
-
-            //lineupTeamAdapter.getListLineupPerson().addAll(personTrainingAttendanceList);
-
-            ArrayList<PersonTrainingAttendance> cloneList = (ArrayList<PersonTrainingAttendance>) unfilteredList.clone();
-
-            for (LineupItem lineupItem: lineupList){
-                PersonTrainingAttendance personTrainingAttendance = unfilteredList.stream()
-                        .filter(item -> lineupItem.equals(item.getPersonId())).findFirst().orElse(null);
-                unfilteredList.remove(personTrainingAttendance);
-            }
-
-            lineupTeamAdapter.updateListLineupPerson(unfilteredList);
-
-            unfilteredList = cloneList;
-        }
-
+        lineupTeamAdapter.setFiltered(showOnlyAttendees);
         lineupTeamAdapter.notifyDataSetChanged();
     }
 
@@ -259,11 +240,11 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
                             lineupAdapter = new LineupAdapter(context, lineupList, FragmentLineup.this);
                             listViewLineup.setAdapter(lineupAdapter);
-                            if(Constants.person.getRole() ==  RoleEnum.ADMIN.getValue()) {
+                            if(Constants.personTeam.getRole() ==  RoleEnum.ADMIN.getValue()) {
                                 listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
                             }
 
-                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, FragmentLineup.this);
+                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, switchOnlyAttendees.isChecked() ,FragmentLineup.this);
                             listViewPerson.setAdapter(lineupTeamAdapter);
                             listViewPerson.setOnDragListener(lineupTeamAdapter.getDragInstance());
 
@@ -299,7 +280,6 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
                             personTrainingAttendanceList.clear();
                             personTrainingAttendanceList.addAll(list);
-                            unfilteredList = (ArrayList<PersonTrainingAttendance>) personTrainingAttendanceList.clone();
                             getLineup();
                         }
 
@@ -393,7 +373,9 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
         NotificationService notificationService = new NotificationService();
         try {
-            notificationService.getPersonsNotificationList(context,
+            Team team = new Team();
+            team.setId(Constants.personTeam.getTeamId());
+            notificationService.getPersonsNotificationList(context,team,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
@@ -406,14 +388,17 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                                 if (personNotification.isLoggedIn()
                                         && !personNotification.getPersonId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         && personNotification.getNotification1()
-                                        && state == SaveEnum.PUBLISH.getValue()) {
+                                        && (state == SaveEnum.PUBLISH.getValue() || personNotification.getRole() == RoleEnum.ADMIN.getValue())) {
                                     tokens.put(personNotification.getToken());
                                 }
                             }
 
                             String message ="";
-                            if(state == SaveEnum.PUBLISH.getValue())
+                            if(state == SaveEnum.PUBLISH.getValue()) {
                                 message = getString(R.string.publish_notification);
+                            } else if(state == SaveEnum.PUBLISH.getValue()){
+                                message = getString(R.string.draft_notification).replace("XXX", Constants.person.getName());
+                            }
 
                             sendMessageNotify(tokens.toString(), message);
                         }

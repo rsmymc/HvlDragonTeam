@@ -13,6 +13,9 @@ import com.google.gson.Gson;
 import com.hvl.dragonteam.Interface.CustomJsonArrayRequest;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Person;
+import com.hvl.dragonteam.Model.PersonTeam;
+import com.hvl.dragonteam.Model.PersonTrainingAttendance;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Utilities.URLs;
 
 import org.json.JSONArray;
@@ -23,26 +26,26 @@ import org.json.JSONObject;
  * Created by rasim-pc on 10.10.2018.
  */
 
-public class PersonService {
+public class PersonTeamService {
 
-    public void savePerson(Context context, final Person person, final VolleyCallback callback) throws JSONException {
+    public void savePersonTeam(Context context, final PersonTeam personTeam, final VolleyCallback callback) throws JSONException {
 
-        String json = new Gson().toJson(person, Person.class);
+        String json = new Gson().toJson(personTeam, Person.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlSavePerson,new JSONObject(json),
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlSavePersonTeam,new JSONObject(json),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("successSavePerson", response.toString());
+                        Log.d("successSavePersonTeam", response.toString());
                         callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("errorSavePerson", error.toString());
+                        Log.d("errorSavePersonTeam", error.toString());
                         callback.onError(error.toString());
                     }
                 }
@@ -50,24 +53,24 @@ public class PersonService {
         queue.add(postRequest);
     }
 
-    public void getPerson(Context context, Person person, final VolleyCallback callback) throws JSONException {
+    public void getPersonTeam(Context context, PersonTeam personTeam, final VolleyCallback callback) throws JSONException {
 
-        String json = new Gson().toJson(person, Person.class);
+        String json = new Gson().toJson(personTeam, PersonTeam.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlGetPerson,new JSONObject(json),
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlGetPersonTeam,new JSONObject(json),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("successGetPerson", response.toString());
+                        Log.d("successGetPersonTeam", response.toString());
                         callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("errorGetPerson", error.toString());
+                        Log.d("errorGetPersonTeam", error.toString());
                         callback.onError(error.toString());
                     }
                 }
@@ -75,27 +78,28 @@ public class PersonService {
         queue.add(postRequest);
     }
 
-    public void getPersonList(Context context, final VolleyCallback callback) throws JSONException {
+    public void getPersonTeamList(Context context, final Team team, final VolleyCallback callback) throws JSONException {
+
+        String json = new Gson().toJson(team, Team.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetPersonList, null,
+        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetPersonTeamList,new JSONObject(json),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("successGetPersonList", response.toString());
+                        Log.d("successGetPersonTeamList", response.toString());
                         callback.onSuccessList(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("errorGetPersonList", error.toString());
+                        Log.d("errorGetPersonTeamList", error.toString());
                         callback.onError(error.toString());
                     }
                 }
         ) ;
         queue.add(postRequest);
     }
-
 }

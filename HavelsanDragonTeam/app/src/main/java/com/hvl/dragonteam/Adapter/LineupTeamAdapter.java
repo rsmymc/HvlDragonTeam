@@ -18,16 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hvl.dragonteam.Interface.DragListener;
 import com.hvl.dragonteam.Interface.OnLineupChangeListener;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Util;
-import com.hvl.dragonteam.Interface.DragListener;
 
 import java.util.ArrayList;
 
-public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.ViewHolder>  implements View.OnTouchListener {
+public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.ViewHolder> implements View.OnTouchListener {
 
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
@@ -35,11 +35,13 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     private Context context;
     private Util util;
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
+    private boolean isFiltered;
 
-    public LineupTeamAdapter(Context context, ArrayList<PersonTrainingAttendance> personTrainingAttendanceList, OnLineupChangeListener listener) {
+    public LineupTeamAdapter(Context context, ArrayList<PersonTrainingAttendance> personTrainingAttendanceList, boolean isFiltered, OnLineupChangeListener listener) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.personTrainingAttendanceList = personTrainingAttendanceList;
+        this.isFiltered = isFiltered;
         this.listener = listener;
         util = new Util();
     }
@@ -48,28 +50,34 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = mInflater.inflate(R.layout.list_item_lineup_person, parent, false);
+
         return new LineupTeamAdapter.ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        Glide.with(context)
-                .load(Util.getProfilePictureURL(personTrainingAttendanceList.get(position).getPersonId()))
-                .apply(new RequestOptions()
-                        .centerInside()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .placeholder(R.drawable.uniform2)
-                        .error(R.drawable.uniform2))
-                .into( holder.imgProfile);
+        if ( isFiltered && !personTrainingAttendanceList.get(position).isAttend()) {
+            holder.layout_hide();
+        } else {
+            holder.layout_show();
+            Glide.with(context)
+                    .load(personTrainingAttendanceList.get(position).getProfilePictureUrl())
+                    .apply(new RequestOptions()
+                            .centerInside()
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                            .skipMemoryCache(false)
+                            .placeholder(R.drawable.uniform2)
+                            .error(R.drawable.uniform2))
+                    .into(holder.imgProfile);
 
-        holder.txtName.setText(personTrainingAttendanceList.get(position).getName() + " , " +
-                SideEnum.toSideEnum(personTrainingAttendanceList.get(position).getSide()).name().substring(0,1) + " ,  " +
-                personTrainingAttendanceList.get(position).getWeight() + "kg");
-        holder.layoutLineup.setTag(position);
-        holder.layoutLineup.setOnTouchListener(this);
-        holder.layoutLineup.setOnDragListener(new DragListener(listener));
+            holder.txtName.setText(personTrainingAttendanceList.get(position).getName() + " , " +
+                    SideEnum.toSideEnum(personTrainingAttendanceList.get(position).getSide()).name().substring(0, 1) + " ,  " +
+                    personTrainingAttendanceList.get(position).getWeight() + "kg");
+            holder.layoutLineup.setTag(position);
+            holder.layoutLineup.setOnTouchListener(this);
+            holder.layoutLineup.setOnDragListener(new DragListener(listener));
+        }
     }
 
     @Override
@@ -77,7 +85,9 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
         return personTrainingAttendanceList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        LinearLayout.LayoutParams params;
 
         ImageView imgProfile;
         TextView txtName;
@@ -88,11 +98,24 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
             imgProfile = itemView.findViewById(R.id.img_profile);
             txtName = itemView.findViewById(R.id.txt_name);
             layoutLineup = itemView.findViewById(R.id.layout_lineup);
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
         }
+
         @Override
         public void onClick(View view) {
             if (mClickListener != null)
                 mClickListener.onItemClick(view, getAdapterPosition());
+        }
+
+        private void layout_hide() {
+            params.height = 0;
+            layoutLineup.setLayoutParams(params);
+        }
+        private void layout_show() {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutLineup.setLayoutParams(params);
         }
     }
 
@@ -139,4 +162,11 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
         this.personTrainingAttendanceList = list;
     }
 
+    public boolean isFiltered() {
+        return isFiltered;
+    }
+
+    public void setFiltered(boolean filtered) {
+        isFiltered = filtered;
+    }
 }

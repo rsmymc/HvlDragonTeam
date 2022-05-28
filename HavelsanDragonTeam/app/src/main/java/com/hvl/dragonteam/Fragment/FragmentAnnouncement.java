@@ -20,15 +20,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Adapter.AnnouncementAdapter;
 import com.hvl.dragonteam.DataService.AnnouncementService;
+import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Announcement;
+import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
+import com.hvl.dragonteam.Model.NotificationModel;
+import com.hvl.dragonteam.Model.PersonNotification;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
 
 import org.json.JSONArray;
@@ -38,7 +45,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FragmentAnnouncement extends Fragment {
 
@@ -81,7 +90,7 @@ public class FragmentAnnouncement extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
         layoutAdd = view.findViewById(R.id.layout_add);
-        if(Constants.person.getRole() == RoleEnum.ADMIN.getValue()) {
+        if(Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()) {
             layoutAdd.setVisibility(View.VISIBLE);
         } else {
             layoutAdd.setVisibility(View.GONE);
@@ -178,7 +187,7 @@ public class FragmentAnnouncement extends Fragment {
                                 @Override
                                 public void onSuccess(JSONObject result) {
                                     getAnnouncements();
-                                    //TODO send notify
+                                    getPersonsNotification(_context);
                                     mRefreshLayout.setRefreshing(false);
                                 }
                                 @Override
@@ -209,6 +218,61 @@ public class FragmentAnnouncement extends Fragment {
 
         builder.show();
     }
+
+    private void sendMessageNotify(String tokens, String message) {
+        NotificationModel notificationModel = new NotificationModel("",
+                NotificationTypeEnum.ANNOUNCEMENT_NOTIFICATION.getValue(),
+                FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                Constants.person.getName());
+        String json = new Gson().toJson(notificationModel, NotificationModel.class);
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", tokens);
+        params.put("body",  message);
+        params.put("title", Constants.person.getName());
+        params.put("notificationModel", json);
+        Util.postRequest(context, URLs.urlSendNotification, params, null);
+    }
+
+    private void getPersonsNotification(String message) {
+
+        NotificationService notificationService = new NotificationService();
+        try {
+            Team team = new Team();
+            team.setId(Constants.personTeam.getTeamId());
+            notificationService.getPersonsNotificationList(context, team,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                            List<PersonNotification> list = new Gson().fromJson(result.toString(), new TypeToken<List<PersonNotification>>() {
+                            }.getType());
+
+                            JSONArray tokens = new JSONArray();
+
+                            for (PersonNotification personNotification : list) {
+                                if (personNotification.isLoggedIn() && !personNotification.getPersonId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && personNotification.getNotification1()) {
+                                    tokens.put(personNotification.getToken());
+                                }
+                            }
+                            sendMessageNotify(tokens.toString(), message);
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Util.toastError(context);
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Util.toastError(context);
+        }
+    }
+
+
 
     @Override
     public void onResume() {
