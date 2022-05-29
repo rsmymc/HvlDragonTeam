@@ -121,7 +121,10 @@ public class PersonTeamView {
 	public void setRole(int role) {
 		this.role = role;
 	}
-    
-    
+
+	@Override
+	public String toString(){
+		return  this.personName;
+	}
 	
 }

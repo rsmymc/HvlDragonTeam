@@ -111,7 +111,9 @@ public class FragmentAnnouncement extends Fragment {
         view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
         AnnouncementService announcementService = new AnnouncementService();
         try {
-            announcementService.getAnnouncementList(context,
+            Team team = new Team();
+            team.setId(Constants.TEAM_ID);
+            announcementService.getAnnouncementList(context, team,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
@@ -176,7 +178,7 @@ public class FragmentAnnouncement extends Fragment {
                 announcement.setContext(_context);
                 String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date());
                 announcement.setTime(timeStamp);
-
+                announcement.setTeamId(Constants.TEAM_ID);
                 AnnouncementService announcementService = new AnnouncementService();
                 try {
                     announcementService.saveAnnouncement(context, announcement,

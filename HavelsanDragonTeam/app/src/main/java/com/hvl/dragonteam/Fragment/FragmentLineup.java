@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -38,6 +39,7 @@ import com.hvl.dragonteam.Model.Enum.LineupEnum;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.Enum.SaveEnum;
+import com.hvl.dragonteam.Model.FilterModel;
 import com.hvl.dragonteam.Model.Lineup;
 import com.hvl.dragonteam.Model.LineupItem;
 import com.hvl.dragonteam.Model.NotificationModel;
@@ -49,7 +51,6 @@ import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
-import com.lambdaworks.redis.models.role.RedisInstance;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +60,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
@@ -70,7 +70,6 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private Training training;
     private LineupAdapter lineupAdapter;
     private LineupTeamAdapter lineupTeamAdapter;
-    private LinearLayout layoutFilter;
     private Switch switchOnlyAttendees;
     private TextView txtWeightLeft;
     private TextView txtWeightRight;
@@ -81,11 +80,17 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private RecyclerView listViewPerson;
     private CardView layoutTeam;
     private CardView layoutLineup;
+    private CardView layoutFilter;
+    private CheckBox checkBoxLeft;
+    private CheckBox checkBoxRight;
+    private CheckBox checkBoxBoth;
+    private CheckBox checkBoxHideDontAttend;
     private LinearLayout layoutActionButtons;
     private ArrayList<LineupItem> lineupList = new ArrayList<>();
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
+    private FilterModel filterModel = new FilterModel();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,15 +117,36 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         listViewPerson = view.findViewById(R.id.listView_team);
         listViewPerson.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
-        layoutFilter = view.findViewById(R.id.layout_filter);
-        switchOnlyAttendees = view.findViewById(R.id.switch_only_attendees);
+        checkBoxLeft = view.findViewById(R.id.checkbox_left);
+        checkBoxRight = view.findViewById(R.id.checkbox_right);
+        checkBoxBoth = view.findViewById(R.id.checkbox_both);
+        checkBoxHideDontAttend = view.findViewById(R.id.checkbox_hide_dont_attend);
 
-        switchOnlyAttendees.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkBoxLeft.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                filterListByAttendees(b);
+                filterList();
             }
         });
+        checkBoxRight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                filterList();
+            }
+        });
+        checkBoxBoth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                filterList();
+            }
+        });
+        checkBoxHideDontAttend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                filterList();
+            }
+        });
+
 
         txtWeightLeft = view.findViewById(R.id.txt_weight_left);
         txtWeightRight = view.findViewById(R.id.txt_weight_right);
@@ -150,6 +176,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
         layoutLineup = view.findViewById(R.id.layout_lineup);
         layoutTeam = view.findViewById(R.id.layout_team);
+        layoutFilter = view.findViewById(R.id.layout_filter);
         layoutActionButtons = view.findViewById(R.id.layout_action_buttons);
 
         if (Constants.personTeam.getRole() != RoleEnum.ADMIN.getValue()){
@@ -179,8 +206,14 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         return personTrainingAttendance;
     }
 
-    private void filterListByAttendees (boolean showOnlyAttendees){
-        lineupTeamAdapter.setFiltered(showOnlyAttendees);
+    private void filterList(){
+
+        filterModel.setLeft(checkBoxLeft.isChecked());
+        filterModel.setRight(checkBoxRight.isChecked());
+        filterModel.setBoth(checkBoxBoth.isChecked());
+        filterModel.setHideDontAttend(checkBoxHideDontAttend.isChecked());
+
+        lineupTeamAdapter.setFilterModel(filterModel);
         lineupTeamAdapter.notifyDataSetChanged();
     }
 
@@ -244,7 +277,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                                 listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
                             }
 
-                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, switchOnlyAttendees.isChecked() ,FragmentLineup.this);
+                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, filterModel ,FragmentLineup.this);
                             listViewPerson.setAdapter(lineupTeamAdapter);
                             listViewPerson.setOnDragListener(lineupTeamAdapter.getDragInstance());
 
@@ -435,11 +468,18 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         int id = item.getItemId();
         switch (id) {
             case (R.id.action_filter): {
-                if (layoutFilter.getVisibility() != View.VISIBLE)
+               /* if (layoutFilter.getVisibility() != View.VISIBLE)
                     layoutFilter.setVisibility(View.VISIBLE);
                 else
-                    layoutFilter.setVisibility(View.GONE);
+                    layoutFilter.setVisibility(View.GONE);*/
 
+                if (layoutFilter.getVisibility() != View.VISIBLE) {
+                    layoutFilter.setVisibility(View.VISIBLE);
+                    layoutLineup.setVisibility(View.GONE);
+                } else {
+                    layoutFilter.setVisibility(View.GONE);
+                    layoutLineup.setVisibility(View.VISIBLE);
+                }
             }
         }
         return super.onOptionsItemSelected(item);

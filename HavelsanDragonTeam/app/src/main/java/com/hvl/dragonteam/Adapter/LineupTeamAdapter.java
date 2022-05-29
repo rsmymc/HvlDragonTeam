@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hvl.dragonteam.Interface.DragListener;
 import com.hvl.dragonteam.Interface.OnLineupChangeListener;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
+import com.hvl.dragonteam.Model.FilterModel;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Util;
@@ -35,13 +36,13 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     private Context context;
     private Util util;
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
-    private boolean isFiltered;
+    private FilterModel filterModel;
 
-    public LineupTeamAdapter(Context context, ArrayList<PersonTrainingAttendance> personTrainingAttendanceList, boolean isFiltered, OnLineupChangeListener listener) {
+    public LineupTeamAdapter(Context context, ArrayList<PersonTrainingAttendance> personTrainingAttendanceList, FilterModel filterModel, OnLineupChangeListener listener) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.personTrainingAttendanceList = personTrainingAttendanceList;
-        this.isFiltered = isFiltered;
+        this.filterModel = filterModel;
         this.listener = listener;
         util = new Util();
     }
@@ -57,9 +58,15 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        if ( isFiltered && !personTrainingAttendanceList.get(position).isAttend()) {
+        if ( filterModel.isHideDontAttend() && !personTrainingAttendanceList.get(position).isAttend()) {
             holder.layout_hide();
-        } else {
+        } else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.LEFT.getValue() && !filterModel.isLeft()) {
+            holder.layout_hide();
+        }   else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.RIGHT.getValue() && !filterModel.isRight()) {
+            holder.layout_hide();
+        }   else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.BOTH.getValue() && !filterModel.isBoth()) {
+            holder.layout_hide();
+        }  else {
             holder.layout_show();
             Glide.with(context)
                     .load(personTrainingAttendanceList.get(position).getProfilePictureUrl())
@@ -162,11 +169,11 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
         this.personTrainingAttendanceList = list;
     }
 
-    public boolean isFiltered() {
-        return isFiltered;
+    public FilterModel getFilterModel() {
+        return filterModel;
     }
 
-    public void setFiltered(boolean filtered) {
-        isFiltered = filtered;
+    public void setFilterModel(FilterModel filterModel) {
+        this.filterModel = filterModel;
     }
 }

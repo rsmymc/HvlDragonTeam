@@ -2,11 +2,16 @@ package com.hvl.dragonteam.Fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -31,8 +36,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentTeam extends Fragment {
 
@@ -43,8 +52,9 @@ public class FragmentTeam extends Fragment {
 
     private PersonTeamAdapter personTeamAdapter;
     private SwipeRefreshLayout mRefreshLayout;
-    private RecyclerView listView;
+    private ListView listView;
     private ArrayList<PersonTeamView> personTeamList = new ArrayList<>();
+    private ArrayList<String> listLetters = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +80,22 @@ public class FragmentTeam extends Fragment {
         });
 
         listView = view.findViewById(R.id.listView_team);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setFastScrollEnabled(true);
+
+        EditText myFilter = (EditText) view.findViewById(R.id.txt_filter);
+        myFilter.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    personTeamAdapter.getFilter().filter(s.toString());
+                } catch (Exception ex) {
+                    Log.i("Error", ex.toString());
+                }
+            }
+        });
 
         getTeamPersons();
 
@@ -93,14 +118,27 @@ public class FragmentTeam extends Fragment {
                             personTeamList.clear();
                             personTeamList.addAll(list);
 
-                            personTeamAdapter = new PersonTeamAdapter(context, personTeamList);
-                            personTeamAdapter.setClickListener(new PersonTeamAdapter.ItemClickListener() {
+                            for (PersonTeamView personTeamView : personTeamList){
+                                if (!listLetters.contains(String.valueOf(personTeamView.getPersonName().charAt(0)).toUpperCase())) {
+                                    listLetters.add(String.valueOf(personTeamView.getPersonName().charAt(0)).toUpperCase());
+                                }
+                            }
+                            Collections.sort(listLetters, new Comparator<String>() {
                                 @Override
-                                public void onItemClick(View view, int position) {
-
+                                public int compare(String s1, String s2) {
+                                    Collator collator = Collator.getInstance(new Locale("tr", "TR"));
+                                    return collator.compare(s1, s2);
                                 }
                             });
+
+                            String mSections = "";
+                            for (String letter : listLetters) {
+                                mSections += letter;
+                            }
+
+                            personTeamAdapter = new PersonTeamAdapter(context, personTeamList, mSections);
                             listView.setAdapter(personTeamAdapter);
+
                             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             if (list.size() == 0)
                                 view.findViewById(R.id.resultPanel).setVisibility(View.VISIBLE);

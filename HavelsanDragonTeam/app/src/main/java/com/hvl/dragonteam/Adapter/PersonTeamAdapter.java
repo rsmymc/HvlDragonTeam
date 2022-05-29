@@ -9,7 +9,10 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,57 +26,62 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.PersonTeamView;
 import com.hvl.dragonteam.R;
+import com.hvl.dragonteam.Utilities.StringMatcher;
 import com.hvl.dragonteam.Utilities.Util;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PersonTeamAdapter extends RecyclerView.Adapter<PersonTeamAdapter.ViewHolder> {
+public class PersonTeamAdapter extends ArrayAdapter<PersonTeamView> implements SectionIndexer {
 
-    private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
-    private ArrayList<PersonTeamView> listPersonTeam = new ArrayList<>();
     private Context context;
-    private Util util;
+    private String mSections;
     private static final int CALL_PERMISSIONS_REQUEST = 102;
 
-    public PersonTeamAdapter(Context context, ArrayList<PersonTeamView> listPersonTeam) {
+    public PersonTeamAdapter(Context context, ArrayList<PersonTeamView> listPersonTeam, String mSections) {
+        super(context, 0, listPersonTeam);
+        this.mSections = mSections;
         this.context = context;
-        this.mInflater = LayoutInflater.from(context);
-        this.listPersonTeam = listPersonTeam;
-        util = new Util();
     }
 
     @Override
-    @NonNull
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.list_item_person_team, parent, false);
-        return new ViewHolder(v);
-    }
+    public View getView(int position, View itemView, ViewGroup parent) {
+        final PersonTeamView item = getItem(position);
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.txtName.setText(listPersonTeam.get(position).getPersonName());
-        holder.txtHeight.setText(listPersonTeam.get(position).getHeight() + " cm");
-        holder.txtWeight.setText(listPersonTeam.get(position).getWeight() + " kg");
-        holder.txtSide.setText(SideEnum.toSideEnum(listPersonTeam.get(position).getSide()).name().substring(0, 1));
+        if (itemView == null) {
+            itemView = LayoutInflater.from(context).inflate(R.layout.list_item_person_team, parent, false);
+        }
+
+        TextView txtName = itemView.findViewById(R.id.txt_person_name);
+        TextView txtHeight = itemView.findViewById(R.id.txt_height);
+        TextView txtWeight = itemView.findViewById(R.id.txt_weight);
+        TextView txtSide = itemView.findViewById(R.id.txt_side);
+        ImageView imgCall = itemView.findViewById(R.id.img_call);
+        CircleImageView imgProfile = itemView.findViewById(R.id.img_profile);
+
+        txtName.setText(item.getPersonName());
+        txtHeight.setText(item.getHeight() + " cm");
+        txtWeight.setText(item.getWeight() + " kg");
+        txtSide.setText(SideEnum.toSideEnum(item.getSide()).name().substring(0, 1));
         Glide.with(context)
-                .load(listPersonTeam.get(position).getProfilePictureUrl())
+                .load(item.getProfilePictureUrl())
                 .apply(new RequestOptions()
                         .centerInside()
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .skipMemoryCache(false)
                         .placeholder(R.drawable.user_placeholder)
                         .error(R.drawable.user_placeholder))
-                .into( holder.imgProfile);
+                .into(imgProfile);
 
-        holder.imgCall.setOnClickListener(new View.OnClickListener() {
+        imgCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCall(listPersonTeam.get(position).getPhone());
+                onCall(item.getPhone());
             }
         });
+
+        return itemView;
     }
 
     public void onCall(String phoneNumber) {
@@ -89,39 +97,37 @@ public class PersonTeamAdapter extends RecyclerView.Adapter<PersonTeamAdapter.Vi
         }
     }
 
+
     @Override
-    public int getItemCount() {
-        return listPersonTeam.size();
+    public Object[] getSections() {
+        String[] sections = new String[mSections.length()];
+        for (int i = 0; i < mSections.length(); i++)
+            sections[i] = String.valueOf(mSections.charAt(i));
+        return sections;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder  {
-
-        TextView txtName;
-        TextView txtHeight;
-        TextView txtWeight;
-        TextView txtSide;
-        ImageView imgCall;
-        CircleImageView imgProfile;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            txtName = itemView.findViewById(R.id.txt_person_name);
-            txtHeight = itemView.findViewById(R.id.txt_height);
-            txtWeight = itemView.findViewById(R.id.txt_weight);
-            txtSide = itemView.findViewById(R.id.txt_side);
-            imgCall = itemView.findViewById(R.id.img_call);
-            imgProfile = itemView.findViewById(R.id.img_profile);
+    @Override
+    public int getPositionForSection(int section) {
+        // If there is no item for current section, previous section will be selected
+        for (int i = section; i >= 0; i--) {
+            for (int j = 0; j < getCount(); j++) {
+                if (i == 0) {
+                    // For numeric section
+                    for (int k = 0; k <= 9; k++) {
+                        if (StringMatcher.match(String.valueOf(getItem(j).getPersonName().charAt(0)), String.valueOf(k)))
+                            return j;
+                    }
+                } else {
+                    if (StringMatcher.match(String.valueOf(getItem(j).getPersonName().charAt(0)), String.valueOf(mSections.charAt(i))))
+                        return j;
+                }
+            }
         }
+        return 0;
     }
 
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
+    @Override
+    public int getSectionForPosition(int position) {
+        return 0;
     }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
 }
