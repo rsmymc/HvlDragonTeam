@@ -30,7 +30,7 @@ public class PersonTeamService {
 
     public void savePersonTeam(Context context, final PersonTeam personTeam, final VolleyCallback callback) throws JSONException {
 
-        String json = new Gson().toJson(personTeam, Person.class);
+        String json = new Gson().toJson(personTeam, PersonTeam.class);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -46,6 +46,31 @@ public class PersonTeamService {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("errorSavePersonTeam", error.toString());
+                        callback.onError(error.toString());
+                    }
+                }
+        ) ;
+        queue.add(postRequest);
+    }
+
+    public void deletePersonTeam(Context context, final PersonTeam personTeam, final VolleyCallback callback) throws JSONException {
+
+        String json = new Gson().toJson(personTeam, PersonTeam.class);
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlDeletePersonTeam,new JSONObject(json),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("successDeletePersonTeam", response.toString());
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("errorDeletePersonTeam", error.toString());
                         callback.onError(error.toString());
                     }
                 }

@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/listViewBackColor"
     android:clickable="true">
 
@@ -33,31 +32,24 @@
     </RelativeLayout>
 
     <EditText
+        android:id="@+id/txt_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_filter"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:ems="10"
-        android:hint="@string/name"/>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/team_swipe_layout"
+        android:hint="@string/name" />
+
+    <com.hvl.dragonteam.Utilities.IndexableListView
+        android:id="@+id/listView_team"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/txt_filter"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/components_top_margin">
-        <com.hvl.dragonteam.Utilities.IndexableListView
-            android:id="@+id/listView_team"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/listViewBackColor"
-            android:drawSelectorOnTop="true" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        android:layout_marginTop="@dimen/components_top_margin"
+        android:background="@color/listViewBackColor"
+        android:drawSelectorOnTop="true" />
 </RelativeLayout>

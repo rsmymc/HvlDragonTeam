@@ -24,7 +24,9 @@ import android.view.MotionEvent;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class IndexableListView extends ListView {
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+
+public class IndexableListView extends SwipeMenuListView {
 	
 	private boolean mIsFastScrollEnabled = false;
 	private IndexScroller mScroller = null;

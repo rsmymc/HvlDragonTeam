@@ -207,7 +207,7 @@ public class FragmentTrainingNext extends Fragment {
             }
         });
 
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add_training, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Training training = new Training();
                 training.setLocation(spinnerLocation.getSelectedItemPosition());

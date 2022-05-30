@@ -459,8 +459,11 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_filter, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+
+        if(Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()){
+            inflater.inflate(R.menu.menu_filter, menu);
+            super.onCreateOptionsMenu(menu, inflater);
+        }
     }
 
     @Override
@@ -468,11 +471,6 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         int id = item.getItemId();
         switch (id) {
             case (R.id.action_filter): {
-               /* if (layoutFilter.getVisibility() != View.VISIBLE)
-                    layoutFilter.setVisibility(View.VISIBLE);
-                else
-                    layoutFilter.setVisibility(View.GONE);*/
-
                 if (layoutFilter.getVisibility() != View.VISIBLE) {
                     layoutFilter.setVisibility(View.VISIBLE);
                     layoutLineup.setVisibility(View.GONE);
