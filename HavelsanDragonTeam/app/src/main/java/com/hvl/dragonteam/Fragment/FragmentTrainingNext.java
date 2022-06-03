@@ -7,8 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -87,7 +85,7 @@ public class FragmentTrainingNext extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
         layoutAdd = view.findViewById(R.id.layout_add);
-        if(Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()) {
+        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             layoutAdd.setVisibility(View.VISIBLE);
         } else {
             layoutAdd.setVisibility(View.GONE);
@@ -110,7 +108,7 @@ public class FragmentTrainingNext extends Fragment {
         PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
         personTrainingAttendance.setPersonId(Constants.person.getId());
         personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date()));
-        personTrainingAttendance.setTeamId(Constants.personTeam.getTeamId());
+        personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
         try {
             personTrainingAttendanceService.getPersonTrainingAttendanceListByPersonNext(context, personTrainingAttendance,
                     new VolleyCallback() {
@@ -130,7 +128,7 @@ public class FragmentTrainingNext extends Fragment {
                                     Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
                                             personTrainingAttendanceList.get(position).getTime(),
                                             personTrainingAttendanceList.get(position).getLocation(),
-                                            Constants.personTeam.getTeamId());
+                                            Constants.personTeamView.getTeamId());
 
                                     String json = new Gson().toJson(training, Training.class);
                                     Bundle bundle = new Bundle();
@@ -213,7 +211,7 @@ public class FragmentTrainingNext extends Fragment {
                 training.setLocation(spinnerLocation.getSelectedItemPosition());
                 String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(date.getTime());
                 training.setTime(timeStamp);
-                training.setTeamId(Constants.personTeam.getTeamId());
+                training.setTeamId(Constants.personTeamView.getTeamId());
                 TrainingService trainingService = new TrainingService();
                 try {
                     trainingService.saveTraining(context, training,

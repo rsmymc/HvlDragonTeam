@@ -98,7 +98,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             txtTime = itemView.findViewById(R.id.txt_time);
-            txtLocation = itemView.findViewById(R.id.txt_location);
+            txtLocation = itemView.findViewById(R.id.txt_context);
             txtLocation.setPaintFlags(txtLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             switchAttendance = itemView.findViewById(R.id.switch_attendance);
             switchAttendance.setClickable(isNext);

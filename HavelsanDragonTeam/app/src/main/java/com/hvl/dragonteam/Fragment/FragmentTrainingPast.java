@@ -1,23 +1,11 @@
 package com.hvl.dragonteam.Fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -30,11 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Adapter.TrainingAdapter;
 import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
-import com.hvl.dragonteam.DataService.TrainingService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
-import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
-import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.Util;
@@ -45,7 +30,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -100,7 +84,7 @@ public class FragmentTrainingPast extends Fragment {
         PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
         personTrainingAttendance.setPersonId(Constants.person.getId());
         personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date()));
-        personTrainingAttendance.setTeamId(Constants.personTeam.getTeamId());
+        personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
         try {
             personTrainingAttendanceService.getPersonTrainingAttendanceListByPersonPast(context, personTrainingAttendance,
                     new VolleyCallback() {

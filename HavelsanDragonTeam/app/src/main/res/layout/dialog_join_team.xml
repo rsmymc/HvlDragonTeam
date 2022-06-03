@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/components_top_margin"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/layout_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bordered_text_height"
+            android:layout_marginVertical="@dimen/components_top_margin"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="-4dp"
+                android:layout_marginRight="@dimen/components_bottom_margin"
+                android:background="@color/bgColor"
+                android:elevation="0dp"
+                android:paddingHorizontal="2dp"
+                android:text="@string/joining_code"
+                android:textColor="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/txt_team_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/code_text_border"
+                android:elevation="-1dp"
+                android:gravity="center"
+                android:hint="@string/enter"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="4hi2nu3rJN"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_next"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_bottom_margin"
+            android:background="@drawable/button_action"
+            android:text="@string/next"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/action_button_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_join_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/txt_question_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/question_join_team"
+            android:textColor="@color/colorPrimary" />
+        <Button
+            android:id="@+id/btn_join_team"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_bottom_margin"
+            android:background="@drawable/button_action"
+            android:text="@string/join_team"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/action_button_text_size" />
+    </LinearLayout>
+</LinearLayout>

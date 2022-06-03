@@ -16,7 +16,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.hvl.dragonteam.Activity.ActivityHome;
+import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.R;
+import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 
 public class FragmentTrainingPager extends Fragment {
 
@@ -115,6 +119,12 @@ public class FragmentTrainingPager extends Fragment {
                         .replace(R.id.container, fragmentAnnouncement, "fragmentAnnouncement").addToBackStack("fragmentAnnouncement")
                         .commit();
 
+            }
+            case (R.id.action_change_team): {
+                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
+                Intent intent = new Intent(getContext(), ActivityTeam.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         }
         return super.onOptionsItemSelected(item);

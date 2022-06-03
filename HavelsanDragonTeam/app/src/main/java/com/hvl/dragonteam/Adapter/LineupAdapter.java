@@ -83,6 +83,7 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
 
 
         holder.txtPersonName.setText(listLineup.get(position).getPersonTrainingAttendance().getName());
+        holder.txtSide.setText(LineupEnum.toLineupEnum(listLineup.get(position).getId()).toString());
         Glide.with(context)
                 .load(listLineup.get(position).getPersonTrainingAttendance().getProfilePictureUrl())
                 .apply(new RequestOptions()
@@ -93,20 +94,22 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
                         .error(R.drawable.uniform2))
                 .into( holder.imgProfile);
 
-        holder.txtSide.setText(LineupEnum.toLineupEnum(listLineup.get(position).getId()).toString());
+
 
         if(!listLineup.get(position).getPersonTrainingAttendance().getPersonId().equals(context.getString(R.string.empty))) {
             if( listLineup.get(position).getPersonTrainingAttendance().getSide() == SideEnum.BOTH.getValue() ||
                     position % 2 == listLineup.get(position).getPersonTrainingAttendance().getSide()) {
                 holder.txtSide.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.chat_sender_color10)));
             } else {
-                holder.txtSide.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.colorSecondary)));
+                holder.txtSide.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.red)));
             }
+            holder.txtPersonName.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.colorPrimaryLight)));
+            holder.imgProfile.setAlpha(1f);
         } else {
             holder.txtSide.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.darkGray)));
+            holder.txtPersonName.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.darkGray)));
+            holder.imgProfile.setAlpha(0.5f);
         }
-
-
         holder.layoutLineup.setTag(position);
         holder.layoutLineup.setOnTouchListener(this);
         holder.layoutLineup.setOnDragListener(new DragListener(listener));

@@ -1,14 +1,10 @@
 package com.hvl.dragonteam.Activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.hvl.dragonteam.DataService.PersonService;
 import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
-import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.BottomNavigationViewHelper;
@@ -45,37 +39,7 @@ public class ActivityHome extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        PersonTeamService personTeamService = new PersonTeamService();//TODO takım seçimi yapılan ekranda çağrılacak
-        PersonTeam personTeam = new PersonTeam();
-        personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        personTeam.setTeamId(Constants.TEAM_ID);
-
-        try {
-            personTeamService.getPersonTeam(ActivityHome.this,
-                    personTeam,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            PersonTeam _personTeam = new Gson().fromJson(result.toString(), PersonTeam.class);
-                            Constants.personTeam = _personTeam;
-
-                            initComponents();
-
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                            Util.toastError(ActivityHome.this);
-                        }
-
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Util.toastError(ActivityHome.this);
-        }
+        initComponents();
     }
 
     private void initComponents() {
@@ -108,10 +72,10 @@ public class ActivityHome extends AppCompatActivity {
                 }
 
                 if (item.getItemId() == R.id.action_stats) {
-                    if (!Constants.frgEquipment.isAdded()) {
+                    if (!Constants.frgStats.isAdded()) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, Constants.frgEquipment, Constants.frgTagEquipment)
-                                .addToBackStack(Constants.frgTagEquipment)
+                                .replace(R.id.container, Constants.frgStats, Constants.frgTagStats)
+                                .addToBackStack(Constants.frgTagStats)
                                 .commit();
                     }
                 }

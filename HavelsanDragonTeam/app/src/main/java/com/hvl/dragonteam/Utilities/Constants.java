@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
 import com.hvl.dragonteam.Fragment.FragmentChat;
 import com.hvl.dragonteam.Fragment.FragmentProfile;
+import com.hvl.dragonteam.Fragment.FragmentStats;
 import com.hvl.dragonteam.Fragment.FragmentTeam;
 import com.hvl.dragonteam.Fragment.FragmentTrainingNext;
 import com.hvl.dragonteam.Fragment.FragmentTrainingPager;
@@ -25,28 +26,30 @@ public class Constants {
 
     public static String frgTagTrainingPager = "fragment_training_pager";
     public static String frgTagTeam = "fragment_team";
-    public static String frgTagEquipment = "fragment_equipment";
     public static String frgTagChat = "fragment_chat";
     public static String frgTagProfile = "fragment_profile";
+    public static String frgTagStats = "fragment_stats";
+    public static String frgTagEquipment = "fragment_equipment";
     public static Fragment frgTrainingPager;
     public static Fragment frgTeam;
-    public static Fragment frgEquipment;
     public static Fragment frgChat;
     public static Fragment frgProfile;
+    public static Fragment frgStats;
+    public static Fragment frgEquipment;
     public static List<String> mainFragmentTags;
     public static List<Fragment> mainFragments;
     public static BottomNavigationView bottomBar;
 
     public static String REDIS_CHAT_PREFIX = "dragonchat_";
-    public static String REDIS_ATTENDANCE_PREFIX = "attendance_";
     public static String imageFilePath;
 
     public static final String UPLOAD_IMAGE_TYPE_PROFILE = "profile_images";
     public static final String UPLOAD_IMAGE_TYPE_CHAT = "chat_images";
-    public static final String ANNOUNCEMENT_READ_LIST="ANNOUNCEMENT_READ_LIST";
-    public static final String TEAM_ID = "4hi2nu3rJN";
+    public static final String TAG_ANNOUNCEMENT_READ_LIST ="ANNOUNCEMENT_READ_LIST";
+    public static final String TAG_LAST_SELECTED_TEAM="LAST_SELECTED_TEAM";
+
     public static Person person;
-    public static PersonTeam personTeam;
+    public static PersonTeamView personTeamView;
 
     public static String REMOTE_DIALOG_PREFIX ="remoteDialog";
     public static Bundle bundle;
@@ -54,21 +57,21 @@ public class Constants {
     public static void setInitialValues() {
         mainFragmentTags = new ArrayList<>();
         mainFragmentTags.add(frgTagTrainingPager);
-        mainFragmentTags.add(frgTagEquipment);
         mainFragmentTags.add(frgTagTeam);
+        mainFragmentTags.add(frgTagStats);
         mainFragmentTags.add(frgTagChat);
         mainFragmentTags.add(frgTagProfile);
 
         frgTrainingPager = new FragmentTrainingPager();
-        frgEquipment = new Fragment();
         frgTeam = new FragmentTeam();
+        frgStats = new FragmentStats();
         frgChat = new FragmentChat();
         frgProfile = new FragmentProfile();
 
         mainFragments = new ArrayList<>();
         mainFragments.add(frgTrainingPager);
-        mainFragments.add(frgEquipment);
         mainFragments.add(frgTeam);
+        mainFragments.add(frgStats);
         mainFragments.add(frgChat);
         mainFragments.add(frgProfile);
     }

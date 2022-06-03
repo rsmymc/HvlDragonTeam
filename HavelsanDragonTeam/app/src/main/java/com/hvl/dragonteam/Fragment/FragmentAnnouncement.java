@@ -90,7 +90,7 @@ public class FragmentAnnouncement extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
         layoutAdd = view.findViewById(R.id.layout_add);
-        if(Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()) {
+        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             layoutAdd.setVisibility(View.VISIBLE);
         } else {
             layoutAdd.setVisibility(View.GONE);
@@ -112,7 +112,7 @@ public class FragmentAnnouncement extends Fragment {
         AnnouncementService announcementService = new AnnouncementService();
         try {
             Team team = new Team();
-            team.setId(Constants.TEAM_ID);
+            team.setId(Constants.personTeamView.getTeamId());
             announcementService.getAnnouncementList(context, team,
                     new VolleyCallback() {
                         @Override
@@ -168,7 +168,7 @@ public class FragmentAnnouncement extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
 
-        final EditText et1 = (EditText) view.findViewById(R.id.txt_location);
+        final EditText et1 = (EditText) view.findViewById(R.id.txt_context);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -178,7 +178,7 @@ public class FragmentAnnouncement extends Fragment {
                 announcement.setContext(_context);
                 String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date());
                 announcement.setTime(timeStamp);
-                announcement.setTeamId(Constants.TEAM_ID);
+                announcement.setTeamId(Constants.personTeamView.getTeamId());
                 AnnouncementService announcementService = new AnnouncementService();
                 try {
                     announcementService.saveAnnouncement(context, announcement,
@@ -197,8 +197,6 @@ public class FragmentAnnouncement extends Fragment {
                                     Activity activity = getActivity();
                                     if (activity != null && isAdded())
                                         Util.toastError(context);
-                                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                                    view.findViewById(R.id.resultPanel).setVisibility(View.VISIBLE);
                                 }
                             });
                 } catch (JSONException e) {
@@ -206,8 +204,6 @@ public class FragmentAnnouncement extends Fragment {
                     Activity activity = getActivity();
                     if (activity != null && isAdded())
                         Util.toastError(context);
-                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                    view.findViewById(R.id.resultPanel).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -241,7 +237,7 @@ public class FragmentAnnouncement extends Fragment {
         NotificationService notificationService = new NotificationService();
         try {
             Team team = new Team();
-            team.setId(Constants.personTeam.getTeamId());
+            team.setId(Constants.personTeamView.getTeamId());
             notificationService.getPersonsNotificationList(context, team,
                     new VolleyCallback() {
                         @Override

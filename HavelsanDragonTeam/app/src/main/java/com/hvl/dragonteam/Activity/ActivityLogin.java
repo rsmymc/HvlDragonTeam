@@ -19,7 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthSettings;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -35,6 +34,7 @@ import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.Model.PersonTeam;
+import com.hvl.dragonteam.Model.PersonTeamView;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Util;
@@ -312,7 +312,6 @@ public class ActivityLogin extends AppCompatActivity {
                             Constants.person = person;
                             PersonNotification personNotification = new PersonNotification(mAuth.getCurrentUser().getUid(), FirebaseInstanceId.getInstance().getToken(), true, LanguageEnum.getLocaleEnumValue());
                             saveNotification(personNotification);
-                            savePersonTeam();//TODO takıma katılım ekranında yapılacak
                             progressDialog.dismiss();
                             goToIntent();
                         }
@@ -380,38 +379,9 @@ public class ActivityLogin extends AppCompatActivity {
         }
     }
 
-    private void savePersonTeam(){
-        PersonTeamService personTeamService = new PersonTeamService();
-        PersonTeam personTeam = new PersonTeam(mAuth.getCurrentUser().getUid(), Constants.TEAM_ID, RoleEnum.DEFAULT.getValue());
-
-        try {
-            personTeamService.savePersonTeam(ActivityLogin.this,
-                    personTeam,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            PersonTeam _personTeam = new Gson().fromJson(result.toString(), PersonTeam.class);
-                            Constants.personTeam = _personTeam;
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                            Util.toastError(ActivityLogin.this);
-                        }
-
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Util.toastError(ActivityLogin.this);
-        }
-    }
-
     private void goToIntent() {
 
-       Intent intent = new Intent(ActivityLogin.this, ActivityHome.class);
+       Intent intent = new Intent(ActivityLogin.this, ActivityHome.class);//TODO team mi home mu
        startActivity(intent);
 
        finish();

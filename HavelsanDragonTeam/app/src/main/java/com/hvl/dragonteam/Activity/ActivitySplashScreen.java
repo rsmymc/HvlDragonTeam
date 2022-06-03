@@ -22,13 +22,17 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.DataService.PersonService;
+import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LanguageEnum;
 import com.hvl.dragonteam.Model.Enum.RemoteDialogTypeEnum;
 import com.hvl.dragonteam.Model.Person;
+import com.hvl.dragonteam.Model.PersonTeam;
+import com.hvl.dragonteam.Model.PersonTeamView;
 import com.hvl.dragonteam.Model.RemoteDialogModel;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.Util;
 
 import org.json.JSONArray;
@@ -244,9 +248,16 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                 Person person = new Gson().fromJson(result.toString(), Person.class);
                                 Constants.person = person;
 
-                                Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
-                                startActivity(intent);
-                                finish();
+                                String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
+
+                                if(lastSelectedTeamId == null) {
+                                    Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    getPersonTeam(lastSelectedTeamId);
+                                }
+
                             }
 
                             @Override
@@ -264,6 +275,52 @@ public class ActivitySplashScreen extends AppCompatActivity {
             }
         } else {
             Intent intent = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void getPersonTeam(String teamId){
+        PersonTeamService personTeamService = new PersonTeamService();
+        PersonTeam _personTeam = new PersonTeam();
+        _personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        _personTeam.setTeamId(teamId);
+
+        try {
+            personTeamService.getPersonTeam(ActivitySplashScreen.this,
+                    _personTeam,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            PersonTeamView personTeamView = new Gson().fromJson(result.toString(), PersonTeamView.class);
+                            Constants.personTeamView = personTeamView;
+
+                            if(personTeamView != null) {
+                                Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
             startActivity(intent);
             finish();
         }

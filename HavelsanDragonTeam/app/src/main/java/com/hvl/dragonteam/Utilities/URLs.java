@@ -20,7 +20,6 @@ public class URLs {
     //personService
     public static String urlSavePerson = urlPrefix + "personservice/save";
     public static String urlGetPerson = urlPrefix + "personservice/get";
-    public static String urlGetPersonList = urlPrefix + "personservice/getpersonlist";
 
     //trainingService
     public static String urlSaveTraining = urlPrefix + "trainingservice/save";
@@ -28,18 +27,16 @@ public class URLs {
     //teamService
     public static String urlSaveTeam = urlPrefix + "teamservice/save";
     public static String urlGetTeam = urlPrefix + "teamservice/get";
-
     public static String urlDeleteTeam = urlPrefix + "teamservice/delete";
 
     //personTeamService
     public static String urlSavePersonTeam = urlPrefix + "personteamservice/save";
     public static String urlGetPersonTeam = urlPrefix + "personteamservice/get";
-    public static String urlGetPersonTeamList = urlPrefix + "personteamservice/getextendedteampersons";
+    public static String urlGetPersonListByTeam = urlPrefix + "personteamservice/getteampersons";
+    public static String urlGetTeamListByPerson = urlPrefix + "personteamservice/getjoinedteams";
     public static String urlDeletePersonTeam = urlPrefix + "personteamservice/delete";
 
     //attendanceService
-    public static String urlGetAttendance = urlPrefix + "attendanceservice/get";
-    public static String urlGetAttendanceList = urlPrefix + "attendanceservice/getattendances";
     public static String urlSaveAttendance = urlPrefix + "attendanceservice/save";
     public static String urlDeleteAttendance = urlPrefix + "attendanceservice/delete";
 
@@ -55,6 +52,9 @@ public class URLs {
     //announcementService
     public static String urlSaveAnnouncement = urlPrefix + "announcementservice/save";
     public static String urlGetAnnouncementList = urlPrefix + "announcementservice/getannouncements";
+
+    //announcementService
+    public static String urlGetStatsByPerson = urlPrefix + "statsservice/getstatsbyperson";
 
     //notificationService
     public static String urlGetNotification = urlPrefix + "personnotificationservice/get";

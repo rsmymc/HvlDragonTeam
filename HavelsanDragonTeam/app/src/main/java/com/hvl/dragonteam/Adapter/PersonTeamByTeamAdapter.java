@@ -33,13 +33,13 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PersonTeamAdapter extends ArrayAdapter<PersonTeamView> implements SectionIndexer {
+public class PersonTeamByTeamAdapter extends ArrayAdapter<PersonTeamView> implements SectionIndexer {
 
     private Context context;
     private String mSections;
     private static final int CALL_PERMISSIONS_REQUEST = 102;
 
-    public PersonTeamAdapter(Context context, ArrayList<PersonTeamView> listPersonTeam, String mSections) {
+    public PersonTeamByTeamAdapter(Context context, ArrayList<PersonTeamView> listPersonTeam, String mSections) {
         super(context, 0, listPersonTeam);
         this.mSections = mSections;
         this.context = context;

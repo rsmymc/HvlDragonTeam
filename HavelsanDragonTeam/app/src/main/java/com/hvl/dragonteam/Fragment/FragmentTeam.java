@@ -31,7 +31,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hvl.dragonteam.Adapter.PersonTeamAdapter;
+import com.hvl.dragonteam.Adapter.PersonTeamByTeamAdapter;
 import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
@@ -60,7 +60,7 @@ public class FragmentTeam extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentActivity context;
 
-    private PersonTeamAdapter personTeamAdapter;
+    private PersonTeamByTeamAdapter personTeamAdapter;
     private SwipeMenuListView listView;
     private ArrayList<PersonTeamView> personTeamList = new ArrayList<>();
     private ArrayList<String> listLetters = new ArrayList<>();
@@ -82,7 +82,7 @@ public class FragmentTeam extends Fragment {
         listView = view.findViewById(R.id.listView_team);
         listView.setFastScrollEnabled(true);
 
-        if (Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()) {
+        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             SwipeMenuCreator creator = new SwipeMenuCreator() {
 
                 @Override
@@ -189,9 +189,9 @@ public class FragmentTeam extends Fragment {
         view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
         PersonTeamService personTeamService = new PersonTeamService();
         Team team = new Team();
-        team.setId(Constants.TEAM_ID);
+        team.setId(Constants.personTeamView.getTeamId());
         try {
-            personTeamService.getPersonTeamList(context, team,
+            personTeamService.getPersonListByTeam(context, team,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
@@ -219,7 +219,7 @@ public class FragmentTeam extends Fragment {
                                 mSections += letter;
                             }
 
-                            personTeamAdapter = new PersonTeamAdapter(context, personTeamList, mSections);
+                            personTeamAdapter = new PersonTeamByTeamAdapter(context, personTeamList, mSections);
                             listView.setAdapter(personTeamAdapter);
 
                             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);

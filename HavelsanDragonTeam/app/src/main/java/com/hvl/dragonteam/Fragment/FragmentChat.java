@@ -147,7 +147,7 @@ public class FragmentChat extends Fragment {
 
         registerChat();
 
-        SharedPrefHelper.getInstance(context).saveLong(Constants.TEAM_ID + FirebaseAuth.getInstance().getCurrentUser().getUid(),
+        SharedPrefHelper.getInstance(context).saveLong(Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 new Date().getTime());
 
         return view;
@@ -155,7 +155,7 @@ public class FragmentChat extends Fragment {
 
     private void registerChat() {
 
-        channel = Constants.REDIS_CHAT_PREFIX + Constants.TEAM_ID;
+        channel = Constants.REDIS_CHAT_PREFIX + Constants.personTeamView.getTeamId();
         chatHistory = new ChatHistory(channel);
         MyFunction<Collection<?>, Boolean> callback = new MyFunction<Collection<?>, Boolean>() {
             @Override
@@ -175,7 +175,7 @@ public class FragmentChat extends Fragment {
                             listViewMessages.scrollToPosition(messageList.size() - 1);
                             mRefreshLayout.setRefreshing(false);
 
-                            SharedPrefHelper.getInstance(context).saveLong(Constants.TEAM_ID + FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            SharedPrefHelper.getInstance(context).saveLong(Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
                                     new Date().getTime());
                         }
                     }
@@ -281,7 +281,7 @@ public class FragmentChat extends Fragment {
         try {
 
             Team team = new Team();
-            team.setId(Constants.TEAM_ID);
+            team.setId(Constants.personTeamView.getTeamId());
 
             notificationService.getPersonsNotificationList(context, team,
                     new VolleyCallback() {

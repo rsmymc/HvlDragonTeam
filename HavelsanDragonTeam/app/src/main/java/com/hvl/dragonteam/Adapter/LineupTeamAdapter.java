@@ -50,7 +50,7 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.list_item_lineup_person, parent, false);
+        View v = mInflater.inflate(R.layout.list_item_lineup_team, parent, false);
 
         return new LineupTeamAdapter.ViewHolder(v);
     }
@@ -58,15 +58,15 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        if ( filterModel.isHideDontAttend() && !personTrainingAttendanceList.get(position).isAttend()) {
+        if (filterModel.isHideDontAttend() && !personTrainingAttendanceList.get(position).isAttend()) {
             holder.layout_hide();
-        } else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.LEFT.getValue() && !filterModel.isLeft()) {
+        } else if (personTrainingAttendanceList.get(position).getSide() == SideEnum.LEFT.getValue() && !filterModel.isLeft()) {
             holder.layout_hide();
-        }   else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.RIGHT.getValue() && !filterModel.isRight()) {
+        } else if (personTrainingAttendanceList.get(position).getSide() == SideEnum.RIGHT.getValue() && !filterModel.isRight()) {
             holder.layout_hide();
-        }   else if ( personTrainingAttendanceList.get(position).getSide() == SideEnum.BOTH.getValue() && !filterModel.isBoth()) {
+        } else if (personTrainingAttendanceList.get(position).getSide() == SideEnum.BOTH.getValue() && !filterModel.isBoth()) {
             holder.layout_hide();
-        }  else {
+        } else {
             holder.layout_show();
             Glide.with(context)
                     .load(personTrainingAttendanceList.get(position).getProfilePictureUrl())
@@ -119,9 +119,14 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
             params.height = 0;
             layoutLineup.setLayoutParams(params);
         }
+
         private void layout_show() {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins((int) context.getResources().getDimension(R.dimen.frame_horizontal_margin)
+                    , 0,
+                    (int) context.getResources().getDimension(R.dimen.frame_horizontal_margin),
+                    (int) context.getResources().getDimension(R.dimen.frame_horizontal_margin));
             layoutLineup.setLayoutParams(params);
         }
     }

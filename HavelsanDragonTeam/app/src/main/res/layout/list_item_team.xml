@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+    android:layout_marginVertical="@dimen/components_bottom_margin"
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp"
+    card_view:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_team_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/components_top_margin"
+            android:text="Havelsan İstanbul"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/components_left_margin"
+            android:layout_marginVertical="@dimen/components_top_margin">
+
+            <TextView
+                android:id="@+id/txt_team_id"
+                android:layout_width="123dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="@dimen/frame_horizontal_margin"
+                android:background="@drawable/code_text_border"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:text="A12CDA1234"
+                android:textColor="@color/textColor" />
+
+            <ImageView
+                android:id="@+id/img_copy"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="@dimen/frame_horizontal_margin"
+                android:layout_toRightOf="@id/txt_team_id"
+                android:src="@drawable/copy"
+                app:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_toRightOf="@id/img_copy"
+                android:src="@drawable/share"
+                app:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/components_left_margin"
+                android:src="@drawable/next"
+                android:tint="@color/colorPrimary"></ImageView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,11 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".movie">
+    xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/action_announcement"
-        android:icon="@drawable/announcement"
+        android:id="@+id/action_change_team"
+        android:icon="@drawable/recycle"
         android:title=""
         app:iconTint="@color/white"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_announcement"
+        android:icon="@drawable/bell"
+        android:title=""
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+
 </menu>

@@ -179,7 +179,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         layoutFilter = view.findViewById(R.id.layout_filter);
         layoutActionButtons = view.findViewById(R.id.layout_action_buttons);
 
-        if (Constants.personTeam.getRole() != RoleEnum.ADMIN.getValue()){
+        if (Constants.personTeamView.getRole() != RoleEnum.ADMIN.getValue()){
             layoutTeam.setVisibility(View.GONE);
             layoutActionButtons.setVisibility(View.GONE);
         }
@@ -273,7 +273,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
                             lineupAdapter = new LineupAdapter(context, lineupList, FragmentLineup.this);
                             listViewLineup.setAdapter(lineupAdapter);
-                            if(Constants.personTeam.getRole() ==  RoleEnum.ADMIN.getValue()) {
+                            if(Constants.personTeamView.getRole() ==  RoleEnum.ADMIN.getValue()) {
                                 listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
                             }
 
@@ -407,7 +407,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         NotificationService notificationService = new NotificationService();
         try {
             Team team = new Team();
-            team.setId(Constants.personTeam.getTeamId());
+            team.setId(Constants.personTeamView.getTeamId());
             notificationService.getPersonsNotificationList(context,team,
                     new VolleyCallback() {
                         @Override
@@ -460,7 +460,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
 
-        if(Constants.personTeam.getRole() == RoleEnum.ADMIN.getValue()){
+        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()){
             inflater.inflate(R.menu.menu_filter, menu);
             super.onCreateOptionsMenu(menu, inflater);
         }

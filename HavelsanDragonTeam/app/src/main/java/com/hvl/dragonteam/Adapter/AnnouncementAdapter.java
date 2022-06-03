@@ -33,7 +33,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listAnnouncement = listAnnouncement;
-        SharedPrefHelper.getInstance(context).getString(Constants.ANNOUNCEMENT_READ_LIST,null);
+        SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
         util = new Util();
     }
 
@@ -50,7 +50,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.txtTime.setText(Util.parseDate(listAnnouncement.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_hh_mm_ss));
         holder.txtContext.setText(listAnnouncement.get(position).getContext());
 
-        String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.ANNOUNCEMENT_READ_LIST,null);
+        String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
 
         if(jsonList !=null ) {
             List<Integer> list = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {}.getType());
@@ -78,13 +78,13 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             txtTime = itemView.findViewById(R.id.txt_time);
-            txtContext = itemView.findViewById(R.id.txt_location);
+            txtContext = itemView.findViewById(R.id.txt_context);
             imgUnread = itemView.findViewById(R.id.img_unread);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.ANNOUNCEMENT_READ_LIST,null);
+                    String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
 
                     List<Integer> list;
                     if(jsonList !=null ) {
@@ -96,7 +96,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                         list.add(listAnnouncement.get(getAdapterPosition()).getId());
                         imgUnread.setVisibility(View.GONE);
                         String json = new Gson().toJson(list, List.class);
-                        SharedPrefHelper.getInstance(context).saveString(Constants.ANNOUNCEMENT_READ_LIST, json);
+                        SharedPrefHelper.getInstance(context).saveString(Constants.TAG_ANNOUNCEMENT_READ_LIST, json);
                     }
                 }
             });

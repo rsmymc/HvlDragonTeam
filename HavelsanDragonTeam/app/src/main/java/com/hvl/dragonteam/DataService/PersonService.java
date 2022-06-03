@@ -74,28 +74,4 @@ public class PersonService {
         ) ;
         queue.add(postRequest);
     }
-
-    public void getPersonList(Context context, final VolleyCallback callback) throws JSONException {
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetPersonList, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("successGetPersonList", response.toString());
-                        callback.onSuccessList(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("errorGetPersonList", error.toString());
-                        callback.onError(error.toString());
-                    }
-                }
-        ) ;
-        queue.add(postRequest);
-    }
-
 }
