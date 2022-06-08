@@ -1,7 +1,0 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:drawable="@drawable/join_team"
-        android:width="56dp"
-        android:height="56dp">
-    </item>
-</layer-list>

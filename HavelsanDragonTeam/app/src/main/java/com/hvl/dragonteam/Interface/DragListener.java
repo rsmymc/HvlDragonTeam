@@ -105,7 +105,7 @@ public class DragListener implements View.OnDragListener {
                                     adapterTarget.updateListLineup((ArrayList<LineupItem>) listTarget);
                                     adapterTarget.notifyDataSetChanged();
 
-                                    if (listItemTarget.getPersonTrainingAttendance().getPersonId() != App.getContext().getString(R.string.empty)) {
+                                    if (!listItemTarget.getPersonTrainingAttendance().getPersonId().equals(App.getContext().getString(R.string.empty))) {
                                         listSource.set(positionSource, listItemTarget.getPersonTrainingAttendance());
                                     } else {
                                         listSource.remove(positionSource);
@@ -159,7 +159,7 @@ public class DragListener implements View.OnDragListener {
             ((View) event.getLocalState()).setVisibility(View.VISIBLE);
         }
 
-        if(isDropped){
+        if (isDropped) {
             listener.lineupChange();
         }
         return true;

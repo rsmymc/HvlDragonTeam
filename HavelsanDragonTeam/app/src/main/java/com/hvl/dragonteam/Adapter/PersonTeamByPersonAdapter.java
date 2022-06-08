@@ -49,6 +49,7 @@ public class PersonTeamByPersonAdapter extends RecyclerView.Adapter<PersonTeamBy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.txtTeamName.setText(listPersonTeam.get(position).getTeamName());
+        holder.txtTeamId.setText(listPersonTeam.get(position).getTeamId());
         holder.imgCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,12 +88,14 @@ public class PersonTeamByPersonAdapter extends RecyclerView.Adapter<PersonTeamBy
     class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
 
         TextView txtTeamName;
+        TextView txtTeamId;
         ImageView imgCopy;
         ImageView imgShare;
 
         public ViewHolder(View itemView) {
             super(itemView);
             txtTeamName = itemView.findViewById(R.id.txt_team_name);
+            txtTeamId = itemView.findViewById(R.id.txt_team_id);
             imgCopy = itemView.findViewById(R.id.img_copy);
             imgShare = itemView.findViewById(R.id.img_share);
             itemView.setOnClickListener(this);

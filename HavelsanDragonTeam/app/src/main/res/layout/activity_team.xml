@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/tools"
     android:background="@color/listViewBackColor"
     android:clickable="true">
 
@@ -32,23 +34,20 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/txt_my_teams"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:textSize="@dimen/action_button_text_size"
-        android:layout_marginTop="@dimen/components_bottom_margin"
-        android:layout_centerHorizontal="true"
-        android:text="@string/my_teams"></TextView>
-
+        app:title="@string/my_teams"
+        app:titleTextColor="@color/white"
+        app:subtitleTextColor="@color/white"
+        android:background="@color/colorPrimary">
+    </androidx.appcompat.widget.Toolbar>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/team_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_add"
-        android:layout_below="@id/txt_my_teams"
+        android:layout_below="@id/toolbar"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="@dimen/components_top_margin">
@@ -63,40 +62,40 @@
             android:drawSelectorOnTop="true" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_add"
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:layout_marginBottom="@dimen/frame_horizontal_margin"
-        android:backgroundTint="@color/white"
-        android:elevation="10dp">
-
-        <Button
-            android:id="@+id/btn_create_team"
-            android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <com.nambimobile.widgets.efab.Overlay
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/frame_horizontal_margin"
+            android:layout_marginEnd="@dimen/frame_horizontal_margin"
             android:layout_marginRight="@dimen/frame_horizontal_margin"
-            android:layout_weight="1"
-            android:background="@drawable/button_action"
-            android:drawableTop="@drawable/join_team_layer"
-            android:drawableTint="@color/white"
-            android:text="Create Team"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/btn_join_team"
-            android:layout_width="0dp"
+            app:efab_firstFabOptionMarginPx="120"
+            ads:efab_successiveFabOptionMarginPx="100"
+            app:efab_iconAnimationRotationDeg="-135"
+            app:efab_closingAnticipateTension="0"/>
+        <com.nambimobile.widgets.efab.FabOption
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/frame_horizontal_margin"
-            android:layout_weight="1"
-            android:background="@drawable/button_action"
-            android:drawableTop="@drawable/join_team_layer"
-            android:drawableTint="@color/white"
-            android:text="Join Team"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
+            app:fab_icon="@drawable/join_team"
+            android:id="@+id/fabOptionCreateTeam"
+            android:onClick="myClickMethod"
+            ads:rippleColor="@color/white"
+            ads:label_backgroundColor="@color/colorSecondary"
+            app:label_text="@string/create_team"/>
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/fabOptionJoinTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="myClickMethod"
+            ads:rippleColor="@color/white"
+            app:fab_icon="@drawable/join_team"
+            ads:label_backgroundColor="@color/colorSecondary"
+            app:label_text="@string/join_team"/>
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
 </RelativeLayout>

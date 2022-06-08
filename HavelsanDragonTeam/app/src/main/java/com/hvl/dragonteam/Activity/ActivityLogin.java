@@ -381,7 +381,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void goToIntent() {
 
-       Intent intent = new Intent(ActivityLogin.this, ActivityHome.class);//TODO team mi home mu
+       Intent intent = new Intent(ActivityLogin.this, ActivityTeam.class);//TODO team mi home mu
        startActivity(intent);
 
        finish();

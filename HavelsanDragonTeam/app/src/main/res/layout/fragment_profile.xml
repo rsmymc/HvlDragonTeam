@@ -242,17 +242,5 @@
         android:textSize="@dimen/switch_text_size"
         android:textStyle="italic|bold"
         android:textColor="@color/colorPrimary" />
-
-    <TextView
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginBottom="@dimen/components_bottom_margin"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom|center"
-        android:text="@string/logout"
-        android:textSize="@dimen/action_button_text_size"
-        android:textColor="@color/red" />
 </LinearLayout>
 </ScrollView>

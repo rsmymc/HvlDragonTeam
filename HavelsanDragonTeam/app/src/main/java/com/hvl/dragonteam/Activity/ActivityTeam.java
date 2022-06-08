@@ -45,8 +45,6 @@ public class ActivityTeam extends AppCompatActivity {
     private PersonTeamByPersonAdapter personTeamByPersonAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
-    private Button btnCreateTeam;
-    private Button btnJoinTeam;
     private TextView txtQuestionConfirm;
     private ArrayList<PersonTeamView> teamList = new ArrayList<>();
     private Team _team;
@@ -70,26 +68,20 @@ public class ActivityTeam extends AppCompatActivity {
 
         listView = findViewById(R.id.listView_team);
         listView.setLayoutManager(new LinearLayoutManager(ActivityTeam.this, LinearLayoutManager.VERTICAL, false));
-
-        btnCreateTeam = findViewById(R.id.btn_create_team);
-        btnJoinTeam = findViewById(R.id.btn_join_team);
-
-        btnCreateTeam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCreateDialog();
-            }
-        });
-
-        btnJoinTeam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showJoinDialog();
-            }
-        });
-
-
         getTeams();
+    }
+
+    public void myClickMethod(View v) {
+        switch (v.getId()) {
+            case R.id.fabOptionCreateTeam: {
+                showCreateDialog();
+                break;
+            }
+            case R.id.fabOptionJoinTeam: {
+                showJoinDialog();
+                break;
+            }
+        }
     }
 
     private void showCreateDialog() {

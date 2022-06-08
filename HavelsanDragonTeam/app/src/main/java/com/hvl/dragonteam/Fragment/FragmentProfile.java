@@ -17,6 +17,9 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,6 +51,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.Activity.ActivityLogin;
+import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
@@ -59,6 +63,7 @@ import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.CustomTypingEditText;
 import com.hvl.dragonteam.Utilities.ImageProcess;
+import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -87,7 +92,6 @@ public class FragmentProfile extends Fragment {
     private Button btnSave;
     private Switch switchNotification1;
     private FirebaseUser firebaseUser;
-    private TextView txtLogout;
     private TextView txtPrivacy;
     private Context context;
     private ProgressDialog progressDialog;
@@ -120,7 +124,6 @@ public class FragmentProfile extends Fragment {
         btnSave = (Button) view.findViewById(R.id.btn_save);
         switchNotification1 = (Switch) view.findViewById(R.id.switchNotification1);
         txtPrivacy = (TextView) view.findViewById(R.id.txt_privacy);
-        txtLogout = (TextView) view.findViewById(R.id.btnLogout);
 
         Glide.with(context)
                 .load(Constants.person.getProfilePictureUrl())
@@ -174,33 +177,6 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 saveUser();
-            }
-        });
-
-        txtLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                personNotification.setLoggedIn(false);
-                                saveNotification();
-                                FirebaseAuth.getInstance().signOut();
-                                Intent intent = new Intent(getContext(), ActivityLogin.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage(getString(R.string.warning_logout))
-                        .setPositiveButton(getString(R.string.yes), dialogClickListener)
-                        .setNegativeButton(getString(R.string.cancel), dialogClickListener).show();
-
             }
         });
 
@@ -592,6 +568,51 @@ public class FragmentProfile extends Fragment {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case (R.id.action_change_team): {
+                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
+                Intent intent = new Intent(getContext(), ActivityTeam.class);
+                startActivity(intent);
+                getActivity().finish();
+                break;
+            }
+            case (R.id.action_logout): {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                personNotification.setLoggedIn(false);
+                                saveNotification();
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(getContext(), ActivityLogin.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(getString(R.string.warning_logout))
+                        .setPositiveButton(getString(R.string.yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.cancel), dialogClickListener).show();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

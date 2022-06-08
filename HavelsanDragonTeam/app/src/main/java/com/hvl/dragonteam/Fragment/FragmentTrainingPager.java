@@ -120,12 +120,6 @@ public class FragmentTrainingPager extends Fragment {
                         .commit();
 
             }
-            case (R.id.action_change_team): {
-                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
-                Intent intent = new Intent(getContext(), ActivityTeam.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
         }
         return super.onOptionsItemSelected(item);
     }
