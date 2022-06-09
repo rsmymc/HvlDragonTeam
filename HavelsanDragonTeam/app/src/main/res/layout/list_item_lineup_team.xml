@@ -3,7 +3,7 @@
     android:id="@+id/layout_lineup"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center"
+    android:layout_gravity="center"
     android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
     android:layout_marginBottom="@dimen/frame_horizontal_margin"
     android:orientation="vertical">
@@ -23,6 +23,7 @@
                 android:paddingVertical="2dp"
                 android:background="@drawable/background_lineup"
                 android:paddingHorizontal="5dp"
+                android:textSize="@dimen/frame_horizontal_margin"
                 android:text="Rasim , L , 80Kg"
                 android:textAlignment="center"
                 android:textColor="@color/white"></TextView>

@@ -210,6 +210,20 @@ public class Util {
         return localizedContext.getString(id);
     }
 
+    public static String getShortName(String name){
+        String shortName = "";
+
+        String [] arr = name.split(" ");
+
+        for (int i = 0; i<arr.length-1; i ++){
+
+            shortName += arr[i].substring(0,1) + ". ";
+        }
+        shortName += arr[arr.length-1];
+
+        return shortName;
+    }
+
     public static void toastError(Context context){
         toastError(context, context.getString(R.string.error));
     }

@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
@@ -26,17 +26,13 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonService;
-import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LanguageEnum;
-import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonNotification;
-import com.hvl.dragonteam.Model.PersonTeam;
-import com.hvl.dragonteam.Model.PersonTeamView;
-import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.R;
+import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.Util;
 
 import org.json.JSONArray;
@@ -54,6 +50,10 @@ public class ActivityLogin extends AppCompatActivity {
     private EditText editTextPhone;
     private Button btnVerify;
     private EditText editTextCode;
+    private TextView txtEnterCode;
+    private TextView txtResend;
+    private LinearLayout layoutPhone;
+    private LinearLayout layoutCode;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
 
@@ -73,22 +73,48 @@ public class ActivityLogin extends AppCompatActivity {
         editTextPhone = (EditText) findViewById(R.id.txt_phone);
         btnVerify = (Button) findViewById(R.id.btn_verify);
         editTextCode = (EditText) findViewById(R.id.txt_code);
+        txtEnterCode = (TextView) findViewById(R.id.txt_enter_code);
+        txtResend = (TextView) findViewById(R.id.txt_resend);
+        layoutPhone = (LinearLayout) findViewById(R.id.layout_phone);
+        layoutCode = (LinearLayout) findViewById(R.id.layout_code);
         mAuth = FirebaseAuth.getInstance();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //testPhoneVerify();
                 testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
-                //startPhoneNumberVerification(editTextPhone.getText().toString());
+                /*if (!editTextPhone.getText().toString().trim().equals("")) {
+                    progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.verifying), false, false);
+                    startPhoneNumberVerification(editTextPhone.getText().toString().trim());
+                } else {
+                    Util.toastWarning(ActivityLogin.this,getString(R.string.enter_phone_number));
+                }*/
             }
         });
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyPhoneNumberWithCode(mVerificationId, editTextCode.getText().toString());
+                if (!editTextCode.getText().toString().trim().equals("")) {
+                    verifyPhoneNumberWithCode(mVerificationId, editTextCode.getText().toString().trim());
+                } else {
+                    Util.toastWarning(ActivityLogin.this,getString(R.string.enter_verification_code).replace("XXX", editTextPhone.getText().toString().trim()));
+                }
             }
         });
+
+        txtResend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.resending), false, false);
+                resendVerificationCode(editTextPhone.getText().toString());
+            }
+        });
+
+        layoutPhone.setVisibility(View.VISIBLE);
+        layoutCode.setVisibility(View.GONE);
+    }
+
+    private void startPhoneNumberVerification(String phoneNumber) {
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -101,12 +127,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onVerificationFailed(FirebaseException e) {
                 Log.w(TAG, "onVerificationFailed", e);
-
-                if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                    // Invalid request
-                } else if (e instanceof FirebaseTooManyRequestsException) {
-                    // The SMS quota for the project has been exceeded
-                }
+                progressDialog.dismiss();
                 Util.toastError(ActivityLogin.this);
             }
 
@@ -114,19 +135,24 @@ public class ActivityLogin extends AppCompatActivity {
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
                 Log.d(TAG, "onCodeSent:" + verificationId);
+                Util.toastInfo(ActivityLogin.this, getString(R.string.code_sent));
+                progressDialog.dismiss();
                 mVerificationId = verificationId;
                 mResendToken = token;
-                //TODO hide phone show code UI
+
+                txtEnterCode.setText(getString(R.string.enter_verification_code).replace("XXX", phoneNumber));
+                layoutPhone.setVisibility(View.GONE);
+                layoutCode.setVisibility(View.VISIBLE);
             }
+
             @Override
             public void onCodeAutoRetrievalTimeOut(String s) {
                 super.onCodeAutoRetrievalTimeOut(s);
                 Log.i(TAG, "onCodeAutoRetrievalTimeOut: " + s);
+                //Util.toastWarning(ActivityLogin.this, "Timeout");
             }
         };
-    }
 
-    private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
                         .setPhoneNumber(phoneNumber)       // Phone number to verify
@@ -140,19 +166,8 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void verifyPhoneNumberWithCode(String verificationId, String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-    }
 
-    private void resendVerificationCode(String phoneNumber,
-                                        PhoneAuthProvider.ForceResendingToken token) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(phoneNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .setForceResendingToken(token)     // ForceResendingToken from callbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        signInWithPhoneAuthCredential(credential);
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -170,56 +185,24 @@ public class ActivityLogin extends AppCompatActivity {
                     }
                 });
     }
-    public void testPhoneVerify() {
-        // [START auth_test_phone_verify]
-        String phoneNum = "+16505554567";
-        String testVerificationCode = "123456";
 
-        // Whenever verification is triggered with the whitelisted number,
-        // provided it is not set for auto-retrieval, onCodeSent will be triggered.
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(phoneNum)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onCodeSent(String verificationId,
-                                           PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        // Save the verification id somewhere
-                        // ...
-
-                        // The corresponding whitelisted code above should be used to complete sign-in.
-                        ActivityLogin.this.enableUserManuallyInputCode();
-                    }
-
-                    @Override
-                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                        // Sign in with the credential
-                        // ...
-                        signInWithPhoneAuthCredential(phoneAuthCredential);
-                    }
-
-                    @Override
-                    public void onVerificationFailed(FirebaseException e) {
-                        // ...
-                        Log.e(TAG,e.getLocalizedMessage());
-                    }
-                })
-                .build();
+    private void resendVerificationCode(String phoneNumber) {
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber(phoneNumber)       // Phone number to verify
+                        .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // Activity (for callback binding)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .setForceResendingToken(mResendToken)     // ForceResendingToken from callbacks
+                        .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
-        // [END auth_test_phone_verify]
-    }
-
-    private void enableUserManuallyInputCode() {
-        // No-op
     }
 
     public void testPhoneAutoRetrieve(String phoneNumber, String smsCode) {
         // [START auth_test_phone_auto]
         // The test phone number and code should be whitelisted in the console.
-       // String phoneNumber = "+16505556878";
-        //String smsCode = "687868";
+        phoneNumber = "+16505554567";
+        smsCode = "123456";
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseAuthSettings firebaseAuthSettings = firebaseAuth.getFirebaseAuthSettings();
@@ -299,7 +282,7 @@ public class ActivityLogin extends AppCompatActivity {
                 mAuth.getCurrentUser().getDisplayName(),
                 mAuth.getCurrentUser().getPhoneNumber(),
                 0,
-               0,
+                0,
                 SideEnum.RIGHT.getValue(),
                 null);
 
@@ -381,10 +364,10 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void goToIntent() {
 
-       Intent intent = new Intent(ActivityLogin.this, ActivityTeam.class);//TODO team mi home mu
-       startActivity(intent);
+        Intent intent = new Intent(ActivityLogin.this, ActivityTeam.class);//TODO team mi home mu
+        startActivity(intent);
 
-       finish();
+        finish();
     }
 
 }

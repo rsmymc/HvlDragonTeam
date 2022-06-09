@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,7 +68,7 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
         } else if (personTrainingAttendanceList.get(position).getSide() == SideEnum.BOTH.getValue() && !filterModel.isBoth()) {
             holder.layout_hide();
         } else {
-            holder.layout_show();
+           // holder.layout_show();
             Glide.with(context)
                     .load(personTrainingAttendanceList.get(position).getProfilePictureUrl())
                     .apply(new RequestOptions()
@@ -116,18 +117,23 @@ public class LineupTeamAdapter extends RecyclerView.Adapter<LineupTeamAdapter.Vi
         }
 
         private void layout_hide() {
-            params.height = 0;
-            layoutLineup.setLayoutParams(params);
+           // params.height = 0;
+            //layoutLineup.setLayoutParams(params);
+            layoutLineup.setVisibility(View.GONE);
         }
 
         private void layout_show() {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            /*params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
+
             params.setMargins((int) context.getResources().getDimension(R.dimen.frame_horizontal_margin)
                     , 0,
                     (int) context.getResources().getDimension(R.dimen.frame_horizontal_margin),
                     (int) context.getResources().getDimension(R.dimen.frame_horizontal_margin));
-            layoutLineup.setLayoutParams(params);
+            params.gravity = Gravity.CENTER_HORIZONTAL;*/
+            //layoutLineup.setLayoutParams(params);
+
+            layoutLineup.setVisibility(View.VISIBLE);
         }
     }
 

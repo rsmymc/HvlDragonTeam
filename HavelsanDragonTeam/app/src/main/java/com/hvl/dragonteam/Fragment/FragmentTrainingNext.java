@@ -104,6 +104,7 @@ public class FragmentTrainingNext extends Fragment {
 
     public void getTrainings() {
         view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
+        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
         PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
         personTrainingAttendance.setPersonId(Constants.person.getId());

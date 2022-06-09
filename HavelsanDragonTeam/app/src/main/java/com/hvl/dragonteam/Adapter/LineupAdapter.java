@@ -81,8 +81,7 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-
-        holder.txtPersonName.setText(listLineup.get(position).getPersonTrainingAttendance().getName());
+        holder.txtPersonName.setText(Util.getShortName(listLineup.get(position).getPersonTrainingAttendance().getName()));
         holder.txtSide.setText(LineupEnum.toLineupEnum(listLineup.get(position).getId()).toString());
         Glide.with(context)
                 .load(listLineup.get(position).getPersonTrainingAttendance().getProfilePictureUrl())
