@@ -16,10 +16,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hvl.dragonteam.Adapter.TrainingAdapter;
+import com.hvl.dragonteam.Adapter.TrainingAttendanceAdapter;
 import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.Util;
@@ -40,7 +41,7 @@ public class FragmentTrainingPast extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentActivity context;
 
-    private TrainingAdapter trainingAdapter;
+    private TrainingAttendanceAdapter trainingAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
     private LinearLayout layoutAdd;
@@ -83,7 +84,7 @@ public class FragmentTrainingPast extends Fragment {
         PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
         PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
         personTrainingAttendance.setPersonId(Constants.person.getId());
-        personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date()));
+        personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(new Date()));
         personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
         try {
             personTrainingAttendanceService.getPersonTrainingAttendanceListByPersonPast(context, personTrainingAttendance,
@@ -96,11 +97,24 @@ public class FragmentTrainingPast extends Fragment {
                             personTrainingAttendanceList.clear();
                             personTrainingAttendanceList.addAll(list);
 
-                            trainingAdapter = new TrainingAdapter(context, personTrainingAttendanceList, false);
-                            trainingAdapter.setClickListener(new TrainingAdapter.ItemClickListener() {
+                            trainingAdapter = new TrainingAttendanceAdapter(context, personTrainingAttendanceList, false);
+                            trainingAdapter.setClickListener(new TrainingAttendanceAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
+                                    Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
+                                            personTrainingAttendanceList.get(position).getTime(),
+                                            personTrainingAttendanceList.get(position).getLocation(),
+                                            Constants.personTeamView.getTeamId());
 
+                                    String json = new Gson().toJson(training, Training.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("OBJ", json);
+
+                                    FragmentLineup fragmentLineup = new FragmentLineup();
+                                    fragmentLineup.setArguments(bundle);
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.container, fragmentLineup, "fragmentLineup").addToBackStack("fragmentLineup")
+                                            .commit();
                                 }
                             });
                             listView.setAdapter(trainingAdapter);

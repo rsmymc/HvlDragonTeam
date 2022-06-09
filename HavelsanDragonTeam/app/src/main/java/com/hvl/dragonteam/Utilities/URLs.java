@@ -23,6 +23,7 @@ public class URLs {
 
     //trainingService
     public static String urlSaveTraining = urlPrefix + "trainingservice/save";
+    public static String urlGetTrainingList = urlPrefix + "trainingservice/gettrainings";
 
     //teamService
     public static String urlSaveTeam = urlPrefix + "teamservice/save";

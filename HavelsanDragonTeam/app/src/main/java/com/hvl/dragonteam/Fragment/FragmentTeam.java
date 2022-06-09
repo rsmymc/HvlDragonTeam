@@ -298,6 +298,7 @@ public class FragmentTeam extends Fragment {
                         public void onSuccess(JSONObject result) {
                             Util.toastInfo(context, getString(R.string.info_team_updated));
                             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                            Constants.personTeamView.setRole(role);
                             getTeamPersons();
                         }
 

@@ -266,6 +266,15 @@
             android:textColor="@color/colorSecondary"></Button>
 
         <Button
+            android:id="@+id/btn_load"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/darkGray"
+            android:text="@string/load"
+            android:textColor="@color/chat_sender_color3"></Button>
+
+        <Button
             android:id="@+id/btn_draft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

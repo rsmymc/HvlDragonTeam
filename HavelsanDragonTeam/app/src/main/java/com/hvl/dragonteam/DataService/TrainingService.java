@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.hvl.dragonteam.Interface.CustomJsonArrayRequest;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Announcement;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.Utilities.URLs;
 
@@ -44,6 +45,31 @@ public class TrainingService {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("errorSaveTraining", error.toString());
+                        callback.onError(error.toString());
+                    }
+                }
+        ) ;
+        queue.add(postRequest);
+    }
+
+    public void getTrainingList(Context context, Team team, final VolleyCallback callback) throws JSONException {
+
+        String json = new Gson().toJson(team, Team.class);
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        CustomJsonArrayRequest postRequest = new CustomJsonArrayRequest(Request.Method.POST, URLs.urlGetTrainingList, new JSONObject(json),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("successGetTrainingList", response.toString());
+                        callback.onSuccessList(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("errGetTrainingList", error.toString());
                         callback.onError(error.toString());
                     }
                 }

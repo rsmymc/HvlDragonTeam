@@ -26,7 +26,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hvl.dragonteam.Adapter.TrainingAdapter;
+import com.hvl.dragonteam.Adapter.TrainingAttendanceAdapter;
 import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
 import com.hvl.dragonteam.DataService.TrainingService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
@@ -54,7 +54,7 @@ public class FragmentTrainingNext extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentActivity context;
 
-    private TrainingAdapter trainingAdapter;
+    private TrainingAttendanceAdapter trainingAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
     private LinearLayout layoutAdd;
@@ -108,7 +108,7 @@ public class FragmentTrainingNext extends Fragment {
         PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
         PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
         personTrainingAttendance.setPersonId(Constants.person.getId());
-        personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date()));
+        personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(new Date()));
         personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
         try {
             personTrainingAttendanceService.getPersonTrainingAttendanceListByPersonNext(context, personTrainingAttendance,
@@ -121,8 +121,8 @@ public class FragmentTrainingNext extends Fragment {
                             personTrainingAttendanceList.clear();
                             personTrainingAttendanceList.addAll(list);
 
-                            trainingAdapter = new TrainingAdapter(context, personTrainingAttendanceList, true);
-                            trainingAdapter.setClickListener(new TrainingAdapter.ItemClickListener() {
+                            trainingAdapter = new TrainingAttendanceAdapter(context, personTrainingAttendanceList, true);
+                            trainingAdapter.setClickListener(new TrainingAttendanceAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
 
@@ -194,7 +194,7 @@ public class FragmentTrainingNext extends Fragment {
             public void onTimeSet(TimePicker timePicker,  int hourOfDay, int minute) {
                 date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 date.set(Calendar.MINUTE, minute);
-                txtDate.setText(Util.formatDate(date.getTime(),Util.DATE_FORMAT_dd_MMM_yyyy_EEE_hh_mm));
+                txtDate.setText(Util.formatDate(date.getTime(),Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
             }
         };
 
@@ -210,7 +210,7 @@ public class FragmentTrainingNext extends Fragment {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Training training = new Training();
                 training.setLocation(spinnerLocation.getSelectedItemPosition());
-                String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(date.getTime());
+                String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(date.getTime());
                 training.setTime(timeStamp);
                 training.setTeamId(Constants.personTeamView.getTeamId());
                 TrainingService trainingService = new TrainingService();

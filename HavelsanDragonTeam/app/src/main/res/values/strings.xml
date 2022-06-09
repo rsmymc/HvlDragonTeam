@@ -21,6 +21,7 @@
     <string name="draft">Draft</string>
     <string name="publish">Publish</string>
     <string name="reset">Reset</string>
+    <string name="load">Load...</string>
     <string name="show_only_attendees">Show only attendees</string>
     <string name="choose">Choose</string>
     <string name="lineup">Lineup</string>

@@ -1,14 +1,18 @@
 package com.hvl.dragonteam.Fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,11 +32,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.Adapter.AnnouncementAdapter;
 import com.hvl.dragonteam.Adapter.LineupAdapter;
 import com.hvl.dragonteam.Adapter.LineupTeamAdapter;
+import com.hvl.dragonteam.Adapter.TrainingAdapter;
 import com.hvl.dragonteam.DataService.LineupService;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
+import com.hvl.dragonteam.DataService.TrainingService;
 import com.hvl.dragonteam.Interface.OnLineupChangeListener;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LineupEnum;
@@ -70,12 +77,12 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private Training training;
     private LineupAdapter lineupAdapter;
     private LineupTeamAdapter lineupTeamAdapter;
-    private Switch switchOnlyAttendees;
     private TextView txtWeightLeft;
     private TextView txtWeightRight;
     private Button btnDraft;
     private Button btnPublish;
     private Button btnReset;
+    private Button btnLoad;
     private RecyclerView listViewLineup;
     private RecyclerView listViewPerson;
     private CardView layoutTeam;
@@ -88,6 +95,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private LinearLayout layoutActionButtons;
     private ArrayList<LineupItem> lineupList = new ArrayList<>();
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
+    private ArrayList<Training> trainingList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private FilterModel filterModel = new FilterModel();
@@ -170,7 +178,15 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getPersonAttendance();
+                getPersonAttendance(training);
+            }
+        });
+
+        btnLoad = view.findViewById(R.id.btn_load);
+        btnLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getTrainings();
             }
         });
 
@@ -179,12 +195,12 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         layoutFilter = view.findViewById(R.id.layout_filter);
         layoutActionButtons = view.findViewById(R.id.layout_action_buttons);
 
-        if (Constants.personTeamView.getRole() != RoleEnum.ADMIN.getValue()){
+        if (Constants.personTeamView.getRole() != RoleEnum.ADMIN.getValue()) {
             layoutTeam.setVisibility(View.GONE);
             layoutActionButtons.setVisibility(View.GONE);
         }
 
-        getPersonAttendance();
+        getPersonAttendance(training);
 
         return view;
     }
@@ -206,7 +222,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         return personTrainingAttendance;
     }
 
-    private void filterList(){
+    private void filterList() {
 
         filterModel.setLeft(checkBoxLeft.isChecked());
         filterModel.setRight(checkBoxRight.isChecked());
@@ -217,7 +233,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         lineupTeamAdapter.notifyDataSetChanged();
     }
 
-    public void getLineup() {
+    public void getLineup(Training training) {
         LineupService lineupService = new LineupService();
         try {
             lineupService.getLineup(context, training,
@@ -273,11 +289,9 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
                             lineupAdapter = new LineupAdapter(context, lineupList, FragmentLineup.this);
                             listViewLineup.setAdapter(lineupAdapter);
-                            if(Constants.personTeamView.getRole() ==  RoleEnum.ADMIN.getValue()) {
-                                listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
-                            }
+                            listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
 
-                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, filterModel ,FragmentLineup.this);
+                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, filterModel, FragmentLineup.this);
                             listViewPerson.setAdapter(lineupTeamAdapter);
                             listViewPerson.setOnDragListener(lineupTeamAdapter.getDragInstance());
 
@@ -302,18 +316,19 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         }
     }
 
-    private void getPersonAttendance() {
+    private void getPersonAttendance(Training loadFrom) {
         PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
         try {
             personTrainingAttendanceService.getPersonTrainingAttendanceListByTraining(context, training,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
-                            List<PersonTrainingAttendance> list = new Gson().fromJson(result.toString(), new TypeToken<List<PersonTrainingAttendance>>() {}.getType());
+                            List<PersonTrainingAttendance> list = new Gson().fromJson(result.toString(), new TypeToken<List<PersonTrainingAttendance>>() {
+                            }.getType());
 
                             personTrainingAttendanceList.clear();
                             personTrainingAttendanceList.addAll(list);
-                            getLineup();
+                            getLineup(loadFrom);
                         }
 
                         @Override
@@ -387,6 +402,88 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         }
     }
 
+    private void getTrainings() {
+        TrainingService trainingService = new TrainingService();
+        try {
+            Team team = new Team();
+            team.setId(Constants.personTeamView.getTeamId());
+            trainingService.getTrainingList(context, team,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                            List<Training> list = new Gson().fromJson(result.toString(), new TypeToken<List<Training>>() {
+                            }.getType());
+
+                            trainingList.clear();
+                            trainingList.addAll(list);
+                            showTrainingDialog();
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Util.toastError(context);
+                            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Util.toastError(context);
+            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+    }
+
+    private void showTrainingDialog() {
+        final Dialog dialog = new Dialog(context,  R.style.Theme_AppCompat_Light_Dialog_Alert);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_training_list);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int displayWidth = displayMetrics.widthPixels;
+        int displayHeight = displayMetrics.heightPixels;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (displayWidth * 0.5f);
+        int dialogWindowHeight = (int) (displayHeight * 0.5f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        RecyclerView listViewTraining = dialog.findViewById(R.id.listView_training);
+        listViewTraining.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+        TrainingAdapter trainingAdapter = new TrainingAdapter(context, trainingList);
+        trainingAdapter.setClickListener(new TrainingAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                getPersonAttendance(trainingList.get(position));
+                    dialog.dismiss();
+            }
+        });
+
+        listViewTraining.setAdapter(trainingAdapter);
+        trainingAdapter.notifyDataSetChanged();
+
+        if(trainingList.size()>0){
+            dialog.findViewById(R.id.resultPanel).setVisibility(View.GONE);
+        }
+
+        dialog.show();
+    }
+
     private void sendMessageNotify(String tokens, String message) {
         NotificationModel notificationModel = new NotificationModel("",
                 NotificationTypeEnum.LINEUP_NOTIFICATION.getValue(),
@@ -397,7 +494,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
         params.put("body", message);
-        params.put("title",  toolbar.getTitle().toString());
+        params.put("title", toolbar.getTitle().toString());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
     }
@@ -408,7 +505,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         try {
             Team team = new Team();
             team.setId(Constants.personTeamView.getTeamId());
-            notificationService.getPersonsNotificationList(context,team,
+            notificationService.getPersonsNotificationList(context, team,
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
@@ -426,10 +523,10 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                                 }
                             }
 
-                            String message ="";
-                            if(state == SaveEnum.PUBLISH.getValue()) {
+                            String message = "";
+                            if (state == SaveEnum.PUBLISH.getValue()) {
                                 message = getString(R.string.publish_notification);
-                            } else if(state == SaveEnum.PUBLISH.getValue()){
+                            } else if (state == SaveEnum.PUBLISH.getValue()) {
                                 message = getString(R.string.draft_notification).replace("XXX", Constants.person.getName());
                             }
 
@@ -460,7 +557,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
 
-        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()){
+        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             inflater.inflate(R.menu.menu_filter, menu);
             super.onCreateOptionsMenu(menu, inflater);
         }
@@ -496,7 +593,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
             if (lineupItem.getId() % 2 == 0) {
                 totalLeftWeight += lineupItem.getPersonTrainingAttendance().getWeight();
             } else {
-                totalRightWeight +=  lineupItem.getPersonTrainingAttendance().getWeight();
+                totalRightWeight += lineupItem.getPersonTrainingAttendance().getWeight();
             }
         }
 

@@ -48,11 +48,9 @@ import es.dmoral.toasty.Toasty;
 
 public class Util {
 
-    public static final String DATE_FORMAT_dd_MMM_yyyy_EEE = "dd MMM yyyy, EEE";
-    public static final String DATE_FORMAT_dd_MMM_yyyy_EEE_hh_mm = "dd MMM yyyy, EEE hh:mm";
-    public static final String DATE_FORMAT_dd_MMM_yyyy_EEE_hh_mm_ss = "dd MMM yyyy, EEE hh:mm:ss";
-    public static final String DATE_FORMAT_dd_MMM_EEE = "dd MMM, EEE";
-    public static final String DATE_FORMAT_yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
+    public static final String DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm = "dd MMM yyyy, EEE HH:mm";
+    public static final String DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm_ss = "dd MMM yyyy, EEE HH:mm:ss";
+    public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
     public static final int MINUTES_PER_HOUR = 60;
     public static final int SECONDS_PER_MINUTE = 60;
     public static final int SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;

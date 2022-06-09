@@ -22,9 +22,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hvl.dragonteam.Model.Enum.LineupEnum;
+import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.LineupItem;
 import com.hvl.dragonteam.R;
+import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.Util;
 import com.hvl.dragonteam.Interface.DragListener;
 import com.hvl.dragonteam.Interface.OnLineupChangeListener;
@@ -93,8 +95,6 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
                         .error(R.drawable.uniform2))
                 .into( holder.imgProfile);
 
-
-
         if(!listLineup.get(position).getPersonTrainingAttendance().getPersonId().equals(context.getString(R.string.empty))) {
             if( listLineup.get(position).getPersonTrainingAttendance().getSide() == SideEnum.BOTH.getValue() ||
                     position % 2 == listLineup.get(position).getPersonTrainingAttendance().getSide()) {
@@ -143,16 +143,18 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                ClipData data = ClipData.newPlainText("", "");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    v.startDragAndDrop(data, shadowBuilder, v, 0);
-                } else {
-                    v.startDrag(data, shadowBuilder, v, 0);
-                }
-                return true;
+        if(Constants.personTeamView.getRole() ==  RoleEnum.ADMIN.getValue()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    ClipData data = ClipData.newPlainText("", "");
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        v.startDragAndDrop(data, shadowBuilder, v, 0);
+                    } else {
+                        v.startDrag(data, shadowBuilder, v, 0);
+                    }
+                    return true;
+            }
         }
         return false;
     }

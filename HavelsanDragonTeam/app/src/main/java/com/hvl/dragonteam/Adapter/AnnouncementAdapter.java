@@ -47,7 +47,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.txtTime.setText(Util.parseDate(listAnnouncement.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_hh_mm_ss));
+        holder.txtTime.setText(Util.parseDate(listAnnouncement.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm_ss));
         holder.txtContext.setText(listAnnouncement.get(position).getContext());
 
         String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);

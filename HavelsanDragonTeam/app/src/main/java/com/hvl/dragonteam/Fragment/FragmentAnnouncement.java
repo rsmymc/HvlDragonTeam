@@ -176,7 +176,7 @@ public class FragmentAnnouncement extends Fragment {
 
                 Announcement announcement = new Announcement();
                 announcement.setContext(_context);
-                String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_hh_mm_ss).format(new Date());
+                String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(new Date());
                 announcement.setTime(timeStamp);
                 announcement.setTeamId(Constants.personTeamView.getTeamId());
                 AnnouncementService announcementService = new AnnouncementService();
