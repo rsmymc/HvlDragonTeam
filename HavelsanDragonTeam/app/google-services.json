@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "883341445592",
+    "project_id": "havelsan-dragon-team-7e993",
+    "storage_bucket": "havelsan-dragon-team-7e993.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883341445592:android:409fd696109b7f9bc48aad",
+        "android_client_info": {
+          "package_name": "com.hvl.dragonteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883341445592-jq8qvmvuertjsfep7ipm0n2ngt9o53om.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_qDjD7kZdSMRqSWOFs67t_sP1rL6vgz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883341445592-jq8qvmvuertjsfep7ipm0n2ngt9o53om.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

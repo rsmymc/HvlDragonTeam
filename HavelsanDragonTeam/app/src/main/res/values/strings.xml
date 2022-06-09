@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">Havelsan Dragon Team</string>
+    <string name="login">Log In</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="error">Error occurred</string>
+    <string name="share">Share</string>
+    <string name="send_code">Send Code</string>
+    <string name="verify">Verify</string>
+    <string name="phone">Phone</string>
+    <string name="weight">Weight (Kg)</string>
+    <string name="height">Height (Cm)</string>
+    <string name="side">Preferred Side</string>
+    <string name="location">Location</string>
+    <string name="chat_hint">Type here</string>
+    <string name="crop">Crop</string>
+    <string name="apply">Apply</string>
+    <string name="save">Save</string>
+    <string name="draft">Draft</string>
+    <string name="publish">Publish</string>
+    <string name="reset">Reset</string>
+    <string name="show_only_attendees">Show only attendees</string>
+    <string name="choose">Choose</string>
+    <string name="lineup">Lineup</string>
+    <string name="remove">Remove</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="context">Context</string>
+    <string name="team_name">Team Name</string>
+    <string name="empty">Empty</string>
+    <string name="logout">Log Out</string>
+    <string name="wait">Please wait</string>
+    <string name="processing">Processing...</string>
+    <string name="profilePhoto">Profile Photo</string>
+    <string name="attendance">Attendance</string>
+    <string name="filters">Filters</string>
+    <string name="hide">Hide</string>
+    <string name="enter">Enter</string>
+    <string name="next">Next</string>
+    <string name="dont_attend">Don\'t Attend</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="both">Both</string>
+    <string name="add_training">Add Training</string>
+    <string name="count">Count</string>
+    <string name="admin">Admin</string>
+    <string name="join_team">Join Team</string>
+    <string name="create_team">Create Team</string>
+    <string name="my_teams">My Teams</string>
+    <string name="joining_code">Joining Code</string>
+    <string name="default_role">Default</string>
+    <string name="chart_title_by_person">Training Attendance Count</string>
+    <string name="privacy">Privacy Policy </string>
+    <string name="privacy_warning">By signing in, you have read and accept our </string>
+
+    <string name="enter_phone_number">Please enter your phone number to continue</string>
+    <string name="enter_verification_code">Please enter the verification code we sent \nto XXX</string>
+    <string name="resend_code">Didn\'t get code? <b>Resend</b></string>
+    <string name="verifying">Verifying your number</string>
+    <string name="resending">Resending code</string>
+    <string name="code_sent">Verification code sent</string>
+
+    <string name="notifications">Notifications</string>
+    <string name="publish_notification">Lineup published</string>
+    <string name="draft_notification">Lineup drafted by XXX</string>
+
+    <string name="question_join_team">Do you want to join team XXX</string>
+
+    <string name="info_profile_updated">Profile info updated</string>
+    <string name="info_team_created">Team created</string>
+    <string name="info_team_joined">Joined team</string>
+    <string name="info_team_updated">Team updated</string>
+    <string name="info_lineup_updated">Lineup updated</string>
+    <string name="info_clipboard">Code copied to clipboard</string>
+    <string name="info_share_team">By clicking the LLL link or by pasting the XXX code into the join team window inside the + button, you can join the YYY team.</string>
+
+
+    <string name="warning_logout">Are you sure to logout?</string>
+    <string name="warning_delete_person_team">Are you sure to remove from team?</string>
+    <string name="warning_no_joined_team">No Joined Team</string>
+    <string name="warning_no_announcement">No Announcement</string>
+    <string name="warning_no_training">No Training</string>
+    <string name="warning_no_person">No Person</string>
+    <string name="warning_team_not_found">Team Not Found</string>
+
+    <string name="question_exit">Do you want to exit?</string>
+    <string name="question_delete_photo">Remove photo?</string>
+
+    <string name="training">Training</string>
+    <string name="equipment">Equipment</string>
+    <string name="team">Team</string>
+    <string name="stats">Stats</string>
+    <string name="announcement">Announcement</string>
+    <string name="profile">Profile</string>
+    <string name="chat">Chat</string>
+    <string name="send_image">Send image</string>
+
+    <string name="new_updates">New Version Available</string>
+    <string name="maintenance">Maintenance</string>
+    <string name="exit">Exit</string>
+    <string name="update">Update</string>
+    <string name="dont_show_again">Do not show for this update</string>
+    <string name="dont_show">Do not show again</string>
+    <string name="later">Later</string>
+
+    <string name="next_training">Next Trainings</string>
+    <string name="past_training">Past Trainings</string>
+
+    <string-array name="profilePhotoArray">
+        <item>From Gallery</item>
+        <item>Take a Photo</item>
+        <item>Remove Photo</item>
+    </string-array>
+
+    <string-array name="chatImageArray">
+        <item>From Gallery</item>
+        <item>Take a Photo</item>
+    </string-array>
+
+    <string-array name="side_array">
+        <item>@string/left</item>
+        <item>@string/right</item>
+        <item>@string/both</item>
+    </string-array>
+
+    <string-array name="location_array">
+        <item>Maltepe</item>
+        <item>Tuzla</item>
+    </string-array>
+</resources>
