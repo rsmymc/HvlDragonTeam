@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -93,6 +94,7 @@ public class FragmentProfile extends Fragment {
     private Switch switchNotification1;
     private FirebaseUser firebaseUser;
     private TextView txtPrivacy;
+    private LinearLayout layoutShuttle;
     private Context context;
     private ProgressDialog progressDialog;
     private final static int PICK_PHOTO_REQUEST = 100;
@@ -124,6 +126,7 @@ public class FragmentProfile extends Fragment {
         btnSave = (Button) view.findViewById(R.id.btn_save);
         switchNotification1 = (Switch) view.findViewById(R.id.switchNotification1);
         txtPrivacy = (TextView) view.findViewById(R.id.txt_privacy);
+        layoutShuttle = (LinearLayout) view.findViewById(R.id.layout_shuttle);
 
         Glide.with(context)
                 .load(Constants.person.getProfilePictureUrl())
@@ -184,6 +187,14 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLs.urlPrivacyPolicy));
+                startActivity(browserIntent);
+            }
+        });
+
+        layoutShuttle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLs.urlShuttle));
                 startActivity(browserIntent);
             }
         });

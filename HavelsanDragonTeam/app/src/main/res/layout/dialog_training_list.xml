@@ -36,7 +36,7 @@
         android:id="@+id/training_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btn_cancel"
+        android:layout_above="@id/txt_cancel"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="@dimen/components_top_margin">
@@ -49,17 +49,13 @@
             android:background="@color/listViewBackColor"
             android:drawSelectorOnTop="true" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <Button
-        android:id="@+id/btn_cancel"
+    <TextView
+        android:id="@+id/txt_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/components_top_margin"
         android:layout_margin="@dimen/components_top_margin"
-        android:text="@string/cancel"
-        android:background="@drawable/button_action"
-        android:textColor="@color/white">
-
-    </Button>
-
+        android:text="@string/cancel"></TextView>
 </RelativeLayout>

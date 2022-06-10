@@ -17,6 +17,8 @@ public class URLs {
 
     public static String urlPrivacyPolicy = "https://www.uppersoftwaresolutions.com/privacy.html";//TODO değişebilir
 
+    public static String urlShuttle= "https://play.google.com/store/apps/details?id=com.uppersoftwaresolutions.shuttle";//TODO değişebilir
+
     //personService
     public static String urlSavePerson = urlPrefix + "personservice/save";
     public static String urlGetPerson = urlPrefix + "personservice/get";

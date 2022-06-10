@@ -447,14 +447,15 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         int displayHeight = displayMetrics.heightPixels;
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        int dialogWindowWidth = (int) (displayWidth * 0.5f);
-        int dialogWindowHeight = (int) (displayHeight * 0.5f);
+        int dialogWindowWidth = (int) (displayWidth * 0.8f);
+        int dialogWindowHeight = (int) (displayHeight * 0.8f);
+
         layoutParams.width = dialogWindowWidth;
         layoutParams.height = dialogWindowHeight;
         dialog.getWindow().setAttributes(layoutParams);
 
-        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        TextView txtCancel = dialog.findViewById(R.id.txt_cancel);
+        txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
