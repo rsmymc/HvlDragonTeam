@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.Util;
+import com.lambdaworks.redis.models.role.RedisInstance;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -327,7 +329,24 @@ public class FragmentTeam extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
+        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue())
+            inflater.inflate(R.menu.menu_team, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case (R.id.action_team_settings): {
+                FragmentTeamSettings fragmentTeamSettings = new FragmentTeamSettings();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragmentTeamSettings, "fragmentTeamSettings").addToBackStack("fragmentTeamSettings")
+                        .commit();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

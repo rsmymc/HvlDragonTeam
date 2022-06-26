@@ -53,6 +53,8 @@
     <string name="joining_code">Joining Code</string>
     <string name="default_role">Default</string>
     <string name="chart_title_by_person">Training Attendance Count</string>
+    <string name="locations">Training Locations</string>
+    <string name="set_location">Set Location</string>
     <string name="privacy">Privacy Policy </string>
     <string name="privacy_warning">By signing in, you have read and accept our </string>
 
@@ -95,6 +97,7 @@
     <string name="stats">Stats</string>
     <string name="announcement">Announcement</string>
     <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
     <string name="chat">Chat</string>
     <string name="send_image">Send image</string>
 

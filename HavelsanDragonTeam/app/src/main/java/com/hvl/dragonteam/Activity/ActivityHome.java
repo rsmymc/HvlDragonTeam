@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -140,6 +141,10 @@ public class ActivityHome extends AppCompatActivity {
             Constants.bottomBar.setSelectedItemId(R.id.action_training);
         }
 
+        String apiKey = getString(R.string.google_maps_key);
+        if (!Places.isInitialized()) {
+            Places.initialize(this, apiKey);
+        }
 
     }
 

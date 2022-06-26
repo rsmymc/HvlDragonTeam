@@ -85,7 +85,7 @@ public class FragmentTrainingNext extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
         layoutAdd = view.findViewById(R.id.layout_add);
-        if(Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
+        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             layoutAdd.setVisibility(View.VISIBLE);
         } else {
             layoutAdd.setVisibility(View.GONE);
@@ -125,21 +125,22 @@ public class FragmentTrainingNext extends Fragment {
                             trainingAdapter.setClickListener(new TrainingAttendanceAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
+                                    if (personTrainingAttendanceList.get(position).getPersonId() != null) {
+                                        Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
+                                                personTrainingAttendanceList.get(position).getTime(),
+                                                personTrainingAttendanceList.get(position).getLocation(),
+                                                Constants.personTeamView.getTeamId());
 
-                                    Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
-                                            personTrainingAttendanceList.get(position).getTime(),
-                                            personTrainingAttendanceList.get(position).getLocation(),
-                                            Constants.personTeamView.getTeamId());
+                                        String json = new Gson().toJson(training, Training.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("OBJ", json);
 
-                                    String json = new Gson().toJson(training, Training.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("OBJ", json);
-
-                                    FragmentLineup fragmentLineup = new FragmentLineup();
-                                    fragmentLineup.setArguments(bundle);
-                                    getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.container, fragmentLineup, "fragmentLineup").addToBackStack("fragmentLineup")
-                                            .commit();
+                                        FragmentLineup fragmentLineup = new FragmentLineup();
+                                        fragmentLineup.setArguments(bundle);
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.container, fragmentLineup, "fragmentLineup").addToBackStack("fragmentLineup")
+                                                .commit();
+                                    }
                                 }
                             });
                             listView.setAdapter(trainingAdapter);
@@ -174,6 +175,7 @@ public class FragmentTrainingNext extends Fragment {
 
     private Calendar date;
     private TimePickerDialog.OnTimeSetListener onTimeSetListener;
+
     private void showAddDialog() {
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -191,10 +193,10 @@ public class FragmentTrainingNext extends Fragment {
 
         onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker,  int hourOfDay, int minute) {
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
                 date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 date.set(Calendar.MINUTE, minute);
-                txtDate.setText(Util.formatDate(date.getTime(),Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
+                txtDate.setText(Util.formatDate(date.getTime(), Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
             }
         };
 
@@ -220,11 +222,13 @@ public class FragmentTrainingNext extends Fragment {
                                 @Override
                                 public void onSuccessList(JSONArray result) {
                                 }
+
                                 @Override
                                 public void onSuccess(JSONObject result) {
                                     getTrainings();
                                     mRefreshLayout.setRefreshing(false);
                                 }
+
                                 @Override
                                 public void onError(String result) {
                                     Activity activity = getActivity();
@@ -262,7 +266,6 @@ public class FragmentTrainingNext extends Fragment {
             }
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
     }
-
 
 
     @Override

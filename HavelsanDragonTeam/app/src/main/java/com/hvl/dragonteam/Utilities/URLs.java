@@ -59,6 +59,10 @@ public class URLs {
     //announcementService
     public static String urlGetStatsByPerson = urlPrefix + "statsservice/getstatsbyperson";
 
+    //locationService
+    public static String urlSaveLocation = urlPrefix + "locationservice/save";
+    public static String urlGetLocationList = urlPrefix + "locationservice/getlocations";
+
     //notificationService
     public static String urlGetNotification = urlPrefix + "personnotificationservice/get";
     public static String urlSaveNotification = urlPrefix + "personnotificationservice/save";

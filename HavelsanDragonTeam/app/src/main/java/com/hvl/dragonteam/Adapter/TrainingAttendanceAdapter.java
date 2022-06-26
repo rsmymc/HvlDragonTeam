@@ -36,52 +36,73 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
     private ArrayList<PersonTrainingAttendance> listTraining = new ArrayList<>();
     private boolean isNext;
     private Context context;
-    private Util util;
+    private static final int LAYOUT_ITEM = 1;
+    private static final int LAYOUT_FOOTER= 2;
+
 
     public TrainingAttendanceAdapter(Context context, ArrayList<PersonTrainingAttendance> listTraining, boolean isNext) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listTraining = listTraining;
+        listTraining.add(new PersonTrainingAttendance());
         this.isNext = isNext;
-        util = new Util();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == listTraining.size()-1) {
+            return LAYOUT_FOOTER;
+        } else {
+            return  LAYOUT_ITEM;
+        }
     }
 
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.list_item_training_attendance, parent, false);
-        return new ViewHolder(v);
+        View v = null;
+        switch (viewType) {
+            case LAYOUT_ITEM:
+                v = mInflater.inflate(R.layout.list_item_training_attendance, parent, false);
+                return new ViewHolder(v);
+            case LAYOUT_FOOTER:
+                v = mInflater.inflate(R.layout.list_item_footer, parent, false);
+                return new ViewHolder(v);
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.txtTime.setText(Util.parseDate(listTraining.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
-        holder.txtLocation.setText(LocationEnum.toLocationEnum(listTraining.get(position).getLocation()).toString());
-        holder.txtLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LocationEnum locationEnum =  LocationEnum.toLocationEnum(listTraining.get(position).getLocation());
-                String uri = "geo:" + locationEnum.getLat() + "," + locationEnum.getLon();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                context.startActivity(intent);
-            }
-        });
+        if(holder.getItemViewType() == LAYOUT_ITEM) {
+            holder.txtTime.setText(Util.parseDate(listTraining.get(position).getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
+            holder.txtLocation.setText(LocationEnum.toLocationEnum(listTraining.get(position).getLocation()).toString());
+            holder.txtLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LocationEnum locationEnum = LocationEnum.toLocationEnum(listTraining.get(position).getLocation());
+                    String uri = "geo:" + locationEnum.getLat() + "," + locationEnum.getLon();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    context.startActivity(intent);
+                }
+            });
 
-        holder.switchAttendance.setChecked(listTraining.get(position).isAttend());
-        holder.switchAttendance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!compoundButton.isPressed()) {
-                    return;
+            holder.switchAttendance.setChecked(listTraining.get(position).isAttend());
+            holder.switchAttendance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (!compoundButton.isPressed()) {
+                        return;
+                    }
+                    Attendance attendance = new Attendance(FirebaseAuth.getInstance().getCurrentUser().getUid(), listTraining.get(position).getTrainingId());
+                    if (b) {
+                        saveAttendance(attendance);
+                    } else {
+                        deleteAttendance(attendance, position);
+                    }
                 }
-                Attendance attendance = new Attendance(FirebaseAuth.getInstance().getCurrentUser().getUid(), listTraining.get(position).getTrainingId());
-                if(b){
-                    saveAttendance(attendance);
-                } else {
-                    deleteAttendance(attendance, position);
-                }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -99,9 +120,11 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
             super(itemView);
             txtTime = itemView.findViewById(R.id.txt_time);
             txtLocation = itemView.findViewById(R.id.txt_context);
-            txtLocation.setPaintFlags(txtLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            if(txtLocation != null)
+             txtLocation.setPaintFlags(txtLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             switchAttendance = itemView.findViewById(R.id.switch_attendance);
-            switchAttendance.setClickable(isNext);
+            if(switchAttendance != null)
+                switchAttendance.setClickable(isNext);
             itemView.setOnClickListener(this);
         }
         @Override
