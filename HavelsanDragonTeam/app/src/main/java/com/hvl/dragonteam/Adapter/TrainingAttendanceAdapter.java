@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hvl.dragonteam.DataService.AttendanceService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Attendance;
-import com.hvl.dragonteam.Model.Enum.LocationEnum;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Util;
@@ -37,7 +36,7 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
     private boolean isNext;
     private Context context;
     private static final int LAYOUT_ITEM = 1;
-    private static final int LAYOUT_FOOTER= 2;
+    private static final int LAYOUT_FOOTER = 2;
 
 
     public TrainingAttendanceAdapter(Context context, ArrayList<PersonTrainingAttendance> listTraining, boolean isNext) {
@@ -50,10 +49,10 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
 
     @Override
     public int getItemViewType(int position) {
-        if (position == listTraining.size()-1) {
+        if (position == listTraining.size() - 1) {
             return LAYOUT_FOOTER;
         } else {
-            return  LAYOUT_ITEM;
+            return LAYOUT_ITEM;
         }
     }
 
@@ -74,14 +73,14 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if(holder.getItemViewType() == LAYOUT_ITEM) {
+        if (holder.getItemViewType() == LAYOUT_ITEM) {
             holder.txtTime.setText(Util.parseDate(listTraining.get(position).getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
-            holder.txtLocation.setText(LocationEnum.toLocationEnum(listTraining.get(position).getLocation()).toString());
+            holder.txtLocation.setText(listTraining.get(position).getLocationName());
             holder.txtLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LocationEnum locationEnum = LocationEnum.toLocationEnum(listTraining.get(position).getLocation());
-                    String uri = "geo:" + locationEnum.getLat() + "," + locationEnum.getLon();
+                    String uri = "geo:" + listTraining.get(position).getLat() + "," + listTraining.get(position).getLon()
+                            + "?q="+ listTraining.get(position).getLat()+","+listTraining.get(position).getLon() +"("+listTraining.get(position).getLocationName()+")";
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     context.startActivity(intent);
                 }
@@ -110,7 +109,7 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
         return listTraining.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtTime;
         TextView txtLocation;
@@ -120,13 +119,14 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
             super(itemView);
             txtTime = itemView.findViewById(R.id.txt_time);
             txtLocation = itemView.findViewById(R.id.txt_context);
-            if(txtLocation != null)
-             txtLocation.setPaintFlags(txtLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            if (txtLocation != null)
+                txtLocation.setPaintFlags(txtLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             switchAttendance = itemView.findViewById(R.id.switch_attendance);
-            if(switchAttendance != null)
+            if (switchAttendance != null)
                 switchAttendance.setClickable(isNext);
             itemView.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View view) {
             if (mClickListener != null)
@@ -144,10 +144,12 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
                         @Override
                         public void onSuccess(JSONObject result) {
                         }
+
                         @Override
                         public void onError(String result) {
                             Util.toastError(context);
                         }
+
                         @Override
                         public void onSuccessList(JSONArray result) {
                         }
@@ -168,10 +170,12 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
                         @Override
                         public void onSuccess(JSONObject result) {
                         }
+
                         @Override
                         public void onError(String result) {
                             Util.toastError(context);
                         }
+
                         @Override
                         public void onSuccessList(JSONArray result) {
                         }

@@ -17,55 +17,29 @@ public class PersonTrainingAttendance {
     //from Training
     private int trainingId;
     private String time;
-    private int location;
     private String teamId;
+
+	//from Location
+	private int locationId;
+	private String locationName;
+	private double lat;
+	private double lon;
     
     //from Attendance
 	@SerializedName(value = "attend", alternate = {"isAttend"})
     private boolean isAttend;
     
     public PersonTrainingAttendance() {}
-    
-    public PersonTrainingAttendance(String personId, String name, String phone, int height, int weight, int side,
-			int role, String profilePictureUrl, int trainingId, String time, int location, String teamId,
-			boolean isAttend) {
-		super();
-		this.personId = personId;
-		this.name = name;
-		this.phone = phone;
-		this.height = height;
-		this.weight = weight;
-		this.side = side;
-		this.role = role;
-		this.profilePictureUrl = profilePictureUrl;
-		this.trainingId = trainingId;
-		this.time = time;
-		this.location = location;
-		this.teamId = teamId;
-		this.isAttend = isAttend;
-	}
 
-    public PersonTrainingAttendance(String personId, String name, String phone, int height, int weight, int side, String profilePictureUrl,
-			int role, int trainingId, boolean isAttend) {
-		super();
-		this.personId = personId;
-		this.name = name;
-		this.phone = phone;
-		this.height = height;
-		this.weight = weight;
-		this.side = side;
-		this.profilePictureUrl = profilePictureUrl;
-		this.role = role;
-		this.trainingId = trainingId;
-		this.isAttend = isAttend;
-	}
-
-	public PersonTrainingAttendance(String personId, int trainingId, String time, int location, boolean isAttend) {
+	public PersonTrainingAttendance(String personId, int trainingId, String time, int locationId, String locationName, double lat, double lon, boolean isAttend) {
 		super();
 		this.personId = personId;
 		this.trainingId = trainingId;
 		this.time = time;
-		this.location = location;
+		this.locationId = locationId;
+		this.locationName = locationName;
+		this.lat = lat;
+		this.lon = lon;
 		this.isAttend = isAttend;
 	}
 
@@ -148,14 +122,6 @@ public class PersonTrainingAttendance {
 	public void setTime(String time) {
 		this.time = time;
 	}
-
-	public int getLocation() {
-		return location;
-	}
-
-	public void setLocation(int location) {
-		this.location = location;
-	}
 	
 	public String getTeamId() {
 		return teamId;
@@ -172,5 +138,36 @@ public class PersonTrainingAttendance {
 	public void setAttend(boolean isAttend) {
 		this.isAttend = isAttend;
 	}
-	
+
+	public int getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
 }

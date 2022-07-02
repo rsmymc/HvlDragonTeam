@@ -67,7 +67,7 @@ public class PersonNotification {
 		this.token = token;
 		this.loggedIn = isLoggedIn;
 		this.languageType = languageType;
-		setNotification1(true);
+		this.notification1 = true;
 	}
 
 

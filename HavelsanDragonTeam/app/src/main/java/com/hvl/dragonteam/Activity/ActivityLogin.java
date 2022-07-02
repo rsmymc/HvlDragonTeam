@@ -279,7 +279,7 @@ public class ActivityLogin extends AppCompatActivity {
     private void createUser() {
         PersonService personService = new PersonService();
         Person person = new Person(mAuth.getCurrentUser().getUid(),
-                mAuth.getCurrentUser().getDisplayName(),
+               "",
                 mAuth.getCurrentUser().getPhoneNumber(),
                 0,
                 0,

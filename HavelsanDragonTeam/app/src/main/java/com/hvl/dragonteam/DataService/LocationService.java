@@ -51,6 +51,31 @@ public class LocationService {
         queue.add(postRequest);
     }
 
+    public void deleteLocation(Context context, final LocationModel location, final VolleyCallback callback) throws JSONException {
+
+        String json = new Gson().toJson(location, LocationModel.class);
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URLs.urlDeleteLocation,new JSONObject(json),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("successDeleteLocation", response.toString());
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("errorDeleteLocation", error.toString());
+                        callback.onError(error.toString());
+                    }
+                }
+        ) ;
+        queue.add(postRequest);
+    }
+
     public void getLocationList(Context context, Team team, final VolleyCallback callback) throws JSONException {
 
         String json = new Gson().toJson(team, Team.class);

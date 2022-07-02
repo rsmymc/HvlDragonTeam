@@ -103,7 +103,7 @@ public class FragmentTrainingPast extends Fragment {
                                 public void onItemClick(View view, int position) {
                                     Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
                                             personTrainingAttendanceList.get(position).getTime(),
-                                            personTrainingAttendanceList.get(position).getLocation(),
+                                            personTrainingAttendanceList.get(position).getLocationId(),
                                             Constants.personTeamView.getTeamId());
 
                                     String json = new Gson().toJson(training, Training.class);

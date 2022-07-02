@@ -54,6 +54,7 @@ import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
 import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
+import com.hvl.dragonteam.Model.TrainingLocationView;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.URLs;
@@ -95,7 +96,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private LinearLayout layoutActionButtons;
     private ArrayList<LineupItem> lineupList = new ArrayList<>();
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
-    private ArrayList<Training> trainingList = new ArrayList<>();
+    private ArrayList<TrainingLocationView> trainingList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private FilterModel filterModel = new FilterModel();
@@ -411,7 +412,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                     new VolleyCallback() {
                         @Override
                         public void onSuccessList(JSONArray result) {
-                            List<Training> list = new Gson().fromJson(result.toString(), new TypeToken<List<Training>>() {
+                            List<TrainingLocationView> list = new Gson().fromJson(result.toString(), new TypeToken<List<TrainingLocationView>>() {
                             }.getType());
 
                             trainingList.clear();
@@ -469,8 +470,9 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         trainingAdapter.setClickListener(new TrainingAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
-                getPersonAttendance(trainingList.get(position));
+                Training training = new Training();
+                training.setId(trainingList.get(position).getId());
+                getPersonAttendance(training);
                     dialog.dismiss();
             }
         });

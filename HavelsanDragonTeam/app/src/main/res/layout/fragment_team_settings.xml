@@ -18,8 +18,8 @@
             android:id="@+id/img_logo"
             android:layout_width="200dp"
             android:layout_height="150dp"
-            android:src="@drawable/icon"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon" />
 
         <LinearLayout
             android:id="@+id/layout_camera"
@@ -87,60 +87,102 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
         android:layout_marginTop="@dimen/components_top_margin"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:textSize="@dimen/switch_text_size"
-                android:text="@string/locations"></TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/components_bottom_margin"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_add"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:tint="@color/colorPrimary"
-                android:layout_marginLeft="@dimen/components_left_margin"
-                android:src="@drawable/plus"></ImageView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginRight="@dimen/components_bottom_margin"
+                    android:background="@color/bgColor"
+                    android:elevation="0dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="@string/locations"
+                    android:textColor="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edit_text_border"
+                    android:elevation="-1dp"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listView_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="@dimen/components_left_margin"
+                        android:background="@color/bgColor"></androidx.recyclerview.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/txt_no_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/components_left_margin"
+                        android:layout_marginBottom="@dimen/components_bottom_margin"
+                        android:text="@string/warning_no_location"
+                        android:visibility="gone
+"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/layout_add"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="@dimen/components_left_margin"
+                        android:layout_marginBottom="@dimen/components_top_margin"
+                        android:background="@drawable/circle"
+                        android:backgroundTint="@color/white"
+                        android:elevation="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_add"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="15dp"
+                            android:src="@drawable/plus"
+                            app:tint="@color/colorSecondary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView_location"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:background="@color/bgColor"></androidx.recyclerview.widget.RecyclerView>
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_shuttle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
         android:layout_marginBottom="@dimen/components_top_margin"
-        android:layout_marginHorizontal="@dimen/frame_horizontal_margin">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/components_left_margin"
+            android:text="Powered by Şatıl "
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold|italic"
             android:textSize="16sp"
-            android:text="Powered by Şatıl "></TextView>
+            android:textStyle="bold|italic"></TextView>
 
         <ImageView
             android:layout_width="32dp"

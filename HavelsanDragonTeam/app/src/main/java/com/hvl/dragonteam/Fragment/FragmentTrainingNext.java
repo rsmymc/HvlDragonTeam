@@ -26,12 +26,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.Adapter.LocationAdapter;
 import com.hvl.dragonteam.Adapter.TrainingAttendanceAdapter;
+import com.hvl.dragonteam.DataService.LocationService;
 import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
 import com.hvl.dragonteam.DataService.TrainingService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
+import com.hvl.dragonteam.Model.LocationModel;
 import com.hvl.dragonteam.Model.PersonTrainingAttendance;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
@@ -59,7 +63,7 @@ public class FragmentTrainingNext extends Fragment {
     private RecyclerView listView;
     private LinearLayout layoutAdd;
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
-
+    private ArrayList<LocationModel> locationModelList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,10 +129,11 @@ public class FragmentTrainingNext extends Fragment {
                             trainingAdapter.setClickListener(new TrainingAttendanceAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
-                                    if (personTrainingAttendanceList.get(position).getPersonId() != null) {
+                                    //if (personTrainingAttendanceList.get(position).getPersonId() != null)
+                                    {
                                         Training training = new Training(personTrainingAttendanceList.get(position).getTrainingId(),
                                                 personTrainingAttendanceList.get(position).getTime(),
-                                                personTrainingAttendanceList.get(position).getLocation(),
+                                                personTrainingAttendanceList.get(position).getLocationId(),
                                                 Constants.personTeamView.getTeamId());
 
                                         String json = new Gson().toJson(training, Training.class);
@@ -173,6 +178,48 @@ public class FragmentTrainingNext extends Fragment {
         }
     }
 
+    public void getLocations() {
+        LocationService locationService = new LocationService();
+        Team team = new Team();
+        team.setId(Constants.personTeamView.getTeamId());
+        try {
+            locationService.getLocationList(context, team,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                            List<LocationModel> list = new Gson().fromJson(result.toString(), new TypeToken<List<LocationModel>>() {
+                            }.getType());
+
+                            LocationModel emptyLocation = new LocationModel(-1,"","-", 0, 0);
+                            list.add(0, emptyLocation);
+
+                            locationModelList.clear();
+                            locationModelList.addAll(list);
+                            ArrayAdapter<LocationModel> adapter =new ArrayAdapter<LocationModel>(context, android.R.layout.simple_spinner_item, list);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerLocation.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Activity activity = getActivity();
+                            if (activity != null && isAdded())
+                                Util.toastError(context);
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Activity activity = getActivity();
+            if (activity != null && isAdded())
+                Util.toastError(context);
+        }
+    }
+
+    private Spinner spinnerLocation;
     private Calendar date;
     private TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
@@ -184,10 +231,8 @@ public class FragmentTrainingNext extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
 
-        final Spinner spinnerLocation = (Spinner) view.findViewById(R.id.spinner_location);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.location_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLocation.setAdapter(adapter);
+        spinnerLocation = (Spinner) view.findViewById(R.id.spinner_location);
+        getLocations();
 
         final TextView txtDate = (TextView) view.findViewById(R.id.txt_date);
 
@@ -211,7 +256,7 @@ public class FragmentTrainingNext extends Fragment {
         builder.setPositiveButton(R.string.add_training, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Training training = new Training();
-                training.setLocation(spinnerLocation.getSelectedItemPosition());
+                training.setLocation(((LocationModel)spinnerLocation.getSelectedItem()).getId());
                 String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(date.getTime());
                 training.setTime(timeStamp);
                 training.setTeamId(Constants.personTeamView.getTeamId());

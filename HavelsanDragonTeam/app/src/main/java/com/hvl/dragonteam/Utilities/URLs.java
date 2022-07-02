@@ -61,6 +61,7 @@ public class URLs {
 
     //locationService
     public static String urlSaveLocation = urlPrefix + "locationservice/save";
+    public static String urlDeleteLocation = urlPrefix + "locationservice/delete";
     public static String urlGetLocationList = urlPrefix + "locationservice/getlocations";
 
     //notificationService

@@ -71,5 +71,9 @@ public class LocationModel {
 		this.lon = lon;
 	}
 
+	@Override
+	public String toString (){
+    	return  name;
+	}
 
 }
