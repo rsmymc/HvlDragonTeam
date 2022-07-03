@@ -9,7 +9,7 @@ public class URLs {
 
     public static String redisAddress = "redis://Rovingy.6878!@46.101.136.203/";
 
-    public static String urlProfilePicture = "https://www.uppersoftwaresolutions.com/apps/dragon/img/profile_images/";
+    public static String urlTeamLogo = "https://www.uppersoftwaresolutions.com/apps/dragon/img/logo_images/";
 
     public static String urlUploadImage = "https://www.uppersoftwaresolutions.com/apps/dragon/upload_image.php?";//TODO domain değişirse içerik değişecek
 

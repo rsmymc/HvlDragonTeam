@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
     <entry>
-        <key>RemoteDialog</key>
-        <value>{"id":1,"type":101,"text":"Evde kal Türkiye","isForceUpdate":false,"version":"1.0.0"}</value>
+        <key>RemoteDialogf</key>
+        <value>{"id":2,"type":0,"tr":"Evde kal Türkiye","en":"Stay HomeTürkiye","isForceUpdate":false,"version":"1.0.2"}</value>
     </entry>
 </defaultsMap>

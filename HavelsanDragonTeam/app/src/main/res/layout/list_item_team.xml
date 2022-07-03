@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:padding="@dimen/components_top_margin"
-            android:text="Havelsan İstanbul"
+            android:text="Hvl İstanbul"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

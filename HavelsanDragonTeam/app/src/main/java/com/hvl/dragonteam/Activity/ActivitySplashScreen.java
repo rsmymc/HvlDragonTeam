@@ -10,11 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,14 +45,29 @@ import org.json.JSONObject;
 
 public class ActivitySplashScreen extends AppCompatActivity {
 
+    private SharedPrefHelper sharedPrefHelperInstance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        sharedPrefHelperInstance = SharedPrefHelper.getInstance(ActivitySplashScreen.this);
 
-        processToApp();
+/*       ImageView imgLogo = (ImageView) findViewById(R.id.img_logo);
 
-        /*FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, "null");
+
+        Glide.with(ActivitySplashScreen.this)
+                .load(Uri.parse(Util.getTeamLogoURL(lastSelectedTeamId)))
+                .apply(new RequestOptions()
+                        .centerInside()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.icon)
+                        .error(R.drawable.icon))
+                .into(imgLogo);*/
+
+        FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(0)
@@ -74,8 +93,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                 int newVer = Integer.parseInt(remoteDialogModel.getVersion().replace(".", "").trim());
                                 if (newVer > curVer) {
 
-                                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivitySplashScreen.this);
-                                    boolean dontShowUpdate = prefs.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
+                                    boolean dontShowUpdate =  sharedPrefHelperInstance.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
 
                                     if (remoteDialogModel.isForceUpdate() || (!remoteDialogModel.isForceUpdate() && !dontShowUpdate)) {
 
@@ -125,8 +143,6 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                             }
                                         });
 
-                                        SharedPreferences.Editor editor = prefs.edit();
-
                                         CheckBox checkBoxUpdate = (CheckBox) view.findViewById(R.id.checkbox_update);
                                         if (remoteDialogModel.isForceUpdate()) {
                                             checkBoxUpdate.setVisibility(View.INVISIBLE);
@@ -134,8 +150,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                             checkBoxUpdate.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    editor.putBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), checkBoxUpdate.isChecked());
-                                                    editor.commit();
+                                                    sharedPrefHelperInstance.saveBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), checkBoxUpdate.isChecked());
                                                 }
                                             });
                                         }
@@ -151,8 +166,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                             } else if (remoteDialogModel.getType() == RemoteDialogTypeEnum.INFO.getValue()) {
 
-                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivitySplashScreen.this);
-                                boolean dontShowInfo = prefs.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
+                                boolean dontShowInfo = sharedPrefHelperInstance.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
 
                                 if (!dontShowInfo) {
                                     LayoutInflater inflater = getLayoutInflater();
@@ -176,14 +190,11 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                         }
                                     });
 
-                                    SharedPreferences.Editor editor = prefs.edit();
-
                                     CheckBox checkBoxUpdate = (CheckBox) view.findViewById(R.id.checkbox_update);
                                     checkBoxUpdate.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            editor.putBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), checkBoxUpdate.isChecked());
-                                            editor.commit();
+                                            sharedPrefHelperInstance.saveBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), checkBoxUpdate.isChecked());
                                         }
                                     });
 
@@ -227,7 +238,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                            processToApp();
                         }
                     }
-                });*/
+                });
     }
 
     private void processToApp() {

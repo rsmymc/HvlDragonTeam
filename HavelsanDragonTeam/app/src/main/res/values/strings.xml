@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Havelsan Dragon Team</string>
+    <string name="app_name">Dragon Team</string>
     <string name="login">Log In</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -78,6 +78,7 @@
     <string name="info_lineup_updated">Lineup updated</string>
     <string name="info_location_deleted">Location deleted</string>
     <string name="info_location_added">Location added</string>
+    <string name="info_location_add_tip">To add location go to Team-> Settings screen</string>
     <string name="info_clipboard">Code copied to clipboard</string>
     <string name="info_share_team">By clicking the LLL link or by pasting the XXX code into the join team window inside the + button, you can join the YYY team.</string>
 
@@ -131,10 +132,5 @@
         <item>@string/left</item>
         <item>@string/right</item>
         <item>@string/both</item>
-    </string-array>
-
-    <string-array name="location_array">
-        <item>Maltepe</item>
-        <item>Tuzla</item>
     </string-array>
 </resources>

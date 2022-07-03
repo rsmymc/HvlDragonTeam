@@ -75,26 +75,6 @@ public class Util {
         context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.share)));
     }
 
-
-
-  /*  public static Comparator<PersonTransportationView> timeComparator = new Comparator<PersonTransportationView>() {
-        @Override
-        public int compare(PersonTransportationView p1, PersonTransportationView p2) {
-            int diff1 = p1.getDailyTimeDiffInSecs();
-            int diff2 = p2.getDailyTimeDiffInSecs();
-
-            if (diff1 == diff2) {
-                return 0;
-            } else if (diff1 > diff2) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-    };
-*/
-
-
     public static String convertTime(long time, String pattern) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat(pattern);
@@ -206,6 +186,10 @@ public class Util {
         conf.setLocale(desiredLocale);
         Context localizedContext = context.createConfigurationContext(conf);
         return localizedContext.getString(id);
+    }
+
+    public static String getTeamLogoURL(String teamId){
+        return URLs.urlTeamLogo + teamId + ".jpg";
     }
 
     public static String getShortName(String name){

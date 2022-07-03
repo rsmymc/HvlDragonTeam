@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dragon Team</string>
+    <string name="login">Giriş</string>
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="error">Bir hata oluştu</string>
+    <string name="share">Paylaş</string>
+    <string name="send_code">Kod Gönder</string>
+    <string name="verify">Onayla</string>
+    <string name="phone">Telefon</string>
+    <string name="weight">Ağırlık (Kg)</string>
+    <string name="height">Boy (Cm)</string>
+    <string name="side">Tercih Edilen Taraf</string>
+    <string name="location">Konum</string>
+    <string name="chat_hint">Mesaj yaz</string>
+    <string name="crop">Kes</string>
+    <string name="apply">Uygula</string>
+    <string name="save">Kaydet</string>
+    <string name="draft">Taslak</string>
+    <string name="publish">Yayınla</string>
+    <string name="reset">Sıfırla</string>
+    <string name="load">Yükle...</string>
+    <string name="show_only_attendees">Sadece katılacakları göster</string>
+    <string name="choose">Seç</string>
+    <string name="lineup">Yerleşim</string>
+    <string name="remove">Kaldır</string>
+    <string name="name">İsim</string>
+    <string name="date">Tarih</string>
+    <string name="context">İçerik</string>
+    <string name="team_name">Takım Adı</string>
+    <string name="empty">Boş</string>
+    <string name="logout">Çıkış</string>
+    <string name="wait">Lütfen Bekleyiniz</string>
+    <string name="processing">İşleniyor...</string>
+    <string name="profilePhoto">Profil Fotoğrafı</string>
+    <string name="attendance">Katılım</string>
+    <string name="filters">Filtreler</string>
+    <string name="hide">Gizle</string>
+    <string name="enter">Giriş</string>
+    <string name="next">Sonraki</string>
+    <string name="dont_attend">Katılmıyor</string>
+    <string name="left">Sol</string>
+    <string name="right">Sağ</string>
+    <string name="both">Her ikisi</string>
+    <string name="add_training">Antreman Ekle</string>
+    <string name="count">Sayı</string>
+    <string name="admin">Yönetici</string>
+    <string name="join_team">Takıma katıl</string>
+    <string name="create_team">Takım oluştur</string>
+    <string name="my_teams">Takımlarım</string>
+    <string name="joining_code">Katılım Kodu</string>
+    <string name="default_role">Varsayılan</string>
+    <string name="chart_title_by_person">Antereman Katılım Sayısı</string>
+    <string name="locations">Antreman Konumu</string>
+    <string name="set_location">Konumu Kaydet</string>
+    <string name="privacy">Gizlilik Şartları</string>
+    <string name="past_training">"Geçmiş "</string>
+    <string name="next_training">Sonraki</string>
+    <string name="later">Sonra</string>
+    <string name="dont_show">Tekrar gösterme</string>
+    <string name="dont_show_again">Bu güncelleme için tekrar gösterme</string>
+    <string name="update">Güncelle</string>
+    <string name="exit">Çıkış</string>
+    <string name="maintenance">Bakım</string>
+    <string name="new_updates">Yeni versiyon mevcut</string>
+    <string name="send_image">Fotoğraf gönder</string>
+    <string name="chat">Chat</string>
+    <string name="settings">Ayarlar</string>
+    <string name="profile">Profil</string>
+    <string name="announcement">Duyuru</string>
+    <string name="stats">İstatistik</string>
+    <string name="team">Takım</string>
+    <string name="equipment">Ekipman</string>
+    <string name="training">Antreman</string>
+    <string name="question_delete_photo">Fotoğrafı kaldır?</string>
+    <string name="question_exit">Çıkmak istiyor musun?</string>
+    <string name="warning_cant_empty">Boş olamaz</string>
+    <string name="warning_team_not_found">Takım bulunamadı</string>
+    <string name="warning_no_person">Kişi yok</string>
+    <string name="warning_no_training">Antreman yok</string>
+    <string name="warning_no_location">Konum yok</string>
+    <string name="warning_no_announcement">Duyuru yok</string>
+    <string name="warning_no_joined_team">Katıldığın takım yok</string>
+    <string name="warning_delete_location">Konumu silmek istediğine emin misin?</string>
+    <string name="warning_delete_person_team">Takımdan çıkarmak istediğine emin misin?</string>
+    <string name="warning_logout">Çıkış yapmak istediğine emin misin?</string>
+    <string name="info_clipboard">Kod panoya koplayandı</string>
+    <string name="info_location_added">Konum eklendi</string>
+    <string name="info_location_deleted">Konum silindi</string>
+    <string name="info_lineup_updated">Yerleşim güncellendi</string>
+    <string name="info_team_updated">Takım güncellendi</string>
+    <string name="info_team_joined">Takıma katınıldı</string>
+    <string name="info_team_created">Takım oluşturuldu</string>
+    <string name="info_profile_updated">Profil bilgisi güncellendi</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="publish_notification">Yerleşim yayınlandı</string>
+    <string name="draft_notification">Yerleşim XXX tarafında taslak olarak kaydedildi.</string>
+    <string name="question_join_team">XXX takımna katılmak istiyor musun?</string>
+    <string name="code_sent">Doğrulama kodu gönderildi</string>
+    <string name="resending">Kodu tekrar gönder</string>
+    <string name="verifying">Numaran doğrulanıyor</string>
+    <string name="resend_code">Kodu alamadın mı? <b>Tekrar gönder</b></string>
+    <string name="enter_phone_number">Devam etmek için telefon numaranı gir</string>
+    <string name="info_location_add_tip">Konum eklemek için Takım->Ayarlar sayfasına git</string>
+    <string name="enter_verification_code">"XXX ' e gönderderdiğimiz doğrulama kodunu giriniz "</string>
+    <string name="info_share_team">LLL linkine tıklayarak ya da XXX kodunu Takıma katılım sayfasında + butonu içindeki katıl penceresine yapıştırarak, YYY takımına katılabilirsiniz.</string>
+    <string-array name="profilePhotoArray">
+        <item>Galeriden Seç</item>
+        <item>Kamera</item>
+        <item>Fotoğrafı Kaldır</item>
+    </string-array>
+
+    <string-array name="chatImageArray">
+        <item>Galeriden Seç</item>
+        <item>Kamera</item>
+    </string-array>
+</resources>

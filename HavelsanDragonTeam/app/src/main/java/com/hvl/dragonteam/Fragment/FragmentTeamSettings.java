@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -52,15 +51,12 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Adapter.LocationAdapter;
@@ -142,13 +138,13 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         txtNoLocation = view.findViewById(R.id.txt_no_location);
 
         Glide.with(context)
-                .load(Constants.personTeamView.getTeamId())//TODO logo
+                .load(Util.getTeamLogoURL(Constants.personTeamView.getTeamId()))
                 .apply(new RequestOptions()
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .skipMemoryCache(false)
-                        .placeholder(R.drawable.icon)
-                        .error(R.drawable.icon))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.icon_rectangle)
+                        .error(R.drawable.icon_rectangle))
                 .into(imgLogo);
 
         editTextName.setText(Constants.personTeamView.getTeamName());
@@ -183,143 +179,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = requireActivity().getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_places, null);
-                final AlertDialog builder = new AlertDialog.Builder(context).create();
-                builder.setView(dialogView);
-
-                mMapView = dialogView.findViewById(R.id.mapView);
-                mMapView.onCreate(savedInstanceState);
-                mMapView.onResume(); // needed to get the map to display immediately
-                try {
-                    MapsInitializer.initialize(context);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                mMapView.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(GoogleMap mMap) {
-                        googleMap = mMap;
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                            googleMap.setMyLocationEnabled(true);
-                        }
-
-                        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        googleMap.getUiSettings().setCompassEnabled(true);
-                        fusedLocationClient.getLastLocation()
-                                .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-                                    @Override
-                                    public void onSuccess(Location location) {
-                                        if (location != null) {
-                                            addMarker(location.getLatitude(), location.getLongitude());
-                                        }
-                                    }
-                                });
-                        googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                            @Override
-                            public void onCameraIdle() {
-                                location = mMap.getCameraPosition().target;
-                            }
-                        });
-                    }
-                });
-
-                EditText txtName = dialogView.findViewById(R.id.txt_name);
-
-                Button btnSetLocation = dialogView.findViewById(R.id.btnSetLocation);
-                btnSetLocation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (!txtName.getText().toString().trim().equals("")) {
-                            LocationModel locationModel = new LocationModel();
-                            locationModel.setName(txtName.getText().toString());
-                            locationModel.setTeamId(Constants.personTeamView.getTeamId());
-                            locationModel.setLat(location.latitude);
-                            locationModel.setLon(location.longitude);
-                            LocationService locationService = new LocationService();
-                            try {
-                                locationService.saveLocation(context, locationModel,
-                                        new VolleyCallback() {
-                                            @Override
-                                            public void onSuccessList(JSONArray result) {
-                                            }
-
-                                            @Override
-                                            public void onSuccess(JSONObject result) {
-                                                Util.toastInfo(context, R.string.info_location_added);
-                                                getLocations();
-                                            }
-
-                                            @Override
-                                            public void onError(String result) {
-                                                Activity activity = getActivity();
-                                                if (activity != null && isAdded())
-                                                    Util.toastError(context);
-                                            }
-                                        });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Activity activity = getActivity();
-                                if (activity != null && isAdded())
-                                    Util.toastError(context);
-                            }
-                            builder.dismiss();
-
-                        } else {
-                            Util.toastWarning(context, R.string.warning_cant_empty);
-                        }
-                    }
-                });
-
-                ImageView imgClose = dialogView.findViewById(R.id.imgClose);
-                imgClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        builder.dismiss();
-                    }
-                });
-
-                LinearLayout layoutSearch = dialogView.findViewById(R.id.layoutSearch);
-                layoutSearch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        List<Place.Field> fields = Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME);
-
-                        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                                .build(context);
-                        ((Activity) context).startActivityForResult(intent, PLACE_PICKER_REQUEST);
-                    }
-                });
-
-                LinearLayout layoutCurrentLocation = dialogView.findViewById(R.id.layoutCurrent);
-                layoutCurrentLocation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            //Util.toastWarning(context, R.string.warning_allow_location);
-                            ActivityCompat.requestPermissions((Activity) context,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    PERMISSIONS_REQUEST);
-                            return;
-                        }
-                        fusedLocationClient.getLastLocation()
-                                .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-                                    @Override
-                                    public void onSuccess(Location location) {
-                                        if (location != null) {
-                                            addMarker(location.getLatitude(), location.getLongitude());
-                                        }
-                                        /*else {
-                                            Util.showSettingsAlert(context);
-                                        }*/
-                                    }
-                                });
-                    }
-                });
-
-                builder.show();
+                showAddLocationDialog(savedInstanceState);
             }
         });
 
@@ -338,7 +198,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         return view;
     }
 
-    public void getLocations() {
+    private void getLocations() {
 
         /* view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);*/
         LocationService locationService = new LocationService();
@@ -390,6 +250,146 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                 Util.toastError(context);
             /* view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);*/
         }
+    }
+
+    private void showAddLocationDialog(Bundle savedInstanceState){
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_places, null);
+        final AlertDialog builder = new AlertDialog.Builder(context).create();
+        builder.setView(dialogView);
+
+        mMapView = dialogView.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume(); // needed to get the map to display immediately
+        try {
+            MapsInitializer.initialize(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
+
+                googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                googleMap.getUiSettings().setCompassEnabled(true);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    addMarker(location.getLatitude(), location.getLongitude());
+                                }
+                            }
+                        });
+                googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                    @Override
+                    public void onCameraIdle() {
+                        location = mMap.getCameraPosition().target;
+                    }
+                });
+            }
+        });
+
+        EditText txtName = dialogView.findViewById(R.id.txt_name);
+
+        Button btnSetLocation = dialogView.findViewById(R.id.btnSetLocation);
+        btnSetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!txtName.getText().toString().trim().equals("")) {
+                    LocationModel locationModel = new LocationModel();
+                    locationModel.setName(txtName.getText().toString());
+                    locationModel.setTeamId(Constants.personTeamView.getTeamId());
+                    locationModel.setLat(location.latitude);
+                    locationModel.setLon(location.longitude);
+                    LocationService locationService = new LocationService();
+                    try {
+                        locationService.saveLocation(context, locationModel,
+                                new VolleyCallback() {
+                                    @Override
+                                    public void onSuccessList(JSONArray result) {
+                                    }
+
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        Util.toastInfo(context, R.string.info_location_added);
+                                        getLocations();
+                                    }
+
+                                    @Override
+                                    public void onError(String result) {
+                                        Activity activity = getActivity();
+                                        if (activity != null && isAdded())
+                                            Util.toastError(context);
+                                    }
+                                });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Activity activity = getActivity();
+                        if (activity != null && isAdded())
+                            Util.toastError(context);
+                    }
+                    builder.dismiss();
+
+                } else {
+                    Util.toastWarning(context, R.string.warning_cant_empty);
+                }
+            }
+        });
+
+        ImageView imgClose = dialogView.findViewById(R.id.imgClose);
+        imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.dismiss();
+            }
+        });
+
+        LinearLayout layoutSearch = dialogView.findViewById(R.id.layoutSearch);
+        layoutSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Place.Field> fields = Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(context);
+                ((Activity) context).startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            }
+        });
+
+        LinearLayout layoutCurrentLocation = dialogView.findViewById(R.id.layoutCurrent);
+        layoutCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    //Util.toastWarning(context, R.string.warning_allow_location);
+                    ActivityCompat.requestPermissions((Activity) context,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST);
+                    return;
+                }
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    addMarker(location.getLatitude(), location.getLongitude());
+                                }
+                                        /*else {
+                                            Util.showSettingsAlert(context);
+                                        }*/
+                            }
+                        });
+            }
+        });
+
+        builder.show();
     }
 
     private void addMarker(double lat, double lon) {
@@ -465,30 +465,15 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
     }
 
     private void deleteImage() {
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(Uri.parse("deleted"))
-                .build();
-
-        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Glide.with(context)
-                            .load(Uri.parse("deleted"))
-                            .apply(new RequestOptions()
-                                    .centerInside()
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                    .skipMemoryCache(false)
-                                    .placeholder(R.drawable.user_placeholder)
-                                    .error(R.drawable.user_placeholder))
-                            .into(imgLogo);
-                    Constants.person.setProfilePictureUrl("deleted");
-                    saveTeam();
-                } else {
-                    Util.toastError(context, task.getException().getMessage());
-                }
-            }
-        });
+        Glide.with(context)
+                .load(Uri.parse("deleted"))
+                .apply(new RequestOptions()
+                        .centerInside()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.icon_rectangle)
+                        .error(R.drawable.icon_rectangle))
+                .into(imgLogo);
     }
 
     private void saveTeam() {
@@ -619,9 +604,8 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         final Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
         imgProfilePhoto.setImageBitmap(myBitmap);
-        imgProfilePhoto.setFixedAspectRatio(true);
-        imgProfilePhoto.setAspectRatio(1, 1);
-        imgProfilePhoto.setCropShape(CropImageView.CropShape.OVAL);
+        imgProfilePhoto.setFixedAspectRatio(false);
+        imgProfilePhoto.setCropShape(CropImageView.CropShape.RECTANGLE);
 
         btnRotate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -658,16 +642,14 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         final String convertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        String userId = firebaseUser.getUid();
-        String imageName = userId + ".jpg";
+        String imageName = Constants.personTeamView.getTeamId() + ".jpg";
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("name", imageName);
         params.put("image_data", convertImage);
-        params.put("type", Constants.UPLOAD_IMAGE_TYPE_PROFILE);
-        params.put("path", Util.setDirectoryFromFileName(userId));
-        params.put("user_id", userId);
+        params.put("type", Constants.UPLOAD_IMAGE_TYPE_LOGO);
+        params.put("path", "/");
+        params.put("user_id", firebaseUser.getUid());
 
         progressDialog = ProgressDialog.show(getActivity(), getString(R.string.processing), getString(R.string.wait), false, false);
 
@@ -676,32 +658,16 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
             public void onSuccess(JSONObject jsonResult) {
 
                 ImageUploadResult imageUploadResult = new Gson().fromJson(jsonResult.toString(), ImageUploadResult.class);
-
                 if (imageUploadResult.getResult().equals(ImageUploadResultTypeEnum.OK.getValue())) {
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setPhotoUri(Uri.parse(imageUploadResult.getUrl()))
-                            .build();
-
-                    firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Glide.with(context)
-                                        .load(Uri.parse(imageUploadResult.getUrl()))
-                                        .apply(new RequestOptions()
-                                                .centerInside()
-                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                                .skipMemoryCache(false)
-                                                .placeholder(R.drawable.user_placeholder)
-                                                .error(R.drawable.user_placeholder))
-                                        .into(imgLogo);
-                                Constants.person.setProfilePictureUrl(imageUploadResult.getUrl());
-                                saveTeam();
-                            } else {
-                                Util.toastError(context, task.getException().getMessage());
-                            }
-                        }
-                    });
+                    Glide.with(context)
+                            .load(Uri.parse(imageUploadResult.getUrl()))
+                            .apply(new RequestOptions()
+                                    .centerInside()
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .placeholder(R.drawable.icon_rectangle)
+                                    .error(R.drawable.icon_rectangle))
+                            .into(imgLogo);
                 } else if (imageUploadResult.getResult().equals(ImageUploadResultTypeEnum.ERROR.getValue())) {
                     Util.toastError(context);
                 }

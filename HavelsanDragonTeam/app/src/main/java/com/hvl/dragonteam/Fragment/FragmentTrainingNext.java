@@ -245,11 +245,19 @@ public class FragmentTrainingNext extends Fragment {
             }
         };
 
-        final ImageView imgDate = (ImageView) view.findViewById(R.id.img_date);
-        imgDate.setOnClickListener(new View.OnClickListener() {
+        txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDateTimePicker();
+            }
+        });
+
+        final ImageView imgInfo = (ImageView) view.findViewById(R.id.img_info);
+
+        imgInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Util.toastInfo(context, R.string.info_location_add_tip);
             }
         });
 

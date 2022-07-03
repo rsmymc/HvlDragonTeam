@@ -1,20 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:layout_marginVertical="@dimen/components_top_margin"
-        android:text="@string/add_training"
-        android:textColor="@color/colorSecondary"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:textSize="@dimen/action_button_text_size">
-    </TextView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +13,6 @@
             android:id="@+id/lyt_date"
             android:layout_width="0dp"
             android:layout_height="@dimen/bordered_text_height"
-            android:layout_marginRight="@dimen/components_left_margin"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -53,20 +40,19 @@
                 android:textColor="@color/textColor"
                 android:textSize="@dimen/bordered_text_size" />
         </RelativeLayout>
-        <ImageView
-            android:id="@+id/img_date"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:src="@drawable/calendar"
-            android:tint="@color/colorPrimary"></ImageView>
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
         android:layout_marginVertical="@dimen/components_top_margin"
+        android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginRight="@dimen/components_left_margin"
+        android:layout_weight="1"
         android:background="@drawable/edit_text_border">
 
         <TextView
@@ -88,4 +74,13 @@
             android:layout_marginTop="5dp"
             android:spinnerMode="dropdown"></Spinner>
     </RelativeLayout>
+        <ImageView
+            android:id="@+id/img_info"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:src="@drawable/info"
+            android:tint="@color/colorPrimary"></ImageView>
+    </LinearLayout>
 </LinearLayout>

@@ -45,6 +45,7 @@ public class Constants {
 
     public static final String UPLOAD_IMAGE_TYPE_PROFILE = "profile_images";
     public static final String UPLOAD_IMAGE_TYPE_CHAT = "chat_images";
+    public static final String UPLOAD_IMAGE_TYPE_LOGO = "logo_images";
     public static final String TAG_ANNOUNCEMENT_READ_LIST ="ANNOUNCEMENT_READ_LIST";
     public static final String TAG_LAST_SELECTED_TEAM="LAST_SELECTED_TEAM";
 

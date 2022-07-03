@@ -2,17 +2,22 @@ package com.hvl.dragonteam.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -52,6 +57,7 @@ public class ActivityLogin extends AppCompatActivity {
     private EditText editTextCode;
     private TextView txtEnterCode;
     private TextView txtResend;
+    private ImageView imgLogo;
     private LinearLayout layoutPhone;
     private LinearLayout layoutCode;
     private FirebaseAuth mAuth;
@@ -75,6 +81,7 @@ public class ActivityLogin extends AppCompatActivity {
         editTextCode = (EditText) findViewById(R.id.txt_code);
         txtEnterCode = (TextView) findViewById(R.id.txt_enter_code);
         txtResend = (TextView) findViewById(R.id.txt_resend);
+        imgLogo = (ImageView) findViewById(R.id.img_logo);
         layoutPhone = (LinearLayout) findViewById(R.id.layout_phone);
         layoutCode = (LinearLayout) findViewById(R.id.layout_code);
         mAuth = FirebaseAuth.getInstance();
@@ -82,13 +89,13 @@ public class ActivityLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
-                /*if (!editTextPhone.getText().toString().trim().equals("")) {
+                //testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
+                if (!editTextPhone.getText().toString().trim().equals("")) {
                     progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.verifying), false, false);
                     startPhoneNumberVerification(editTextPhone.getText().toString().trim());
                 } else {
                     Util.toastWarning(ActivityLogin.this,getString(R.string.enter_phone_number));
-                }*/
+                }
             }
         });
         btnVerify.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +116,16 @@ public class ActivityLogin extends AppCompatActivity {
                 resendVerificationCode(editTextPhone.getText().toString());
             }
         });
+
+      /*  Glide.with(ActivityLogin.this)
+                .load(Uri.parse(Util.getTeamLogoURL()))
+                .apply(new RequestOptions()
+                        .centerInside()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.icon)
+                        .error(R.drawable.icon))
+                .into(imgLogo);*/
 
         layoutPhone.setVisibility(View.VISIBLE);
         layoutCode.setVisibility(View.GONE);
