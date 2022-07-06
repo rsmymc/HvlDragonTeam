@@ -77,7 +77,7 @@
     <string name="training">Antreman</string>
     <string name="question_delete_photo">Fotoğrafı kaldır?</string>
     <string name="question_exit">Çıkmak istiyor musun?</string>
-    <string name="warning_cant_empty">Boş olamaz</string>
+    <string name="warning_cant_empty">boş olamaz</string>
     <string name="warning_team_not_found">Takım bulunamadı</string>
     <string name="warning_no_person">Kişi yok</string>
     <string name="warning_no_training">Antreman yok</string>

@@ -22,6 +22,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.R;
 
@@ -108,6 +111,20 @@ public class Util {
             e.printStackTrace();
             return date;
         }
+    }
+
+    public void createDynamicLink(String teamId, OnCompleteListener<ShortDynamicLink> onCompleteListener) {
+
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://www.uppersoftwaresolutions.com/?teamId=" + teamId))
+                .setDomainUriPrefix("https://dragonteam.page.link")
+                // Open links with this app on Android
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                // Open links with com.example.ios on iOS
+                //.setIosParameters(new DynamicLink.IosParameters.Builder("com.hvl.dragonteam")//TODO IOS Params
+                  //      .setAppStoreId("1592737409").build())
+                .buildShortDynamicLink()
+                .addOnCompleteListener(onCompleteListener);
     }
 
 

@@ -48,8 +48,9 @@ public class ActivityTeam extends AppCompatActivity {
     private TextView txtQuestionConfirm;
     private ArrayList<PersonTeamView> teamList = new ArrayList<>();
     private Team _team;
-    LinearLayout layoutCode;
-    LinearLayout layoutJoinConfirm;
+    private LinearLayout layoutCode;
+    private LinearLayout layoutJoinConfirm;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,13 @@ public class ActivityTeam extends AppCompatActivity {
         listView = findViewById(R.id.listView_team);
         listView.setLayoutManager(new LinearLayoutManager(ActivityTeam.this, LinearLayoutManager.VERTICAL, false));
         getTeams();
+
+        bundle = getIntent().getExtras();
+
+        if (bundle != null && bundle.getString("DIRECT", "").equals("JOIN")) {
+            String teamId = bundle.getString("ID", "");
+            showJoinDialog(teamId);
+        }
     }
 
     public void myClickMethod(View v) {
@@ -78,7 +86,7 @@ public class ActivityTeam extends AppCompatActivity {
                 break;
             }
             case R.id.fabOptionJoinTeam: {
-                showJoinDialog();
+                showJoinDialog("");
                 break;
             }
         }
@@ -143,20 +151,23 @@ public class ActivityTeam extends AppCompatActivity {
         builder.show();
     }
 
-    private void showJoinDialog() {
+    AlertDialog builder;
+
+    private void showJoinDialog(String teamId) {
 
         LayoutInflater inflater = getLayoutInflater();
 
         View view = inflater.inflate(R.layout.dialog_join_team, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityTeam.this);
+        builder = new AlertDialog.Builder(ActivityTeam.this).create();
         builder.setView(view);
-
         EditText editTextName = (EditText) view.findViewById(R.id.txt_team_name);
         Button btnNext = (Button) view.findViewById(R.id.btn_next);
         Button btnConfirmJoin = (Button) view.findViewById(R.id.btn_join_team);
         txtQuestionConfirm = (TextView) view.findViewById(R.id.txt_question_confirm);
         layoutCode = (LinearLayout) view.findViewById(R.id.layout_code);
         layoutJoinConfirm = (LinearLayout) view.findViewById(R.id.layout_join_confirm);
+
+        editTextName.setText(teamId);
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,12 +184,6 @@ public class ActivityTeam extends AppCompatActivity {
                 savePersonTeam(personTeam, false);
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.dismiss();
-            }
-        });
-
 
         builder.show();
     }
@@ -256,6 +261,7 @@ public class ActivityTeam extends AppCompatActivity {
                                 Util.toastInfo(ActivityTeam.this, getString(R.string.info_team_created));
                             } else {
                                 Util.toastInfo(ActivityTeam.this, getString(R.string.info_team_joined));
+                                builder.dismiss();
                             }
                         }
 

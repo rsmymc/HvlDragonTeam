@@ -19,7 +19,7 @@
             android:layout_width="200dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/icon_rectangle" />
+            android:src="@drawable/logo_genel" />
 
         <LinearLayout
             android:id="@+id/layout_camera"

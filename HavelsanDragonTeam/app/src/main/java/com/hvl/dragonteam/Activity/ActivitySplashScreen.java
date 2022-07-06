@@ -2,26 +2,25 @@ package com.hvl.dragonteam.Activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
@@ -93,7 +92,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                 int newVer = Integer.parseInt(remoteDialogModel.getVersion().replace(".", "").trim());
                                 if (newVer > curVer) {
 
-                                    boolean dontShowUpdate =  sharedPrefHelperInstance.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
+                                    boolean dontShowUpdate = sharedPrefHelperInstance.getBoolean(Constants.REMOTE_DIALOG_PREFIX + remoteDialogModel.getId(), false);
 
                                     if (remoteDialogModel.isForceUpdate() || (!remoteDialogModel.isForceUpdate() && !dontShowUpdate)) {
 
@@ -104,7 +103,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                                         TextView txtChanges = (TextView) view.findViewById(R.id.txtChanges);
 
-                                        if(LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()){
+                                        if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
                                             txtChanges.setText(remoteDialogModel.getTr());
                                         } else {
                                             txtChanges.setText(remoteDialogModel.getEn());
@@ -176,7 +175,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                                     TextView txtWarning = (TextView) view.findViewById(R.id.txtWarning);
 
-                                    if(LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()){
+                                    if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
                                         txtWarning.setText(remoteDialogModel.getTr());
                                     } else {
                                         txtWarning.setText(remoteDialogModel.getEn());
@@ -211,7 +210,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                                 TextView txtWarning = (TextView) view.findViewById(R.id.txtWarning);
 
-                                if(LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()){
+                                if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
                                     txtWarning.setText(remoteDialogModel.getTr());
                                 } else {
                                     txtWarning.setText(remoteDialogModel.getEn());
@@ -230,18 +229,151 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                 });
 
                                 builder.show();
-                            }
-                            else {
+                            } else {
                                 processToApp();
                             }
                         } else {
-                           processToApp();
+                            processToApp();
                         }
                     }
                 });
     }
 
     private void processToApp() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(ActivitySplashScreen.this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        if (mAuth.getCurrentUser() != null) {
+                            PersonService personService = new PersonService();
+                            Person _person = new Person();
+                            _person.setId(mAuth.getCurrentUser().getUid());
+
+                            try {
+                                personService.getPerson(ActivitySplashScreen.this,
+                                        _person,
+                                        new VolleyCallback() {
+                                            @Override
+                                            public void onSuccess(JSONObject result) {
+                                                Person person = new Gson().fromJson(result.toString(), Person.class);
+                                                Constants.person = person;
+
+                                                if (pendingDynamicLinkData != null) {
+                                                    Uri deepLink = pendingDynamicLinkData.getLink();
+                                                    String teamId = deepLink.getQueryParameter("teamId");
+
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("ID", teamId);
+                                                    bundle.putString("DIRECT", "JOIN");
+
+                                                    Intent intent = new Intent(ActivitySplashScreen.this, ActivityTeam.class);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+
+                                                } else {
+
+                                                   /* Bundle bundle = getIntent().getExtras();//TODO notifacition dan gelen intenti handle et
+                                                    if (bundle != null)
+                                                        intent.putExtras(bundle);*/
+                                                    String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
+
+                                                    if (lastSelectedTeamId == null) {
+                                                        Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    } else {
+                                                        getPersonTeam(lastSelectedTeamId);
+                                                    }
+                                                }
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onError(String result) {
+                                                Util.toastError(ActivitySplashScreen.this);
+                                            }
+
+                                            @Override
+                                            public void onSuccessList(JSONArray result) {
+                                            }
+                                        });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Util.toastError(ActivitySplashScreen.this);
+                            }
+                        } else {
+                            Intent intent = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
+                            if (pendingDynamicLinkData != null) {
+                                Uri deepLink = pendingDynamicLinkData.getLink();
+                                String teamId = deepLink.getQueryParameter("teamId");
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("ID", teamId);
+                                bundle.putString("DIRECT", "JOIN");
+                                intent.putExtras(bundle);
+                            }
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                })
+                .addOnFailureListener(ActivitySplashScreen.this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("", "getDynamicLink:onFailure", e);
+                        Util.toastError(ActivitySplashScreen.this, "getDynamicLink:onFailure");
+                    }
+                });
+    }
+
+    private void getPersonTeam(String teamId) {
+        PersonTeamService personTeamService = new PersonTeamService();
+        PersonTeam _personTeam = new PersonTeam();
+        _personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        _personTeam.setTeamId(teamId);
+
+        try {
+            personTeamService.getPersonTeam(ActivitySplashScreen.this,
+                    _personTeam,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            PersonTeamView personTeamView = new Gson().fromJson(result.toString(), PersonTeamView.class);
+                            Constants.personTeamView = personTeamView;
+
+                            if (personTeamView != null) {
+                                Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void processToApp2() {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
@@ -261,7 +393,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                                 String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
 
-                                if(lastSelectedTeamId == null) {
+                                if (lastSelectedTeamId == null) {
                                     Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
                                     startActivity(intent);
                                     finish();
@@ -286,52 +418,6 @@ public class ActivitySplashScreen extends AppCompatActivity {
             }
         } else {
             Intent intent = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    private void getPersonTeam(String teamId){
-        PersonTeamService personTeamService = new PersonTeamService();
-        PersonTeam _personTeam = new PersonTeam();
-        _personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        _personTeam.setTeamId(teamId);
-
-        try {
-            personTeamService.getPersonTeam(ActivitySplashScreen.this,
-                    _personTeam,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            PersonTeamView personTeamView = new Gson().fromJson(result.toString(), PersonTeamView.class);
-                            Constants.personTeamView = personTeamView;
-
-                            if(personTeamView != null) {
-                                Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
-                            startActivity(intent);
-                            finish();
-                        }
-
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
             startActivity(intent);
             finish();
         }

@@ -1,23 +1,22 @@
 package com.hvl.dragonteam.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -62,7 +61,7 @@ public class ActivityLogin extends AppCompatActivity {
     private LinearLayout layoutCode;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
-
+    private Bundle bundle;
     private static final String TAG = "PhoneAuthActivity";
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -72,7 +71,7 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        bundle = getIntent().getExtras();
         FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
 
         btnLogin = (Button) findViewById(R.id.btn_send_sms);
@@ -89,13 +88,13 @@ public class ActivityLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
-                if (!editTextPhone.getText().toString().trim().equals("")) {
+                testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
+                /*if (!editTextPhone.getText().toString().trim().equals("")) {
                     progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.verifying), false, false);
                     startPhoneNumberVerification(editTextPhone.getText().toString().trim());
                 } else {
                     Util.toastWarning(ActivityLogin.this,getString(R.string.enter_phone_number));
-                }
+                }*/
             }
         });
         btnVerify.setOnClickListener(new View.OnClickListener() {
@@ -279,49 +278,13 @@ public class ActivityLogin extends AppCompatActivity {
 
                         @Override
                         public void onError(String result) {
-                            createUser();
-                        }
+                            Intent intent = new Intent(ActivityLogin.this, ActivityPersonInfo.class);
+                            if (bundle != null/* && bundle.getString("DIRECT", "").equals("JOIN")*/) {
+                                intent.putExtras(bundle);
+                            }
+                            startActivity(intent);
 
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            progressDialog.dismiss();
-            Util.toastError(ActivityLogin.this);
-        }
-    }
-
-    private void createUser() {
-        PersonService personService = new PersonService();
-        Person person = new Person(mAuth.getCurrentUser().getUid(),
-               "",
-                mAuth.getCurrentUser().getPhoneNumber(),
-                0,
-                0,
-                SideEnum.RIGHT.getValue(),
-                null);
-
-        try {
-            personService.savePerson(this,
-                    person,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            Constants.person = person;
-                            PersonNotification personNotification = new PersonNotification(mAuth.getCurrentUser().getUid(), FirebaseInstanceId.getInstance().getToken(), true, LanguageEnum.getLocaleEnumValue());
-                            saveNotification(personNotification);
-                            progressDialog.dismiss();
-                            goToIntent();
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                            mAuth.getCurrentUser().delete();
-                            FirebaseAuth.getInstance().signOut();
-                            progressDialog.dismiss();
-                            Util.toastError(ActivityLogin.this);
+                            finish();
                         }
 
                         @Override
@@ -381,7 +344,10 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void goToIntent() {
 
-        Intent intent = new Intent(ActivityLogin.this, ActivityTeam.class);//TODO team mi home mu
+        Intent intent = new Intent(ActivityLogin.this, ActivityTeam.class);
+        if (bundle != null/* && bundle.getString("DIRECT", "").equals("JOIN")*/) {
+            intent.putExtras(bundle);
+        }
         startActivity(intent);
 
         finish();

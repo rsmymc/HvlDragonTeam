@@ -143,8 +143,8 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
-                        .placeholder(R.drawable.icon_rectangle)
-                        .error(R.drawable.icon_rectangle))
+                        .placeholder(R.drawable.logo_genel)
+                        .error(R.drawable.logo_genel))
                 .into(imgLogo);
 
         editTextName.setText(Constants.personTeamView.getTeamName());
@@ -471,8 +471,8 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                         .centerInside()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
-                        .placeholder(R.drawable.icon_rectangle)
-                        .error(R.drawable.icon_rectangle))
+                        .placeholder(R.drawable.logo_genel)
+                        .error(R.drawable.logo_genel))
                 .into(imgLogo);
     }
 
@@ -665,8 +665,8 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                                     .centerInside()
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true)
-                                    .placeholder(R.drawable.icon_rectangle)
-                                    .error(R.drawable.icon_rectangle))
+                                    .placeholder(R.drawable.logo_genel)
+                                    .error(R.drawable.logo_genel))
                             .into(imgLogo);
                 } else if (imageUploadResult.getResult().equals(ImageUploadResultTypeEnum.ERROR.getValue())) {
                     Util.toastError(context);

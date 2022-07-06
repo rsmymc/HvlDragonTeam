@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Model.Announcement;
@@ -60,22 +61,21 @@ public class PersonTeamByPersonAdapter extends RecyclerView.Adapter<PersonTeamBy
         holder.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                util.shareTextIntent(listPersonTeam.get(position).getTeamId(), context);
-                /*OnCompleteListener<ShortDynamicLink> onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
+                OnCompleteListener<ShortDynamicLink> onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
                     @Override
                     public void onComplete(@NonNull Task<ShortDynamicLink> task) {
                         if (task.isSuccessful()) {
                             Uri shortLink = task.getResult().getShortLink();
                             //Uri previewLink = task.getResult().getPreviewLink();
-                            util.shareTextIntent(context.getString(R.string.info_share_shuttle)
+                            util.shareTextIntent(context.getString(R.string.info_share_team)
                                     .replace("LLL", shortLink.toString())
-                                    .replace("XXX", listTransportation.get(position).getId())
-                                    .replace("YYY", listTransportation.get(position).getName()), context);
+                                    .replace("XXX", listPersonTeam.get(position).getTeamId())
+                                    .replace("YYY", listPersonTeam.get(position).getTeamName()), context);
                         } else {
                         }
                     }
                 };
-                util.createDynamicLink(listTransportation.get(position).getId(),onCompleteListener);*/
+                util.createDynamicLink(listPersonTeam.get(position).getTeamId(),onCompleteListener);
             }
         });
     }

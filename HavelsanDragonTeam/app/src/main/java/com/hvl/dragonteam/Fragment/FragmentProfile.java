@@ -353,11 +353,14 @@ public class FragmentProfile extends Fragment {
     private void saveUser() {
         PersonService personService = new PersonService();
         progressDialog = ProgressDialog.show(context, getResources().getString(R.string.processing), getResources().getString(R.string.wait), false, false);
+
+        int height = editTextHeight.getText().toString().trim().equals("") ? 0 : Integer.parseInt(editTextHeight.getText().toString());
+        int weight = editTextWeight.getText().toString().trim().equals("") ? 0 : Integer.parseInt(editTextWeight.getText().toString());
         Person person = new Person(firebaseUser.getUid(),
                 editTextName.getText().toString(),
                 editTextPhone.getText().toString(),
-                Integer.parseInt(editTextHeight.getText().toString()),
-                Integer.parseInt(editTextWeight.getText().toString()),
+                height,
+                weight,
                 spinnerSide.getSelectedItemPosition(),
                 Constants.person.getProfilePictureUrl());
         try {
@@ -394,9 +397,9 @@ public class FragmentProfile extends Fragment {
 
         if(!editTextName.getText().toString().equals(Constants.person.getName())){
             isEnable = true;
-        } else if(Integer.parseInt(editTextHeight.getText().toString()) != Constants.person.getHeight()){
+        } else if(editTextHeight.getText().toString().trim().equals("")  || Integer.parseInt(editTextHeight.getText().toString()) != Constants.person.getHeight()){
             isEnable = true;
-        } else if(Integer.parseInt(editTextWeight.getText().toString()) != Constants.person.getWeight()){
+        } else if(editTextWeight.getText().toString().trim().equals("")  || Integer.parseInt(editTextWeight.getText().toString()) != Constants.person.getWeight()){
             isEnable = true;
         } else if(spinnerSide.getSelectedItemPosition() != Constants.person.getSide()){
             isEnable = true;

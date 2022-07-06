@@ -91,7 +91,7 @@
     <string name="warning_no_training">No Training</string>
     <string name="warning_no_person">No Person</string>
     <string name="warning_team_not_found">Team Not Found</string>
-    <string name="warning_cant_empty">Can\'t be empty</string>
+    <string name="warning_cant_empty">can\'t be empty</string>
 
     <string name="question_exit">Do you want to exit?</string>
     <string name="question_delete_photo">Remove photo?</string>
