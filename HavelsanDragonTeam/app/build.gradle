@@ -11,8 +11,8 @@ android {
         applicationId "com.hvl.dragonteam"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.nambimobile.widgets:expandable-fab:1.0.2'
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    implementation 'com.hbb20:ccp:2.6.0'
 
     testImplementation 'junit:junit:'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -1,17 +1,14 @@
 package com.hvl.dragonteam.Activity;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,11 +25,11 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.hbb20.CountryCodePicker;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LanguageEnum;
-import com.hvl.dragonteam.Model.Enum.SideEnum;
 import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.R;
@@ -57,6 +54,7 @@ public class ActivityLogin extends AppCompatActivity {
     private TextView txtEnterCode;
     private TextView txtResend;
     private ImageView imgLogo;
+    private CountryCodePicker countryCodePicker;
     private LinearLayout layoutPhone;
     private LinearLayout layoutCode;
     private FirebaseAuth mAuth;
@@ -81,20 +79,23 @@ public class ActivityLogin extends AppCompatActivity {
         txtEnterCode = (TextView) findViewById(R.id.txt_enter_code);
         txtResend = (TextView) findViewById(R.id.txt_resend);
         imgLogo = (ImageView) findViewById(R.id.img_logo);
+        countryCodePicker = (CountryCodePicker) findViewById(R.id.country_code_holder);
         layoutPhone = (LinearLayout) findViewById(R.id.layout_phone);
         layoutCode = (LinearLayout) findViewById(R.id.layout_code);
         mAuth = FirebaseAuth.getInstance();
 
+        countryCodePicker.registerCarrierNumberEditText(editTextPhone);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
-                /*if (!editTextPhone.getText().toString().trim().equals("")) {
+                //testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
+                if (!editTextPhone.getText().toString().trim().equals("")) {
                     progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.verifying), false, false);
-                    startPhoneNumberVerification(editTextPhone.getText().toString().trim());
+                    startPhoneNumberVerification(countryCodePicker.getFullNumberWithPlus());
                 } else {
                     Util.toastWarning(ActivityLogin.this,getString(R.string.enter_phone_number));
-                }*/
+                }
             }
         });
         btnVerify.setOnClickListener(new View.OnClickListener() {
