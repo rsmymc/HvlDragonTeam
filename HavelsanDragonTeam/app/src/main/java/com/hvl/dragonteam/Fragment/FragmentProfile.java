@@ -595,13 +595,6 @@ public class FragmentProfile extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case (R.id.action_change_team): {
-                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
-                Intent intent = new Intent(getContext(), ActivityTeam.class);
-                startActivity(intent);
-                getActivity().finish();
-                break;
-            }
             case (R.id.action_logout): {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
