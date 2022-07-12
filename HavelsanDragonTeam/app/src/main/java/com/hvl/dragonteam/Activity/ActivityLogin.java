@@ -70,7 +70,7 @@ public class ActivityLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         bundle = getIntent().getExtras();
-        FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
+        FirebaseAuth.getInstance().getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
 
         btnLogin = (Button) findViewById(R.id.btn_send_sms);
         editTextPhone = (EditText) findViewById(R.id.txt_phone);
@@ -113,7 +113,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.resending), false, false);
-                resendVerificationCode(editTextPhone.getText().toString());
+                resendVerificationCode(countryCodePicker.getFullNumberWithPlus());
             }
         });
 
