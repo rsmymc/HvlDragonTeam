@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -59,11 +60,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.Adapter.LocationAdapter;
 import com.hvl.dragonteam.DataService.LocationService;
 import com.hvl.dragonteam.DataService.TeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.ImageUploadResultTypeEnum;
+import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.ImageUploadResult;
 import com.hvl.dragonteam.Model.LocationModel;
 import com.hvl.dragonteam.Model.Team;
@@ -71,6 +74,7 @@ import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.CustomTypingEditText;
 import com.hvl.dragonteam.Utilities.ImageProcess;
+import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -691,7 +695,68 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
+        inflater.inflate(R.menu.menu_team_settings, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case (R.id.action_team_delete): {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                deleteTeam();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(context.getString(R.string.warning_delete_team).replace("XXX", Constants.personTeamView.getTeamName()))
+                        .setPositiveButton(context.getString(R.string.delete), dialogClickListener)
+                        .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteTeam() {
+        TeamService teamService = new TeamService();
+        Team team = new Team();
+        team.setId(Constants.personTeamView.getTeamId());
+        try {
+            teamService.deleteTeam(context,
+                    team,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Util.toastInfo(context, context.getString(R.string.info_team_deleted));
+                            SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
+                            Intent intent = new Intent(getContext(), ActivityTeam.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Util.toastError(context);
+                            //view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Util.toastError(context);
+            //view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
     }
 
     @Override

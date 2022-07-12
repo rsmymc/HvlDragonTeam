@@ -27,6 +27,7 @@
     <string name="choose">Seç</string>
     <string name="lineup">Yerleşim</string>
     <string name="remove">Kaldır</string>
+    <string name="delete">Sil</string>
     <string name="name">İsim</string>
     <string name="date">Tarih</string>
     <string name="context">İçerik</string>
@@ -86,6 +87,7 @@
     <string name="warning_no_joined_team">Katıldığın takım yok</string>
     <string name="warning_delete_location">Konumu silmek istediğine emin misin?</string>
     <string name="warning_delete_person_team">Takımdan çıkarmak istediğine emin misin?</string>
+    <string name="warning_delete_team">XXX takımını silmek istediğine emin misin?</string>
     <string name="warning_logout">Çıkış yapmak istediğine emin misin?</string>
     <string name="info_clipboard">Kod panoya koplayandı</string>
     <string name="info_location_added">Konum eklendi</string>
@@ -94,6 +96,7 @@
     <string name="info_team_updated">Takım güncellendi</string>
     <string name="info_team_joined">Takıma katınıldı</string>
     <string name="info_team_created">Takım oluşturuldu</string>
+    <string name="info_team_deleted">Takım silindi</string>
     <string name="info_profile_updated">Profil bilgisi güncellendi</string>
     <string name="info_load">Yerleşimini yüklemek istediğiniz antremanı seçiniz</string>
     <string name="notifications">Bildirimler</string>

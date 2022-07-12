@@ -26,6 +26,7 @@
     <string name="choose">Choose</string>
     <string name="lineup">Lineup</string>
     <string name="remove">Remove</string>
+    <string name="delete">Delete</string>
     <string name="name">Name</string>
     <string name="date">Date</string>
     <string name="context">Context</string>
@@ -77,6 +78,7 @@
     <string name="info_team_updated">Team updated</string>
     <string name="info_lineup_updated">Lineup updated</string>
     <string name="info_location_deleted">Location deleted</string>
+    <string name="info_team_deleted">Team deleted</string>
     <string name="info_location_added">Location added</string>
     <string name="info_location_add_tip">To add location go to Team-> Settings screen</string>
     <string name="info_clipboard">Code copied to clipboard</string>
@@ -86,6 +88,7 @@
     <string name="warning_logout">Are you sure to logout?</string>
     <string name="warning_delete_person_team">Are you sure to remove from team?</string>
     <string name="warning_delete_location">Are you sure to remove location?</string>
+    <string name="warning_delete_team">Are you sure to delete team XXX?</string>
     <string name="warning_no_joined_team">No Joined Team</string>
     <string name="warning_no_announcement">No Announcement</string>
     <string name="warning_no_location">No Location</string>

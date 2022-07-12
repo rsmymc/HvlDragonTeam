@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".movie">
+    xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/action_filter"
-        android:icon="@drawable/filter"
+        android:id="@+id/action_team_delete"
+        android:icon="@drawable/delete"
         android:title=""
         app:iconTint="@color/white"
         app:showAsAction="always" />
+
 </menu>

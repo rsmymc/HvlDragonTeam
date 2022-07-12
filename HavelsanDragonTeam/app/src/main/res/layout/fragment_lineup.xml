@@ -270,14 +270,14 @@
         android:id="@+id/layout_action_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/darkGray">
+        android:background="@color/lightGray">
 
         <Button
             android:id="@+id/btn_reset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/darkGray"
+            android:background="@color/lightGray"
             android:text="@string/reset"
             android:textColor="@color/colorSecondary"></Button>
 
@@ -286,17 +286,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/darkGray"
+            android:background="@color/lightGray"
             android:text="@string/load"
-            android:textColor="@color/chat_sender_color3"></Button>
+            android:textColor="@color/chat_sender_color2"></Button>
 
         <Button
             android:id="@+id/btn_draft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/darkGray"
-            android:text="@string/draft"
+            android:background="@color/lightGray"
+            android:text="@string/save"
             android:textColor="@color/colorPrimary"></Button>
 
         <Button
@@ -304,7 +304,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/darkGray"
+            android:background="@color/lightGray"
             android:text="@string/publish"
             android:textColor="@color/chat_sender_color10"></Button>
 
