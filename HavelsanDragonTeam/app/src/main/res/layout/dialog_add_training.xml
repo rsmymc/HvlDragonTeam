@@ -80,7 +80,7 @@
             android:layout_height="32dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:src="@drawable/info"
+            android:src="@drawable/add_point"
             android:tint="@color/colorPrimary"></ImageView>
     </LinearLayout>
 </LinearLayout>

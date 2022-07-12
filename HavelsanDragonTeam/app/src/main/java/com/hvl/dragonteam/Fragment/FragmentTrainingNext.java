@@ -1,22 +1,32 @@
 package com.hvl.dragonteam.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -24,6 +34,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Adapter.LocationAdapter;
@@ -39,17 +62,23 @@ import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.ImageProcess;
 import com.hvl.dragonteam.Utilities.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentTrainingNext extends Fragment {
 
@@ -57,13 +86,18 @@ public class FragmentTrainingNext extends Fragment {
     private Activity activity;
     private FragmentManager fragmentManager;
     private FragmentActivity context;
-
+    private MapView mMapView;
+    private GoogleMap googleMap;
+    private LatLng location;
     private TrainingAttendanceAdapter trainingAdapter;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
     private LinearLayout layoutAdd;
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
     private ArrayList<LocationModel> locationModelList = new ArrayList<>();
+    private FusedLocationProviderClient fusedLocationClient;
+    public static final int PLACE_PICKER_REQUEST = 9000;
+    private final static int PERMISSIONS_REQUEST = 103;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +107,7 @@ public class FragmentTrainingNext extends Fragment {
         view = inflater.inflate(R.layout.fragment_training_list, container, false);
         activity = getActivity();
         context = (FragmentActivity) getContext();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         fragmentManager = context.getSupportFragmentManager();
         setHasOptionsMenu(true);
 
@@ -97,7 +132,7 @@ public class FragmentTrainingNext extends Fragment {
         layoutAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddDialog();
+                showAddDialog(savedInstanceState);
             }
         });
 
@@ -178,7 +213,7 @@ public class FragmentTrainingNext extends Fragment {
         }
     }
 
-    public void getLocations() {
+    public void getLocations(LocationModel _locationModel) {
         LocationService locationService = new LocationService();
         Team team = new Team();
         team.setId(Constants.personTeamView.getTeamId());
@@ -195,9 +230,18 @@ public class FragmentTrainingNext extends Fragment {
 
                             locationModelList.clear();
                             locationModelList.addAll(list);
+
                             ArrayAdapter<LocationModel> adapter =new ArrayAdapter<LocationModel>(context, android.R.layout.simple_spinner_item, list);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             spinnerLocation.setAdapter(adapter);
+
+                            if(_locationModel != null){
+                                LocationModel model = locationModelList.stream().filter(a -> a.getId() == _locationModel.getId()).collect(Collectors.toList()).get(0);
+                                int index = locationModelList.indexOf(model);
+                                spinnerLocation.setSelection(index);
+                            } else  if (locationModelList.size()>1){
+                                spinnerLocation.setSelection(1);
+                            }
                         }
 
                         @Override
@@ -223,7 +267,7 @@ public class FragmentTrainingNext extends Fragment {
     private Calendar date;
     private TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
-    private void showAddDialog() {
+    private void showAddDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -232,7 +276,7 @@ public class FragmentTrainingNext extends Fragment {
         builder.setView(view);
 
         spinnerLocation = (Spinner) view.findViewById(R.id.spinner_location);
-        getLocations();
+        getLocations(null);
 
         final TextView txtDate = (TextView) view.findViewById(R.id.txt_date);
 
@@ -257,7 +301,8 @@ public class FragmentTrainingNext extends Fragment {
         imgInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.toastInfo(context, R.string.info_location_add_tip);
+                //Util.toastInfo(context, R.string.info_location_add_tip);
+                showAddLocationDialog(savedInstanceState);
             }
         });
 
@@ -307,7 +352,6 @@ public class FragmentTrainingNext extends Fragment {
         builder.show();
     }
 
-
     public void showDateTimePicker() {
         final Calendar currentDate = Calendar.getInstance();
         date = Calendar.getInstance();
@@ -320,6 +364,165 @@ public class FragmentTrainingNext extends Fragment {
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
     }
 
+    private void showAddLocationDialog(Bundle savedInstanceState){
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_places, null);
+        final AlertDialog builder = new AlertDialog.Builder(context).create();
+        builder.setView(dialogView);
+
+        mMapView = dialogView.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume(); // needed to get the map to display immediately
+        try {
+            MapsInitializer.initialize(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
+
+                googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                googleMap.getUiSettings().setCompassEnabled(true);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    addMarker(location.getLatitude(), location.getLongitude());
+                                }
+                            }
+                        });
+                googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                    @Override
+                    public void onCameraIdle() {
+                        location = mMap.getCameraPosition().target;
+                    }
+                });
+            }
+        });
+
+        EditText txtName = dialogView.findViewById(R.id.txt_name);
+
+        Button btnSetLocation = dialogView.findViewById(R.id.btnSetLocation);
+        btnSetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!txtName.getText().toString().trim().equals("")) {
+                    LocationModel locationModel = new LocationModel();
+                    locationModel.setName(txtName.getText().toString());
+                    locationModel.setTeamId(Constants.personTeamView.getTeamId());
+                    locationModel.setLat(location.latitude);
+                    locationModel.setLon(location.longitude);
+                    LocationService locationService = new LocationService();
+                    try {
+                        locationService.saveLocation(context, locationModel,
+                                new VolleyCallback() {
+                                    @Override
+                                    public void onSuccessList(JSONArray result) {
+                                    }
+
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        Util.toastInfo(context, R.string.info_location_added);
+                                        LocationModel _locationModel = new Gson().fromJson(result.toString(), LocationModel.class);
+                                        getLocations(_locationModel);
+                                    }
+
+                                    @Override
+                                    public void onError(String result) {
+                                        Activity activity = getActivity();
+                                        if (activity != null && isAdded())
+                                            Util.toastError(context);
+                                    }
+                                });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Activity activity = getActivity();
+                        if (activity != null && isAdded())
+                            Util.toastError(context);
+                    }
+                    builder.dismiss();
+
+                } else {
+                    Util.toastWarning(context, R.string.warning_cant_empty);
+                }
+            }
+        });
+
+        ImageView imgClose = dialogView.findViewById(R.id.imgClose);
+        imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.dismiss();
+            }
+        });
+
+        LinearLayout layoutSearch = dialogView.findViewById(R.id.layoutSearch);
+        layoutSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Place.Field> fields = Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                        .build(context);
+                ((Activity) context).startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            }
+        });
+
+        LinearLayout layoutCurrentLocation = dialogView.findViewById(R.id.layoutCurrent);
+        layoutCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    //Util.toastWarning(context, R.string.warning_allow_location);
+                    ActivityCompat.requestPermissions((Activity) context,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST);
+                    return;
+                }
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    addMarker(location.getLatitude(), location.getLongitude());
+                                }
+                                        /*else {
+                                            Util.showSettingsAlert(context);
+                                        }*/
+                            }
+                        });
+            }
+        });
+
+        builder.show();
+    }
+
+    private void addMarker(double lat, double lon) {
+        location = new LatLng(lat, lon);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(17).build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PLACE_PICKER_REQUEST:
+                    Place place = Autocomplete.getPlaceFromIntent(data);
+                    addMarker(place.getLatLng().latitude, place.getLatLng().longitude);
+                    break;
+            }
+        }
+    }
 
     @Override
     public void onResume() {

@@ -139,13 +139,12 @@
                         android:layout_marginLeft="@dimen/components_left_margin"
                         android:layout_marginBottom="@dimen/components_bottom_margin"
                         android:text="@string/warning_no_location"
-                        android:visibility="gone
-"></TextView>
+                        android:visibility="gone"></TextView>
 
                     <LinearLayout
                         android:id="@+id/layout_add"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_gravity="right"
                         android:layout_marginRight="@dimen/components_left_margin"
                         android:layout_marginBottom="@dimen/components_top_margin"
