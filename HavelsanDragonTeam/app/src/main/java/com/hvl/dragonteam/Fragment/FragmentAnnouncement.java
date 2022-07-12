@@ -167,7 +167,7 @@ public class FragmentAnnouncement extends Fragment {
         final View view = inflater.inflate(R.layout.dialog_add_announcement, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
-
+        builder.setCancelable(false);
         final EditText et1 = (EditText) view.findViewById(R.id.txt_context);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

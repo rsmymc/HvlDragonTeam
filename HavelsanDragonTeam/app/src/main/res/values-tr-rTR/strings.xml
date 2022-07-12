@@ -95,6 +95,7 @@
     <string name="info_team_joined">Takıma katınıldı</string>
     <string name="info_team_created">Takım oluşturuldu</string>
     <string name="info_profile_updated">Profil bilgisi güncellendi</string>
+    <string name="info_load">Yerleşimini yüklemek istediğiniz antremanı seçiniz</string>
     <string name="notifications">Bildirimler</string>
     <string name="publish_notification">Yerleşim yayınlandı</string>
     <string name="draft_notification">Yerleşim XXX tarafında taslak olarak kaydedildi.</string>

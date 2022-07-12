@@ -115,7 +115,7 @@ public class FragmentTeam extends Fragment {
                             final View view = inflater.inflate(R.layout.dialog_update_role, null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setView(view);
-
+                            builder.setCancelable(false);
                             final RadioGroup radioGroupRole = (RadioGroup) view.findViewById(R.id.radio_group_role);
 
                             ((RadioButton) radioGroupRole.getChildAt(personTeamList.get(position).getRole())).setChecked(true);

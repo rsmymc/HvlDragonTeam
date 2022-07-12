@@ -111,6 +111,7 @@ public class FragmentStats extends Fragment {
 
     private void initChart(){
         AnyChartView anyChartView = view.findViewById(R.id.chart);
+        //anyChartView.clear();
 
         Cartesian vertical = AnyChart.vertical();
 

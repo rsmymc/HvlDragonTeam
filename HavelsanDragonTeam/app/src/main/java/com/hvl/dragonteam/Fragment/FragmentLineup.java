@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -80,6 +81,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private LineupTeamAdapter lineupTeamAdapter;
     private TextView txtWeightLeft;
     private TextView txtWeightRight;
+    private ImageView imgFilter;
     private Button btnDraft;
     private Button btnPublish;
     private Button btnReset;
@@ -156,9 +158,23 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
             }
         });
 
-
         txtWeightLeft = view.findViewById(R.id.txt_weight_left);
         txtWeightRight = view.findViewById(R.id.txt_weight_right);
+
+        imgFilter = view.findViewById(R.id.img_filter);
+
+        imgFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (layoutFilter.getVisibility() != View.VISIBLE) {
+                    layoutFilter.setVisibility(View.VISIBLE);
+                    layoutLineup.setVisibility(View.GONE);
+                } else {
+                    layoutFilter.setVisibility(View.GONE);
+                    layoutLineup.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         btnPublish = view.findViewById(R.id.btn_publish);
         btnPublish.setOnClickListener(new View.OnClickListener() {
@@ -484,6 +500,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
             dialog.findViewById(R.id.resultPanel).setVisibility(View.GONE);
         }
 
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -559,28 +576,6 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-
-        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
-            inflater.inflate(R.menu.menu_filter, menu);
-            super.onCreateOptionsMenu(menu, inflater);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case (R.id.action_filter): {
-                if (layoutFilter.getVisibility() != View.VISIBLE) {
-                    layoutFilter.setVisibility(View.VISIBLE);
-                    layoutLineup.setVisibility(View.GONE);
-                } else {
-                    layoutFilter.setVisibility(View.GONE);
-                    layoutLineup.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

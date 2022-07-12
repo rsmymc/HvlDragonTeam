@@ -99,6 +99,7 @@ public class ActivityTeam extends AppCompatActivity {
         final View view = inflater.inflate(R.layout.dialog_create_team, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityTeam.this);
         builder.setView(view);
+        builder.setCancelable(false);
 
         final EditText editTextName = (EditText) view.findViewById(R.id.txt_team_name);
 

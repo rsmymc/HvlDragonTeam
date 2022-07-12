@@ -252,12 +252,12 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         }
     }
 
-    private void showAddLocationDialog(Bundle savedInstanceState){
+    private void showAddLocationDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_places, null);
         final AlertDialog builder = new AlertDialog.Builder(context).create();
         builder.setView(dialogView);
-
+        builder.setCancelable(false);
         mMapView = dialogView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately

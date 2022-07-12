@@ -100,7 +100,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                         View view = inflater.inflate(R.layout.dialog_update, null);
                                         AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySplashScreen.this);
                                         builder.setView(view);
-
+                                        builder.setCancelable(false);
                                         TextView txtChanges = (TextView) view.findViewById(R.id.txtChanges);
 
                                         if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
@@ -172,7 +172,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                     View view = inflater.inflate(R.layout.dialog_info, null);
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySplashScreen.this);
                                     builder.setView(view);
-
+                                    builder.setCancelable(false);
                                     TextView txtWarning = (TextView) view.findViewById(R.id.txtWarning);
 
                                     if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
@@ -207,7 +207,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                 View view = inflater.inflate(R.layout.dialog_under_construction, null);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySplashScreen.this);
                                 builder.setView(view);
-
+                                builder.setCancelable(false);
                                 TextView txtWarning = (TextView) view.findViewById(R.id.txtWarning);
 
                                 if (LanguageEnum.getLocaleEnumValue() == LanguageEnum.TURKISH.getValue()) {
@@ -368,56 +368,6 @@ public class ActivitySplashScreen extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    private void processToApp2() {
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null) {
-
-            PersonService personService = new PersonService();
-            Person _person = new Person();
-            _person.setId(mAuth.getCurrentUser().getUid());
-
-            try {
-                personService.getPerson(ActivitySplashScreen.this,
-                        _person,
-                        new VolleyCallback() {
-                            @Override
-                            public void onSuccess(JSONObject result) {
-                                Person person = new Gson().fromJson(result.toString(), Person.class);
-                                Constants.person = person;
-
-                                String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
-
-                                if (lastSelectedTeamId == null) {
-                                    Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    getPersonTeam(lastSelectedTeamId);
-                                }
-
-                            }
-
-                            @Override
-                            public void onError(String result) {
-                                Util.toastError(ActivitySplashScreen.this);
-                            }
-
-                            @Override
-                            public void onSuccessList(JSONArray result) {
-                            }
-                        });
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Util.toastError(ActivitySplashScreen.this);
-            }
-        } else {
-            Intent intent = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
             startActivity(intent);
             finish();
         }

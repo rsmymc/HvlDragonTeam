@@ -274,6 +274,7 @@ public class FragmentTrainingNext extends Fragment {
         final View view = inflater.inflate(R.layout.dialog_add_training, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
+        builder.setCancelable(false);
 
         spinnerLocation = (Spinner) view.findViewById(R.id.spinner_location);
         getLocations(null);
@@ -369,7 +370,7 @@ public class FragmentTrainingNext extends Fragment {
         View dialogView = inflater.inflate(R.layout.dialog_places, null);
         final AlertDialog builder = new AlertDialog.Builder(context).create();
         builder.setView(dialogView);
-
+        builder.setCancelable(false);
         mMapView = dialogView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
