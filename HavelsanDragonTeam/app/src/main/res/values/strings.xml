@@ -82,7 +82,7 @@
     <string name="info_location_added">Location added</string>
     <string name="info_location_add_tip">To add location go to Team-> Settings screen</string>
     <string name="info_clipboard">Code copied to clipboard</string>
-    <string name="info_share_team">By clicking the LLL link or by pasting the XXX code into the join team window inside the + button, you can join the YYY team.</string>
+    <string name="info_share_team">By clicking the LLL link or by using the XXX code , you can join the YYY team.</string>
     <string name="info_load">Choose training to load lineup from</string>
 
     <string name="warning_logout">Are you sure to logout?</string>

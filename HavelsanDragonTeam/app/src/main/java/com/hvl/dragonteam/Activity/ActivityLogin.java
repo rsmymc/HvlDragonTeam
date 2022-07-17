@@ -70,7 +70,7 @@ public class ActivityLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         bundle = getIntent().getExtras();
-        FirebaseAuth.getInstance().getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
+        FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
 
         btnLogin = (Button) findViewById(R.id.btn_send_sms);
         editTextPhone = (EditText) findViewById(R.id.txt_phone);
@@ -89,13 +89,13 @@ public class ActivityLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
-               /* if (!editTextPhone.getText().toString().trim().equals("")) {
+                //testPhoneAutoRetrieve(editTextPhone.getText().toString(), editTextCode.getText().toString());
+                if (!editTextPhone.getText().toString().trim().equals("")) {
                     progressDialog = ProgressDialog.show(ActivityLogin.this, getString(R.string.processing), getString(R.string.verifying), false, false);
                     startPhoneNumberVerification(countryCodePicker.getFullNumberWithPlus());
                 } else {
                     Util.toastWarning(ActivityLogin.this,getString(R.string.enter_phone_number));
-                }*/
+                }
             }
         });
         btnVerify.setOnClickListener(new View.OnClickListener() {

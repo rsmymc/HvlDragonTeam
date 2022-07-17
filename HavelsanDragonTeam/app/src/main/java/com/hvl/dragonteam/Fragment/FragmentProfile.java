@@ -132,8 +132,8 @@ public class FragmentProfile extends Fragment {
                 .load(Constants.person.getProfilePictureUrl())
                 .apply(new RequestOptions()
                         .centerInside()
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .skipMemoryCache(false)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .placeholder(R.drawable.user_placeholder)
                         .error(R.drawable.user_placeholder))
                 .into(imgProfile);

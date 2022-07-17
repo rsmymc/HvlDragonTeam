@@ -110,7 +110,7 @@
     <string name="enter_phone_number">Devam etmek için telefon numaranı gir</string>
     <string name="info_location_add_tip">Konum eklemek için Takım->Ayarlar sayfasına git</string>
     <string name="enter_verification_code">"XXX ' e gönderderdiğimiz doğrulama kodunu giriniz "</string>
-    <string name="info_share_team">LLL linkine tıklayarak ya da XXX kodunu Takıma katılım sayfasında + butonu içindeki katıl penceresine yapıştırarak, YYY takımına katılabilirsiniz.</string>
+    <string name="info_share_team">LLL linkine tıklayarak ya da XXX kodunu kullanarak, YYY takımına katılabilirsiniz.</string>
     <string-array name="profilePhotoArray">
         <item>Galeriden Seç</item>
         <item>Kamera</item>

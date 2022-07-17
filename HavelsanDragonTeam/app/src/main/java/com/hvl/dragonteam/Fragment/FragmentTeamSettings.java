@@ -342,7 +342,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                     builder.dismiss();
 
                 } else {
-                    Util.toastWarning(context, R.string.warning_cant_empty);
+                    Util.toastWarning(context, getString(R.string.name) + " " + getString(R.string.warning_cant_empty));
                 }
             }
         });

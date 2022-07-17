@@ -48,8 +48,8 @@ public class FragmentStats extends Fragment {
     private Activity activity;
     private FragmentManager fragmentManager;
     private FragmentActivity context;
-    private PersonTeamByTeamAdapter personTeamAdapter;
     private ArrayList<Stats> statsList = new ArrayList<>();
+    AnyChartView anyChartView ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +64,7 @@ public class FragmentStats extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.stats));
-
+        anyChartView = view.findViewById(R.id.chart);
         getStats();
 
         return view;
@@ -109,9 +109,9 @@ public class FragmentStats extends Fragment {
         }
     }
 
+    private Set set;
+
     private void initChart(){
-        AnyChartView anyChartView = view.findViewById(R.id.chart);
-        //anyChartView.clear();
 
 
         Cartesian vertical = AnyChart.vertical();
@@ -125,7 +125,7 @@ public class FragmentStats extends Fragment {
             data.add(new ValueDataEntry(stats.getName(), stats.getCount()));
         }
 
-        Set set = Set.instantiate();
+        set = Set.instantiate();
         set.data(data);
         Mapping barData = set.mapAs("{ x: 'x', value: 'value' }");
 
