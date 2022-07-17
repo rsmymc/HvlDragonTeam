@@ -100,6 +100,7 @@
             android:elevation="-1dp"
             android:gravity="center"
             android:maxLines="1"
+            android:inputType="text"
             android:textColor="@color/textColor"
             android:textSize="@dimen/bordered_text_size" />
     </RelativeLayout>

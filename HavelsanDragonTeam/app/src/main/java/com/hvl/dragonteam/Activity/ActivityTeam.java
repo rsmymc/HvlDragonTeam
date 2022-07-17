@@ -32,6 +32,8 @@ import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.Util;
+import com.nambimobile.widgets.efab.ExpandableFabLayout;
+import com.nambimobile.widgets.efab.FabOption;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,8 +48,12 @@ public class ActivityTeam extends AppCompatActivity {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
     private TextView txtQuestionConfirm;
+    private ExpandableFabLayout fabLayout;
     private ArrayList<PersonTeamView> teamList = new ArrayList<>();
     private Team _team;
+    private LinearLayout layoutCreate;
+    private LinearLayout layoutJoin;
+    private LinearLayout layoutActionButtons;
     private LinearLayout layoutCode;
     private LinearLayout layoutJoinConfirm;
     private Bundle bundle;
@@ -70,6 +76,25 @@ public class ActivityTeam extends AppCompatActivity {
         listView = findViewById(R.id.listView_team);
         listView.setLayoutManager(new LinearLayoutManager(ActivityTeam.this, LinearLayoutManager.VERTICAL, false));
         getTeams();
+
+        fabLayout = findViewById(R.id.fabLayout);
+        layoutCreate = findViewById(R.id.layout_create);
+        layoutJoin = findViewById(R.id.layout_join);
+        layoutActionButtons = findViewById(R.id.layout_action_buttons);
+
+        layoutCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCreateDialog();
+            }
+        });
+
+        layoutJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showJoinDialog("");
+            }
+        });
 
         bundle = getIntent().getExtras();
 
@@ -223,8 +248,13 @@ public class ActivityTeam extends AppCompatActivity {
                             });
                             listView.setAdapter(personTeamByPersonAdapter);
                             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                            if (list.size() == 0)
-                                findViewById(R.id.resultPanel).setVisibility(View.VISIBLE);
+                            if (teamList.size() == 0) {
+                                layoutActionButtons.setVisibility(View.VISIBLE);
+                                fabLayout.setVisibility(View.GONE);
+                            } else  {
+                                layoutActionButtons.setVisibility(View.GONE);
+                                fabLayout.setVisibility(View.VISIBLE);
+                            }
                             mRefreshLayout.setRefreshing(false);
                         }
 

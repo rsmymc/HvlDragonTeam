@@ -309,37 +309,43 @@ public class FragmentTrainingNext extends Fragment {
 
         builder.setPositiveButton(R.string.add_training, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Training training = new Training();
-                training.setLocation(((LocationModel)spinnerLocation.getSelectedItem()).getId());
-                String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(date.getTime());
-                training.setTime(timeStamp);
-                training.setTeamId(Constants.personTeamView.getTeamId());
-                TrainingService trainingService = new TrainingService();
-                try {
-                    trainingService.saveTraining(context, training,
-                            new VolleyCallback() {
-                                @Override
-                                public void onSuccessList(JSONArray result) {
-                                }
 
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    getTrainings();
-                                    mRefreshLayout.setRefreshing(false);
-                                }
+                if(date != null) {
+                    Training training = new Training();
+                    training.setLocation(((LocationModel) spinnerLocation.getSelectedItem()).getId());
+                    String timeStamp = new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(date.getTime());
+                    training.setTime(timeStamp);
+                    training.setTeamId(Constants.personTeamView.getTeamId());
+                    TrainingService trainingService = new TrainingService();
+                    try {
+                        trainingService.saveTraining(context, training,
+                                new VolleyCallback() {
+                                    @Override
+                                    public void onSuccessList(JSONArray result) {
+                                    }
 
-                                @Override
-                                public void onError(String result) {
-                                    Activity activity = getActivity();
-                                    if (activity != null && isAdded())
-                                        Util.toastError(context);
-                                }
-                            });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Activity activity = getActivity();
-                    if (activity != null && isAdded())
-                        Util.toastError(context);
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        getTrainings();
+                                        mRefreshLayout.setRefreshing(false);
+                                    }
+
+                                    @Override
+                                    public void onError(String result) {
+                                        Activity activity = getActivity();
+                                        if (activity != null && isAdded())
+                                            Util.toastError(context);
+                                    }
+                                });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Activity activity = getActivity();
+                        if (activity != null && isAdded())
+                            Util.toastError(context);
+                    }
+                } else {
+                    Util.toastWarning(context, getString(R.string.date) + " " + getString(R.string.warning_cant_empty));
+                    showAddDialog(savedInstanceState);
                 }
             }
         });
@@ -452,7 +458,7 @@ public class FragmentTrainingNext extends Fragment {
                     builder.dismiss();
 
                 } else {
-                    Util.toastWarning(context, R.string.warning_cant_empty);
+                    Util.toastWarning(context, getString(R.string.name) + " " + getString(R.string.warning_cant_empty));
                 }
             }
         });

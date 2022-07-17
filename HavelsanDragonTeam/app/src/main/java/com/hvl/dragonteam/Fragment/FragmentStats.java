@@ -113,6 +113,7 @@ public class FragmentStats extends Fragment {
         AnyChartView anyChartView = view.findViewById(R.id.chart);
         //anyChartView.clear();
 
+
         Cartesian vertical = AnyChart.vertical();
 
         vertical.animation(true)
@@ -143,6 +144,7 @@ public class FragmentStats extends Fragment {
         vertical.xAxis(true);
         vertical.yAxis(true);
         vertical.yAxis(0).labels().format("{%Value}");
+
 
         anyChartView.setChart(vertical);
 
