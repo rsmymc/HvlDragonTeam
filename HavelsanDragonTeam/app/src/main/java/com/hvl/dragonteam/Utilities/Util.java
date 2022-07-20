@@ -116,7 +116,7 @@ public class Util {
     public void createDynamicLink(String teamId, OnCompleteListener<ShortDynamicLink> onCompleteListener) {
 
         Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://www.uppersoftwaresolutions.com/?teamId=" + teamId))
+                .setLink(Uri.parse("https://www.uppersoftwaresolutions.com/dragonteam.html?teamId=" + teamId))
                 .setDomainUriPrefix("https://dragonteam.page.link")
                 // Open links with this app on Android
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())

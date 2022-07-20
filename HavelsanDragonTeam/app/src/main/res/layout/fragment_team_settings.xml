@@ -181,12 +181,12 @@
             android:layout_marginRight="@dimen/components_left_margin"
             android:text="Powered by Şatıl "
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold|italic"></TextView>
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/shuttle"></ImageView>
 
     </LinearLayout>
