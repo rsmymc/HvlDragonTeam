@@ -218,7 +218,7 @@ public class ActivityLogin extends AppCompatActivity {
     public void testPhoneAutoRetrieve(String phoneNumber, String smsCode) {
         // [START auth_test_phone_auto]
         // The test phone number and code should be whitelisted in the console.
-        phoneNumber = "+16505554567";
+        phoneNumber = "+16505556878";
         smsCode = "123456";
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

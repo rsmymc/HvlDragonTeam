@@ -40,7 +40,7 @@ public class Constants {
     public static List<Fragment> mainFragments;
     public static BottomNavigationView bottomBar;
 
-    public static String REDIS_CHAT_PREFIX = "dragonchat_";
+    public static String REDIS_CHAT_PREFIX = "dragonchatchannel_";
     public static String imageFilePath;
 
     public static final String UPLOAD_IMAGE_TYPE_PROFILE = "profile_images";

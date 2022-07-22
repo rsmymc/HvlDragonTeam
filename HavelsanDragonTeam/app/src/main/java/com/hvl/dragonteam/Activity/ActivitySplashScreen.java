@@ -240,6 +240,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
     }
 
     private void processToApp() {
+
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(ActivitySplashScreen.this, new OnSuccessListener<PendingDynamicLinkData>() {

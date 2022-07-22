@@ -11,7 +11,7 @@ android {
         applicationId "com.hvl.dragonteam"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 8
+        versionCode 9
         versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-iid'
     implementation 'com.google.firebase:firebase-dynamic-links'
 

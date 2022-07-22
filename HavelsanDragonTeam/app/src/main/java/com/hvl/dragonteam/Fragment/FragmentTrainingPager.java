@@ -125,6 +125,13 @@ public class FragmentTrainingPager extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onResume(){
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

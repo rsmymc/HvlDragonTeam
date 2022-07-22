@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "883341445592",
-    "project_id": "havelsan-dragon-team-7e993",
-    "storage_bucket": "havelsan-dragon-team-7e993.appspot.com"
+    "project_number": "909279211053",
+    "project_id": "dragon--team",
+    "storage_bucket": "dragon--team.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:883341445592:android:409fd696109b7f9bc48aad",
+        "mobilesdk_app_id": "1:909279211053:android:7ab1e8d7395dfaf89212a4",
         "android_client_info": {
           "package_name": "com.hvl.dragonteam"
         }
       },
       "oauth_client": [
         {
-          "client_id": "883341445592-jq8qvmvuertjsfep7ipm0n2ngt9o53om.apps.googleusercontent.com",
+          "client_id": "909279211053-nu096qk69oiti0dhgsdjrpksrhodkoom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hvl.dragonteam",
+            "certificate_hash": "a47be5264e347f1c39283305371d1126e458221f"
+          }
+        },
+        {
+          "client_id": "909279211053-2v1c157n92elkj3n4cbiaddsrak10729.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_qDjD7kZdSMRqSWOFs67t_sP1rL6vgz0"
+          "current_key": "AIzaSyA02MrR0twG998gZiXMyaRBUD1m1VYyjyE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "883341445592-jq8qvmvuertjsfep7ipm0n2ngt9o53om.apps.googleusercontent.com",
+              "client_id": "909279211053-2v1c157n92elkj3n4cbiaddsrak10729.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

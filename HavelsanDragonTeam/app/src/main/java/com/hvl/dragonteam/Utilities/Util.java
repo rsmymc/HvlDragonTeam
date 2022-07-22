@@ -117,7 +117,7 @@ public class Util {
 
         Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://www.uppersoftwaresolutions.com/dragonteam.html?teamId=" + teamId))
-                .setDomainUriPrefix("https://dragonteam.page.link")
+                .setDomainUriPrefix("https://dragonteam1.page.link")
                 // Open links with this app on Android
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
                 // Open links with com.example.ios on iOS
