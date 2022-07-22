@@ -5,7 +5,6 @@
         android:id="@+id/action_announcement"
         android:icon="@drawable/bell"
         android:title=""
-        app:iconTint="@color/white"
         app:showAsAction="always" />
 
 </menu>
