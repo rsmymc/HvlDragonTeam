@@ -49,6 +49,7 @@ import com.hvl.dragonteam.Model.ImageUploadResult;
 import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.Model.Team;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Redis.ChatHistory;
 import com.hvl.dragonteam.Redis.ChatMessage;
@@ -95,6 +96,7 @@ public class FragmentChat extends Fragment {
     private ChatHistory chatHistory;
     private Gson gson = new Gson();
     private String channel;
+    private Toolbar toolbar;
 
     private ProgressDialog progressDialog;
     private PopupWindow popupCropPhoto;
@@ -110,7 +112,7 @@ public class FragmentChat extends Fragment {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         context = (FragmentActivity) getContext();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.chat));
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.message_swipe_layout);
@@ -261,16 +263,21 @@ public class FragmentChat extends Fragment {
     }
 
     private void sendMessageNotify(String tokens, String message) {
+
+        Training training = new Training();
+        training.setTeamId(Constants.personTeamView.getTeamId());
+
         NotificationModel notificationModel = new NotificationModel("",
                 NotificationTypeEnum.CHAT_MESSAGE_NOTIFICATION.getValue(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                Constants.person.getName());
+                Constants.person.getName(),
+                training);
         String json = new Gson().toJson(notificationModel, NotificationModel.class);
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
-        params.put("body",  message);
-        params.put("title", Constants.person.getName());
+        params.put("body", Constants.person.getName() + " : " + message);
+        params.put("title", Constants.personTeamView.getTeamName());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
     }
@@ -498,8 +505,8 @@ public class FragmentChat extends Fragment {
 
     @Override
     public void onResume() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
+        if (toolbar != null)
+            toolbar.setTitle(getString(R.string.chat));
         super.onResume();
     }
 

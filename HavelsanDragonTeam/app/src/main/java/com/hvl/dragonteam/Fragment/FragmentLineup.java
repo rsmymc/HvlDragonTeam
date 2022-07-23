@@ -8,17 +8,14 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hvl.dragonteam.Adapter.AnnouncementAdapter;
 import com.hvl.dragonteam.Adapter.LineupAdapter;
 import com.hvl.dragonteam.Adapter.LineupTeamAdapter;
 import com.hvl.dragonteam.Adapter.TrainingAdapter;
@@ -121,6 +117,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.lineup));
+        toolbar.setSubtitle(Util.parseDate(training.getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
 
         listViewLineup = view.findViewById(R.id.listView_lineup);
         listViewLineup.setLayoutManager(new GridLayoutManager(context, 2));
@@ -454,7 +451,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     }
 
     private void showTrainingDialog() {
-        final Dialog dialog = new Dialog(context,  R.style.Theme_AppCompat_Light_Dialog_Alert);
+        final Dialog dialog = new Dialog(context, R.style.Theme_AppCompat_Light_Dialog_Alert);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog_training_list);
 
@@ -489,14 +486,14 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                 Training training = new Training();
                 training.setId(trainingList.get(position).getId());
                 getPersonAttendance(training);
-                    dialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         listViewTraining.setAdapter(trainingAdapter);
         trainingAdapter.notifyDataSetChanged();
 
-        if(trainingList.size()>0){
+        if (trainingList.size() > 0) {
             dialog.findViewById(R.id.resultPanel).setVisibility(View.GONE);
         }
 
@@ -508,13 +505,14 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         NotificationModel notificationModel = new NotificationModel("",
                 NotificationTypeEnum.LINEUP_NOTIFICATION.getValue(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                Constants.person.getName());
+                Constants.person.getName(),
+                training);
         String json = new Gson().toJson(notificationModel, NotificationModel.class);
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
-        params.put("body", message);
-        params.put("title", toolbar.getTitle().toString());
+        params.put("body", toolbar.getSubtitle() + " " + message);
+        params.put("title", Constants.personTeamView.getTeamName());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
     }
@@ -546,7 +544,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                             String message = "";
                             if (state == SaveEnum.PUBLISH.getValue()) {
                                 message = getString(R.string.publish_notification);
-                            } else if (state == SaveEnum.PUBLISH.getValue()) {
+                            } else if (state == SaveEnum.DRAFT.getValue()) {
                                 message = getString(R.string.draft_notification).replace("XXX", Constants.person.getName());
                             }
 
@@ -570,6 +568,8 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
     @Override
     public void onResume() {
+        if (toolbar != null)
+            toolbar.setTitle(getString(R.string.lineup));
         super.onResume();
     }
 

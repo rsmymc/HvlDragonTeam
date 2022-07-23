@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-    android:layout_marginVertical="@dimen/components_bottom_margin"
+    android:layout_marginTop="@dimen/components_bottom_margin"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true"
     card_view:cardElevation="5dp">

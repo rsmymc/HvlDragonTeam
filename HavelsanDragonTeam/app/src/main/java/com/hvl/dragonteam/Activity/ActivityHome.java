@@ -17,8 +17,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.DataService.PersonTeamService;
+import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
+import com.hvl.dragonteam.Fragment.FragmentChat;
+import com.hvl.dragonteam.Fragment.FragmentLineup;
 import com.hvl.dragonteam.Interface.VolleyCallback;
+import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
+import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.PersonTeam;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.BottomNavigationViewHelper;
 import com.hvl.dragonteam.Utilities.Constants;
@@ -105,39 +111,33 @@ public class ActivityHome extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-
         if (bundle != null && bundle.getString("DIRECT", "").equals("NOTIFICATION")) {
 
-           /* ShuttleNotificationModel shuttleNotificationModel = new Gson().fromJson(bundle.getString("shuttleNotificationModel"), ShuttleNotificationModel.class);
-            String json = new Gson().toJson(shuttleNotificationModel.getTransportation(), Transportation.class);
+            NotificationModel notificationModel = new Gson().fromJson(bundle.getString("notificationModel"), NotificationModel.class);
+            String json = new Gson().toJson(notificationModel.getTraining(), Training.class);
             bundle.putString("OBJ", json);
 
-            if (shuttleNotificationModel.getShuttleNotificationType() == NotificationTypeEnum.TRANSPORTATION_NOTIFICATION.getValue()) {
-                FragmentJoinedShuttlePager fragmentJoinedShuttlePager = new FragmentJoinedShuttlePager();
-                fragmentJoinedShuttlePager.setArguments(bundle);
+            if (notificationModel.getNotificationType() == NotificationTypeEnum.LINEUP_NOTIFICATION.getValue()) {
+                FragmentLineup fragmentLineup = new FragmentLineup();
+                fragmentLineup.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentJoinedShuttlePager, "fragmentJoinedShuttlePager").addToBackStack("fragmentJoinedShuttlePager")
+                        .replace(R.id.container, fragmentLineup, "fragmentLineup")
+                        .addToBackStack("fragmentLineup")
                         .commit();
-            } else if (shuttleNotificationModel.getShuttleNotificationType() == NotificationTypeEnum.CHAT_MESSAGE_NOTIFICATION.getValue()) {
-                FragmentChat fragmentChat = new FragmentChat();
-                fragmentChat.setArguments(bundle);
+            } else if (notificationModel.getNotificationType() == NotificationTypeEnum.CHAT_MESSAGE_NOTIFICATION.getValue()) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentChat, "fragmentChat").addToBackStack("fragmentChat")
+                        .replace(R.id.container, Constants.frgChat, Constants.frgTagChat)
+                        .addToBackStack(Constants.frgTagChat)
                         .commit();
-            } else if (shuttleNotificationModel.getShuttleNotificationType() == NotificationTypeEnum.LOCATION_NOTIFICATION.getValue()) {
-                Constants.frgChat.setArguments(bundle);
-                Constants.bottomBar.setSelectedItemId(R.id.action_active_shuttle);
+                Constants.bottomBar.setSelectedItemId(R.id.action_chat);
+            } else if (notificationModel.getNotificationType() == NotificationTypeEnum.ANNOUNCEMENT_NOTIFICATION.getValue()) {
+                FragmentAnnouncement fragmentAnnouncement = new FragmentAnnouncement();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragmentAnnouncement, "fragmentAnnouncement").addToBackStack("fragmentAnnouncement")
+                        .commit();
             }
-*/
-        }  else if (bundle != null && bundle.getString("DIRECT", "").equals("CHAT")) {
-            /*FragmentChat fragmentChat = new FragmentChat();
-            fragmentChat.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragmentChat, "fragmentChat").addToBackStack("fragmentChat")
-                    .commit();*/
-        } else {
-            if (bundle != null)
-                Constants.frgChat.setArguments(bundle);
+
+        }  else {
             Constants.bottomBar.setSelectedItemId(R.id.action_training);
         }
 

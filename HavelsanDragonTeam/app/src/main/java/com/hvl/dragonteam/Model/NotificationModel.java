@@ -10,12 +10,14 @@ public class NotificationModel {
     private int notificationType;
 	private String senderPersonId;
 	private String senderPersonName;
+	private Training training;
 
-	public NotificationModel(String notificationId, int notificationType, String senderPersonId, String senderPersonName) {
+	public NotificationModel(String notificationId, int notificationType, String senderPersonId, String senderPersonName, Training training) {
 		this.notificationId = notificationId;
 		this.notificationType = notificationType;
 		this.senderPersonId = senderPersonId;
 		this.senderPersonName = senderPersonName;
+		this.training = training;
 	}
 
 	public String getNotificationId() {
@@ -50,7 +52,15 @@ public class NotificationModel {
 		this.senderPersonName = senderPersonName;
 	}
 
-    @Override
+	public Training getTraining() {
+		return training;
+	}
+
+	public void setTraining(Training training) {
+		this.training = training;
+	}
+
+	@Override
 	public boolean equals(Object that) {
 		boolean isEqual = EqualsBuilder.reflectionEquals(this, that,  "latitude", "longitude", "dailyTimeDiffInSecs");
 		return isEqual;

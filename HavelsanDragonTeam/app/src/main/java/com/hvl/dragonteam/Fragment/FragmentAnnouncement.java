@@ -33,6 +33,7 @@ import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.PersonNotification;
 import com.hvl.dragonteam.Model.Team;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.URLs;
@@ -60,6 +61,7 @@ public class FragmentAnnouncement extends Fragment {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView listView;
     private LinearLayout layoutAdd;
+    private  Toolbar toolbar;
     private ArrayList<Announcement> announcementList = new ArrayList<>();
 
 
@@ -74,7 +76,7 @@ public class FragmentAnnouncement extends Fragment {
         fragmentManager = context.getSupportFragmentManager();
         setHasOptionsMenu(true);
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.announcement));
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.announcement_swipe_layout);
@@ -218,16 +220,21 @@ public class FragmentAnnouncement extends Fragment {
     }
 
     private void sendMessageNotify(String tokens, String message) {
+
+        Training training = new Training();
+        training.setTeamId(Constants.personTeamView.getTeamId());
+
         NotificationModel notificationModel = new NotificationModel("",
                 NotificationTypeEnum.ANNOUNCEMENT_NOTIFICATION.getValue(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                Constants.person.getName());
+                Constants.person.getName(),
+                training);
         String json = new Gson().toJson(notificationModel, NotificationModel.class);
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
-        params.put("body",  message);
-        params.put("title", Constants.person.getName());
+        params.put("body",  context.getString(R.string.announcement) + " : " + message);
+        params.put("title", Constants.personTeamView.getTeamName());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
     }
@@ -274,6 +281,8 @@ public class FragmentAnnouncement extends Fragment {
 
     @Override
     public void onResume() {
+        if (toolbar != null)
+            toolbar.setTitle(getString(R.string.announcement));
         super.onResume();
     }
 

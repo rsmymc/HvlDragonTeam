@@ -29,10 +29,12 @@ import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.LanguageEnum;
 import com.hvl.dragonteam.Model.Enum.RemoteDialogTypeEnum;
+import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.Model.PersonTeamView;
 import com.hvl.dragonteam.Model.RemoteDialogModel;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.SharedPrefHelper;
@@ -275,17 +277,20 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                                                 } else {
 
-                                                   /* Bundle bundle = getIntent().getExtras();//TODO notifacition dan gelen intenti handle et
-                                                    if (bundle != null)
-                                                        intent.putExtras(bundle);*/
-                                                    String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
-
-                                                    if (lastSelectedTeamId == null) {
-                                                        Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
-                                                        startActivity(intent);
-                                                        finish();
+                                                    Bundle bundle = getIntent().getExtras();
+                                                    if (bundle != null){
+                                                        getPersonTeam(null, bundle );
                                                     } else {
-                                                        getPersonTeam(lastSelectedTeamId);
+
+                                                        String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
+
+                                                        if (lastSelectedTeamId == null) {
+                                                            Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else {
+                                                            getPersonTeam(lastSelectedTeamId, null);
+                                                        }
                                                     }
                                                 }
                                                 finish();
@@ -329,11 +334,19 @@ public class ActivitySplashScreen extends AppCompatActivity {
                 });
     }
 
-    private void getPersonTeam(String teamId) {
-        PersonTeamService personTeamService = new PersonTeamService();
+    private void getPersonTeam(String teamId, Bundle bundle) {
+
         PersonTeam _personTeam = new PersonTeam();
         _personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        _personTeam.setTeamId(teamId);
+
+        if(bundle != null) {
+            NotificationModel notificationModel = new Gson().fromJson(bundle.getString("notificationModel"), NotificationModel.class);
+            _personTeam.setTeamId(notificationModel.getTraining().getTeamId());
+        } else {
+            _personTeam.setTeamId(teamId);
+        }
+
+        PersonTeamService personTeamService = new PersonTeamService();
 
         try {
             personTeamService.getPersonTeam(ActivitySplashScreen.this,
@@ -346,6 +359,9 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
                             if (personTeamView != null) {
                                 Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+                                if(bundle != null)
+                                    intent.putExtras(bundle);
+                                SharedPrefHelper.getInstance(getApplicationContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM,  Constants.personTeamView.getTeamId());
                                 startActivity(intent);
                                 finish();
                             } else {

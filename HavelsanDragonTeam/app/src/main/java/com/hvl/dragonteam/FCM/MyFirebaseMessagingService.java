@@ -13,13 +13,15 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.Activity.ActivityHome;
+import com.hvl.dragonteam.Activity.ActivitySplashScreen;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
+import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String TAG = "SHUTTLE FCM Service";
+    private static final String TAG = "Dragon Team FCM Service";
     String channelId = "notification_channel";
 
     @Override
@@ -28,32 +30,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = null;
         NotificationModel notificationModel;
         if (remoteMessage.getData().get("notificationModel") != null) {
-            notificationModel = new Gson().fromJson(remoteMessage.getData().get("notificationModel").toString(), NotificationModel.class);
+            notificationModel = new Gson().fromJson(remoteMessage.getData().get("notificationModel"), NotificationModel.class);
 
-          /*  String json = new Gson().toJson(notificationModel.getTransportation(), Transportation.class);
             Bundle bundle = new Bundle();
-            bundle.putString("OBJ", json);*/
+            bundle.putString("notificationModel", remoteMessage.getData().get("notificationModel"));
+            bundle.putString("DIRECT", "NOTIFICATION");
 
-            Intent intent = new Intent(this, ActivityHome.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent;
 
-            if(notificationModel.getNotificationType() == NotificationTypeEnum.CHAT_MESSAGE_NOTIFICATION.getValue()){
-               // Constants.bottomBar.setSelectedItemId(R.id.action_chat);
-//               < bundle.putString("DIRECT", "CHAT");
-//                intent.putExtras(bundle);>
-                pendingIntent = PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_ONE_SHOT);
+            if(notificationModel.getTraining().getTeamId().equals(Constants.personTeamView.getTeamId())){
+                intent = new Intent(this, ActivityHome.class);
+            } else {
+                intent = new Intent(this, ActivitySplashScreen.class);
             }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtras(bundle);
+            pendingIntent = PendingIntent.getActivity(this, notificationModel.getNotificationType(), intent,  PendingIntent.FLAG_ONE_SHOT);
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.logo)
+                        .setSmallIcon(R.drawable.logo_genel)
                         .setContentTitle(remoteMessage.getNotification().getTitle())
                         .setContentText(remoteMessage.getNotification().getBody())
                         .setContentIntent(pendingIntent)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
