@@ -69,8 +69,8 @@
             android:background="@drawable/edit_text_border"
             android:elevation="-1dp"
             android:gravity="center"
-            android:maxLines="1"
             android:inputType="textPersonName"
+            android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="@dimen/bordered_text_size" />
     </RelativeLayout>
@@ -80,28 +80,82 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:layout_marginTop="@dimen/components_top_margin"
+        android:layout_marginVertical="@dimen/components_top_margin"
         android:background="@drawable/button_action"
         android:text="@string/save"
+        android:visibility="gone"
         android:textColor="@color/secondaryTextColor"></Button>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bordered_text_height"
+        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+        android:layout_marginVertical="@dimen/components_bottom_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="@dimen/components_bottom_margin"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="@string/joining_code"
+            android:textColor="@color/colorPrimary" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_text_border"
+            android:elevation="-1dp"
+            android:gravity="center_vertical"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/txt_team_id"
+                android:layout_width="123dp"
+                android:layout_height="32dp"
+                android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
+                android:background="@drawable/code_text_border"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:text="A12CDA1234"
+                android:textColor="@color/textColor" />
+
+            <ImageView
+                android:id="@+id/img_copy"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="@dimen/frame_horizontal_margin"
+                android:layout_toLeftOf="@id/img_share"
+                android:src="@drawable/copy"
+                app:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="@dimen/frame_horizontal_margin"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/share"
+                app:tint="@color/colorPrimary" />
+
+        </RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:layout_marginTop="@dimen/components_top_margin"
+        android:layout_marginVertical="@dimen/components_top_margin"
         android:layout_weight="1"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/components_bottom_margin"
                 android:orientation="vertical">
 
                 <TextView
@@ -163,7 +217,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

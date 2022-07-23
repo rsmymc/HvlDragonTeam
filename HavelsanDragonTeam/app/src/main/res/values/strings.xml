@@ -27,6 +27,7 @@
     <string name="lineup">Lineup</string>
     <string name="remove">Remove</string>
     <string name="delete">Delete</string>
+    <string name="leave">Leave</string>
     <string name="name">Name</string>
     <string name="date">Date</string>
     <string name="context">Context</string>
@@ -56,6 +57,8 @@
     <string name="chart_title_by_person">Training Attendance Count</string>
     <string name="locations">Training Locations</string>
     <string name="set_location">Set Location</string>
+    <string name="team_members">Team Members</string>
+    <string name="team_info">Team Info</string>
     <string name="privacy">Privacy Policy </string>
     <string name="privacy_warning">By signing in, you have read and accept our </string>
 
@@ -79,6 +82,7 @@
     <string name="info_lineup_updated">Lineup updated</string>
     <string name="info_location_deleted">Location deleted</string>
     <string name="info_team_deleted">Team deleted</string>
+    <string name="info_team_leaved">Leaved from team</string>
     <string name="info_location_added">Location added</string>
     <string name="info_location_add_tip">To add location go to Team-> Settings screen</string>
     <string name="info_clipboard">Code copied to clipboard</string>
@@ -89,6 +93,8 @@
     <string name="warning_delete_person_team">Are you sure to remove from team?</string>
     <string name="warning_delete_location">Are you sure to remove location?</string>
     <string name="warning_delete_team">Are you sure to delete team XXX?</string>
+    <string name="warning_leave_team">Are you sure to leave team XXX?</string>
+    <string name="warning_admin">Assign admin role to at least one member before leave team</string>
     <string name="warning_no_joined_team">No Joined Team</string>
     <string name="warning_no_announcement">No Announcement</string>
     <string name="warning_no_location">No Location</string>

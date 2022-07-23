@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -52,12 +53,15 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Activity.ActivityTeam;
@@ -97,12 +101,14 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class FragmentTeamSettings extends Fragment implements LocationAdapter.OnDeleteClickedListener {
     View view;
     private ImageView imgLogo;
-    private ImageView imgCamera;
-    private ImageView imgAdd;
+    private LinearLayout layoutCamera;
+    private LinearLayout layoutAddLocation;
     private CustomTypingEditText editTextName;
     private TextView txtNoLocation;
+    private TextView txtTeamId;
+    private ImageView imgShare;
+    private ImageView imgCopy;
     private Button btnSave;
-    private FirebaseUser firebaseUser;
     private LinearLayout layoutShuttle;
     private MapView mMapView;
     private GoogleMap googleMap;
@@ -119,13 +125,13 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
     public static final int PLACE_PICKER_REQUEST = 9000;
     private final static int PERMISSIONS_REQUEST = 103;
     private PopupWindow popupCropPhoto;
+    private Util util = new Util();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         view = inflater.inflate(R.layout.fragment_team_settings, container, false);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         context = getContext();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -134,9 +140,12 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         listView = view.findViewById(R.id.listView_location);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         imgLogo = (ImageView) view.findViewById(R.id.img_logo);
-        imgCamera = (ImageView) view.findViewById(R.id.img_camera);
-        imgAdd = (ImageView) view.findViewById(R.id.img_add);
+        layoutCamera = (LinearLayout) view.findViewById(R.id.layout_camera);
+        layoutAddLocation = (LinearLayout) view.findViewById(R.id.layout_add);
         editTextName = (CustomTypingEditText) view.findViewById(R.id.txt_name);
+        txtTeamId = (TextView) view.findViewById(R.id.txt_team_id);
+        imgCopy = (ImageView) view.findViewById(R.id.img_copy);
+        imgShare = (ImageView) view.findViewById(R.id.img_share);
         btnSave = (Button) view.findViewById(R.id.btn_save);
         layoutShuttle = (LinearLayout) view.findViewById(R.id.layout_shuttle);
         txtNoLocation = view.findViewById(R.id.txt_no_location);
@@ -152,6 +161,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                 .into(imgLogo);
 
         editTextName.setText(Constants.personTeamView.getTeamName());
+        txtTeamId.setText(Constants.personTeamView.getTeamId());
 
         CustomTypingEditText.OnTypingModified onTypingModified = new CustomTypingEditText.OnTypingModified() {
             @Override
@@ -162,7 +172,36 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
 
         editTextName.setOnTypingModified(onTypingModified);
 
-        imgCamera.setOnClickListener(new View.OnClickListener() {
+        imgCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                util.setClipboard(context, Constants.personTeamView.getTeamId());
+                Util.toastInfo(context, R.string.info_clipboard);
+            }
+        });
+
+        imgShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnCompleteListener<ShortDynamicLink> onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            Uri shortLink = task.getResult().getShortLink();
+                            //Uri previewLink = task.getResult().getPreviewLink();
+                            util.shareTextIntent(context.getString(R.string.info_share_team)
+                                    .replace("LLL", shortLink.toString())
+                                    .replace("XXX", Constants.personTeamView.getTeamId())
+                                    .replace("YYY", Constants.personTeamView.getTeamName()), context);
+                        } else {
+                        }
+                    }
+                };
+                util.createDynamicLink(Constants.personTeamView.getTeamId(),onCompleteListener);
+            }
+        });
+
+        layoutCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!checkWritePermission()) {
@@ -180,7 +219,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
             }
         });
 
-        imgAdd.setOnClickListener(new View.OnClickListener() {
+        layoutAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddLocationDialog(savedInstanceState);
@@ -198,6 +237,12 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         manageSaveButton();
 
         getLocations();
+
+        if (Constants.personTeamView.getRole() != RoleEnum.ADMIN.getValue()) {
+           layoutCamera.setVisibility(View.GONE);
+           editTextName.setEnabled(false);
+           layoutAddLocation.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -697,13 +742,19 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         menu.clear();
         inflater.inflate(R.menu.menu_team_settings, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem menu_delete_team = menu.findItem(R.id.action_delete_team);
+        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
+            menu_delete_team.setVisible(true);
+        }  else {
+            menu_delete_team.setVisible(false);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case (R.id.action_team_delete): {
+            case (R.id.action_delete_team): {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -716,9 +767,16 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(false);
                 builder.setMessage(context.getString(R.string.warning_delete_team).replace("XXX", Constants.personTeamView.getTeamName()))
                         .setPositiveButton(context.getString(R.string.delete), dialogClickListener)
                         .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
+                break;
+            }
+            case (R.id.action_change_team): {
+                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
+                Intent intent = new Intent(getContext(), ActivityTeam.class);
+                startActivity(intent);
                 break;
             }
         }

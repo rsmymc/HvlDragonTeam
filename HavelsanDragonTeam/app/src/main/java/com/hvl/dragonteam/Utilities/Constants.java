@@ -6,17 +6,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
 import com.hvl.dragonteam.Fragment.FragmentChat;
 import com.hvl.dragonteam.Fragment.FragmentProfile;
 import com.hvl.dragonteam.Fragment.FragmentStats;
-import com.hvl.dragonteam.Fragment.FragmentTeam;
-import com.hvl.dragonteam.Fragment.FragmentTrainingNext;
+import com.hvl.dragonteam.Fragment.FragmentTeamPager;
+import com.hvl.dragonteam.Fragment.FragmentTeamPersonList;
 import com.hvl.dragonteam.Fragment.FragmentTrainingPager;
 import com.hvl.dragonteam.Model.Person;
-import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.Model.PersonTeamView;
-import com.hvl.dragonteam.Model.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +22,13 @@ import java.util.List;
 public class Constants {
 
     public static String frgTagTrainingPager = "fragment_training_pager";
-    public static String frgTagTeam = "fragment_team";
+    public static String frgTagTeamPager = "fragment_team_pager";
     public static String frgTagChat = "fragment_chat";
     public static String frgTagProfile = "fragment_profile";
     public static String frgTagStats = "fragment_stats";
     public static String frgTagEquipment = "fragment_equipment";
     public static Fragment frgTrainingPager;
-    public static Fragment frgTeam;
+    public static Fragment frgTeamPager;
     public static Fragment frgChat;
     public static Fragment frgProfile;
     public static Fragment frgStats;
@@ -58,20 +55,20 @@ public class Constants {
     public static void setInitialValues() {
         mainFragmentTags = new ArrayList<>();
         mainFragmentTags.add(frgTagTrainingPager);
-        mainFragmentTags.add(frgTagTeam);
+        mainFragmentTags.add(frgTagTeamPager);
         mainFragmentTags.add(frgTagStats);
         mainFragmentTags.add(frgTagChat);
         mainFragmentTags.add(frgTagProfile);
 
         frgTrainingPager = new FragmentTrainingPager();
-        frgTeam = new FragmentTeam();
+        frgTeamPager = new FragmentTeamPager();
         frgStats = new FragmentStats();
         frgChat = new FragmentChat();
         frgProfile = new FragmentProfile();
 
         mainFragments = new ArrayList<>();
         mainFragments.add(frgTrainingPager);
-        mainFragments.add(frgTeam);
+        mainFragments.add(frgTeamPager);
         mainFragments.add(frgStats);
         mainFragments.add(frgChat);
         mainFragments.add(frgProfile);

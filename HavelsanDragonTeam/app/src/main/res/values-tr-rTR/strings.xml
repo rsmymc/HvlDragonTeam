@@ -60,6 +60,7 @@
     <string name="privacy">Gizlilik Şartları</string>
     <string name="past_training">"Geçmiş "</string>
     <string name="next_training">Sonraki</string>
+    <string name="leave">Ayrıl</string>
     <string name="later">Sonra</string>
     <string name="dont_show">Tekrar gösterme</string>
     <string name="dont_show_again">Bu güncelleme için tekrar gösterme</string>
@@ -76,6 +77,8 @@
     <string name="team">Takım</string>
     <string name="equipment">Ekipman</string>
     <string name="training">Antrenman</string>
+    <string name="team_members">Takım Üyeleri</string>
+    <string name="team_info">Takım Bilgileri</string>
     <string name="question_delete_photo">Fotoğrafı kaldır?</string>
     <string name="question_exit">Çıkmak istiyor musun?</string>
     <string name="warning_cant_empty">boş olamaz</string>
@@ -88,6 +91,8 @@
     <string name="warning_delete_location">Konumu silmek istediğine emin misin?</string>
     <string name="warning_delete_person_team">Takımdan çıkarmak istediğine emin misin?</string>
     <string name="warning_delete_team">XXX takımını silmek istediğine emin misin?</string>
+    <string name="warning_leave_team">XXX takımından çıkmak istediğine emin misin?</string>
+    <string name="warning_admin">Takımdan çıkmadan önce en az bir takım üyesine yönetici rolü atayın</string>
     <string name="warning_logout">Çıkış yapmak istediğine emin misin?</string>
     <string name="info_clipboard">Kod panoya koplayandı</string>
     <string name="info_location_added">Konum eklendi</string>
@@ -97,6 +102,7 @@
     <string name="info_team_joined">Takıma katılım sağlandı</string>
     <string name="info_team_created">Takım oluşturuldu</string>
     <string name="info_team_deleted">Takım silindi</string>
+    <string name="info_team_leaved">Takımdan ayrılıdı</string>
     <string name="info_profile_updated">Profil bilgisi güncellendi</string>
     <string name="info_load">Yerleşimini yüklemek istediğiniz antrenmanı seçiniz</string>
     <string name="notifications">Bildirimler</string>

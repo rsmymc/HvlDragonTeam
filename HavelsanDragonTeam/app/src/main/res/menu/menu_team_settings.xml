@@ -2,7 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/action_team_delete"
+        android:id="@+id/action_change_team"
+        android:icon="@drawable/exchange"
+        android:title=""
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete_team"
         android:icon="@drawable/delete"
         android:title=""
         app:iconTint="@color/white"

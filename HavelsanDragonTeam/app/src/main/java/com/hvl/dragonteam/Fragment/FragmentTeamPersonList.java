@@ -36,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.Adapter.PersonTeamByTeamAdapter;
 import com.hvl.dragonteam.DataService.PersonTeamService;
+import com.hvl.dragonteam.DataService.TeamService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.PersonTeam;
@@ -56,8 +57,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
-public class FragmentTeam extends Fragment {
+public class FragmentTeamPersonList extends Fragment {
 
     private View view;
     private Activity activity;
@@ -74,7 +76,7 @@ public class FragmentTeam extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_team, container, false);
+        view = inflater.inflate(R.layout.fragment_team_person_list, container, false);
         activity = getActivity();
         context = (FragmentActivity) getContext();
         fragmentManager = context.getSupportFragmentManager();
@@ -119,7 +121,6 @@ public class FragmentTeam extends Fragment {
                             final RadioGroup radioGroupRole = (RadioGroup) view.findViewById(R.id.radio_group_role);
 
                             ((RadioButton) radioGroupRole.getChildAt(personTeamList.get(position).getRole())).setChecked(true);
-
 
                             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -267,9 +268,18 @@ public class FragmentTeam extends Fragment {
                     new VolleyCallback() {
                         @Override
                         public void onSuccess(JSONObject result) {
-                            Util.toastInfo(context, getString(R.string.info_team_updated));
-                            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                            getTeamPersons();
+                            if(personTeamView.getPersonId().equals(Constants.personTeamView.getPersonId())){
+                                Util.toastInfo(context, context.getString(R.string.info_team_leaved));
+                                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
+                                Intent intent = new Intent(getContext(), ActivityTeam.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                            } else {
+                                Util.toastInfo(context, getString(R.string.info_team_updated));
+                                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                                getTeamPersons();
+                            }
                         }
 
                         @Override
@@ -331,32 +341,40 @@ public class FragmentTeam extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_team, menu);
+        inflater.inflate(R.menu.menu_team_person_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
-        MenuItem menu_team_settings = menu.findItem(R.id.action_team_settings);
-        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
-            menu_team_settings.setVisible(true);
-        }  else {
-            menu_team_settings.setVisible(false);
-        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case (R.id.action_change_team): {
-                SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
-                Intent intent = new Intent(getContext(), ActivityTeam.class);
-                startActivity(intent);
-                break;
-            }
-            case (R.id.action_team_settings): {
-                FragmentTeamSettings fragmentTeamSettings = new FragmentTeamSettings();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentTeamSettings, "fragmentTeamSettings").addToBackStack("fragmentTeamSettings")
-                        .commit();
-                break;
+            case (R.id.action_leave_team): {
+
+                List<PersonTeamView> filteredPersonList = personTeamList.stream().filter(article -> article.getRole() == RoleEnum.ADMIN.getValue()).collect(Collectors.toList());
+
+                if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue() && filteredPersonList.size() == 1) {
+                    Util.toastWarning(context, R.string.warning_admin);
+                } else {
+
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    deletePersonTeam(Constants.personTeamView);
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(false);
+                    builder.setMessage(context.getString(R.string.warning_leave_team).replace("XXX", Constants.personTeamView.getTeamName()))
+                            .setPositiveButton(context.getString(R.string.leave), dialogClickListener)
+                            .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
+                    break;
+                }
             }
         }
         return super.onOptionsItemSelected(item);

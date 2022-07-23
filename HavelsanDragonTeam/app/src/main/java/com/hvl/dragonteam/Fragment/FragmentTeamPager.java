@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.DataService.AnnouncementService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Announcement;
@@ -34,14 +35,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentTrainingPager extends Fragment {
+public class FragmentTeamPager extends Fragment {
 
     private ViewPagerAdapter mAdapter;
     private ViewPager mPager;
     private TabLayout tabLayout;
-    private FragmentActivity context;
-    private ArrayList<Announcement> announcementList = new ArrayList<>();
-    private Menu menu;
     private static final int NUM_ITEMS = 2;
 
     @Override
@@ -52,7 +50,6 @@ public class FragmentTrainingPager extends Fragment {
         return view;
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -61,7 +58,6 @@ public class FragmentTrainingPager extends Fragment {
         tabLayout = (TabLayout) getView().findViewById(R.id.tab_layout);
         mPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(mPager);
-        context = (FragmentActivity) getContext();
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.post(new Runnable() {
             @Override
@@ -83,9 +79,9 @@ public class FragmentTrainingPager extends Fragment {
         @Override
         public Fragment getItem(int num) {
             if (num == 0) {
-                return new FragmentTrainingNext();
+                return new FragmentTeamSettings();
             } else if (num == 1) {
-                return new FragmentTrainingPast();
+                return new FragmentTeamPersonList();
             }
             return null;
         }
@@ -101,93 +97,23 @@ public class FragmentTrainingPager extends Fragment {
             switch (position) {
                 case 0:
                     if (isAdded())
-                        title = getString(R.string.next_training);
+                        title = getString(R.string.team_info);
                     break;
                 case 1:
                     if (isAdded())
-                        title = getString(R.string.past_training);
+                        title = getString(R.string.team_members);
                     break;
             }
             return title;
         }
     }
 
-    public void getAnnouncements() {
-        AnnouncementService announcementService = new AnnouncementService();
-
-        try {
-            Team team = new Team();
-            team.setId(Constants.personTeamView.getTeamId());
-            announcementService.getAnnouncementList(context, team,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                            List<Announcement> list = new Gson().fromJson(result.toString(), new TypeToken<List<Announcement>>() {
-                            }.getType());
-
-                            announcementList.clear();
-                            announcementList.addAll(list);
-
-                            boolean unread = false;
-
-                            String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST, null);
-                            List<Integer> readList = null;
-
-                            if (jsonList != null) {
-                                readList = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {
-                                }.getType());
-                            }
-
-                            if (readList != null) {
-                                for (Announcement announcement : announcementList) {
-                                    if (!readList.contains(announcement.getId())) {
-                                        unread = true;
-                                        break;
-                                    }
-                                }
-                            } else {
-                                unread = true;
-                            }
-
-                            if (unread)
-                                menu.getItem(0).setIcon(context.getDrawable(R.drawable.unread_bell));
-                        }
-
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                        }
-                    });
-        } catch (JSONException e) {
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_announcement, menu);
-        this.menu = menu;
-        getAnnouncements();
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case (R.id.action_announcement): {
-                FragmentAnnouncement fragmentAnnouncement = new FragmentAnnouncement();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentAnnouncement, "fragmentAnnouncement").addToBackStack("fragmentAnnouncement")
-                        .commit();
-
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,11 +124,6 @@ public class FragmentTrainingPager extends Fragment {
 
     @Override
     public void onResume() {
-
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.setTitle(getString(R.string.training));
-
         super.onResume();
 
     }

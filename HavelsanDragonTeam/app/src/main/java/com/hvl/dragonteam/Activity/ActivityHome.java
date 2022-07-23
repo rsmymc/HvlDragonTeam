@@ -14,25 +14,15 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
-import com.hvl.dragonteam.Fragment.FragmentChat;
 import com.hvl.dragonteam.Fragment.FragmentLineup;
-import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
-import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.BottomNavigationViewHelper;
 import com.hvl.dragonteam.Utilities.Constants;
-import com.hvl.dragonteam.Utilities.Util;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ActivityHome extends AppCompatActivity {
 
@@ -70,10 +60,10 @@ public class ActivityHome extends AppCompatActivity {
                 }
 
                 if (item.getItemId() == R.id.action_team) {
-                    if (!Constants.frgTeam.isAdded()) {
+                    if (!Constants.frgTeamPager.isAdded()) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, Constants.frgTeam, Constants.frgTagTeam)
-                                .addToBackStack(Constants.frgTagTeam)
+                                .replace(R.id.container, Constants.frgTeamPager, Constants.frgTagTeamPager)
+                                .addToBackStack(Constants.frgTagTeamPager)
                                 .commit();
                     }
                 }
