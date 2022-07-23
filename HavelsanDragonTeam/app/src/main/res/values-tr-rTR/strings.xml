@@ -47,6 +47,7 @@
     <string name="right">Sağ</string>
     <string name="both">Her ikisi</string>
     <string name="add_training">Antrenman Ekle</string>
+    <string name="add_announcement">Duyuru Ekle</string>
     <string name="count">Sayı</string>
     <string name="admin">Yönetici</string>
     <string name="join_team">Takıma katıl</string>

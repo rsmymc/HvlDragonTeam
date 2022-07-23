@@ -39,6 +39,7 @@ import com.hvl.dragonteam.DataService.PersonTrainingAttendanceService;
 import com.hvl.dragonteam.DataService.TrainingService;
 import com.hvl.dragonteam.Interface.OnLineupChangeListener;
 import com.hvl.dragonteam.Interface.VolleyCallback;
+import com.hvl.dragonteam.Model.Enum.LanguageEnum;
 import com.hvl.dragonteam.Model.Enum.LineupEnum;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
@@ -64,6 +65,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FragmentLineup extends Fragment implements OnLineupChangeListener {
@@ -530,25 +532,29 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                             List<PersonNotification> list = new Gson().fromJson(result.toString(), new TypeToken<List<PersonNotification>>() {
                             }.getType());
 
-                            JSONArray tokens = new JSONArray();
-
                             for (PersonNotification personNotification : list) {
                                 if (personNotification.isLoggedIn()
                                         && !personNotification.getPersonId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         && personNotification.getNotification1()
                                         && (state == SaveEnum.PUBLISH.getValue() || personNotification.getRole() == RoleEnum.ADMIN.getValue())) {
+
+                                    JSONArray tokens = new JSONArray();
                                     tokens.put(personNotification.getToken());
+
+                                    String message = "";
+                                    if (state == SaveEnum.PUBLISH.getValue()) {
+                                        message =  Util.getLocalizedString(context,
+                                                new Locale(LanguageEnum.toLanguageEnum(personNotification.getLanguageType()).getLocale()),
+                                                R.string.publish_notification) ;
+                                    } else if (state == SaveEnum.DRAFT.getValue()) {
+                                        message = Util.getLocalizedString(context,
+                                                new Locale(LanguageEnum.toLanguageEnum(personNotification.getLanguageType()).getLocale()),
+                                                R.string.draft_notification).replace("XXX", Constants.person.getName());
+                                    }
+
+                                    sendMessageNotify(tokens.toString(), message);
                                 }
                             }
-
-                            String message = "";
-                            if (state == SaveEnum.PUBLISH.getValue()) {
-                                message = getString(R.string.publish_notification);
-                            } else if (state == SaveEnum.DRAFT.getValue()) {
-                                message = getString(R.string.draft_notification).replace("XXX", Constants.person.getName());
-                            }
-
-                            sendMessageNotify(tokens.toString(), message);
                         }
 
                         @Override

@@ -28,6 +28,7 @@ import com.hvl.dragonteam.DataService.AnnouncementService;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Announcement;
+import com.hvl.dragonteam.Model.Enum.LanguageEnum;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FragmentAnnouncement extends Fragment {
@@ -172,7 +174,7 @@ public class FragmentAnnouncement extends Fragment {
         builder.setCancelable(false);
         final EditText et1 = (EditText) view.findViewById(R.id.txt_context);
 
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add_announcement, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String _context = et1.getText().toString();
 
@@ -233,7 +235,7 @@ public class FragmentAnnouncement extends Fragment {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
-        params.put("body",  context.getString(R.string.announcement) + " : " + message);
+        params.put("body",   message);
         params.put("title", Constants.personTeamView.getTeamName());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
@@ -252,14 +254,16 @@ public class FragmentAnnouncement extends Fragment {
                             List<PersonNotification> list = new Gson().fromJson(result.toString(), new TypeToken<List<PersonNotification>>() {
                             }.getType());
 
-                            JSONArray tokens = new JSONArray();
-
                             for (PersonNotification personNotification : list) {
                                 if (personNotification.isLoggedIn() && !personNotification.getPersonId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && personNotification.getNotification1()) {
+
+                                    JSONArray tokens = new JSONArray();
                                     tokens.put(personNotification.getToken());
+                                    sendMessageNotify(tokens.toString(),  Util.getLocalizedString(context,
+                                            new Locale(LanguageEnum.toLanguageEnum(personNotification.getLanguageType()).getLocale()),
+                                            R.string.announcement)  + " : " + message);
                                 }
                             }
-                            sendMessageNotify(tokens.toString(), message);
                         }
 
                         @Override
@@ -276,8 +280,6 @@ public class FragmentAnnouncement extends Fragment {
             Util.toastError(context);
         }
     }
-
-
 
     @Override
     public void onResume() {

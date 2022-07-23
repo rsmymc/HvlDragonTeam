@@ -47,6 +47,7 @@
     <string name="right">Right</string>
     <string name="both">Both</string>
     <string name="add_training">Add Training</string>
+    <string name="add_announcement">Add Announcement</string>
     <string name="count">Count</string>
     <string name="admin">Admin</string>
     <string name="join_team">Join Team</string>
