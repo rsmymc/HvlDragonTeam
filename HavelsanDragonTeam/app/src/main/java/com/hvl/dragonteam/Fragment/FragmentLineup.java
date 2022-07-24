@@ -1,13 +1,19 @@
 package com.hvl.dragonteam.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,6 +26,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -30,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.Activity.ActivityLogin;
 import com.hvl.dragonteam.Adapter.LineupAdapter;
 import com.hvl.dragonteam.Adapter.LineupTeamAdapter;
 import com.hvl.dragonteam.Adapter.TrainingAdapter;
@@ -55,6 +63,7 @@ import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.Model.TrainingLocationView;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.ImageProcess;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
 
@@ -100,6 +109,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private FilterModel filterModel = new FilterModel();
+    private final static int WRITE_PERMISSION_REQUEST = 102;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -578,10 +588,51 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
             toolbar.setTitle(getString(R.string.lineup));
         super.onResume();
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
+        inflater.inflate(R.menu.menu_lineup, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case (R.id.action_share_lineup): {
+                if (!checkWritePermission()) {
+                    requestWritePermission();
+                } else {
+                    ImageProcess.getScreenShot(layoutLineup, toolbar.getSubtitle().toString(), context);
+                }
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean checkWritePermission() {
+        int result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestWritePermission() {
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                WRITE_PERMISSION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == WRITE_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ImageProcess.getScreenShot(layoutLineup, toolbar.getSubtitle().toString(), context);
+            } else {
+            }
+        }
     }
 
     @Override

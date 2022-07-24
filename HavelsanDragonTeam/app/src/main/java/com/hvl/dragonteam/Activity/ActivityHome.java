@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,15 +16,26 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
 import com.hvl.dragonteam.Fragment.FragmentLineup;
+import com.hvl.dragonteam.Interface.MyFunction;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
+import com.hvl.dragonteam.Redis.ChatHistory;
+import com.hvl.dragonteam.Redis.ChatMessage;
+import com.hvl.dragonteam.Redis.RedisGroupChatProcess;
 import com.hvl.dragonteam.Utilities.BottomNavigationViewHelper;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.SharedPrefHelper;
+import com.hvl.dragonteam.Utilities.URLs;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class ActivityHome extends AppCompatActivity {
 
@@ -135,6 +148,41 @@ public class ActivityHome extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(this, apiKey);
         }
+
+        registerChat();
+    }
+
+    private void registerChat() {
+        String channel = Constants.REDIS_CHAT_PREFIX + Constants.personTeamView.getTeamId();
+        ChatHistory chatHistory = new ChatHistory(channel);
+        MyFunction<Collection<?>, Boolean> callback = new MyFunction<Collection<?>, Boolean>() {
+            @Override
+            public Boolean apply(Collection<?> chatList) {
+
+                boolean result = chatHistory.add((List<String>) chatList);
+
+                ActivityHome.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (result == true) {
+                            long lastSeen = SharedPrefHelper.getInstance(ActivityHome.this).getLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            if(lastSeen < chatHistory.getOrderedChatMessageList().last().getTime()){
+                                Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(true);
+
+                            } else {
+                                Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(false);
+                            }
+                        }
+                    }
+                });
+                return result;
+            }
+        };
+
+        RedisGroupChatProcess chatProcess = new RedisGroupChatProcess(URLs.redisAddress);
+        chatProcess.init();
+        chatProcess.subscribe(channel, callback);
 
     }
 

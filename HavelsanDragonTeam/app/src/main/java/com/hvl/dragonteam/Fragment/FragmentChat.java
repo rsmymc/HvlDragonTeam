@@ -149,8 +149,10 @@ public class FragmentChat extends Fragment {
 
         registerChat();
 
-        SharedPrefHelper.getInstance(context).saveLong(Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
+        SharedPrefHelper.getInstance(context).saveLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 new Date().getTime());
+
+        Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(false);
 
         return view;
     }
@@ -177,8 +179,9 @@ public class FragmentChat extends Fragment {
                             listViewMessages.scrollToPosition(messageList.size() - 1);
                             mRefreshLayout.setRefreshing(false);
 
-                            SharedPrefHelper.getInstance(context).saveLong(Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            SharedPrefHelper.getInstance(context).saveLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid(),
                                     new Date().getTime());
+                            Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(false);
                         }
                     }
                 });

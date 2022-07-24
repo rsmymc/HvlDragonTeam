@@ -1,12 +1,20 @@
 package com.hvl.dragonteam.Utilities;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -175,4 +183,43 @@ public class ImageProcess {
         String uriString = (mediaStorageDir.getAbsolutePath() + "/" + mImageName);
         return uriString;
     }
+
+    public static void getScreenShot(View view, String text, Context context) {
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        store(bitmap, text, context);
+    }
+
+    private static void store(Bitmap bm, String  text, Context context){
+
+        File file = new File(getFilename());
+
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            shareImage(file, text, context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static void shareImage(File file, String text, Context context){
+        Uri photoURI = FileProvider.getUriForFile(context, "com.hvl.dragonteam.GenericFileProvider",file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+        try {
+            context.startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Util.toastError(context);
+        }
+    }
+
+
 }
