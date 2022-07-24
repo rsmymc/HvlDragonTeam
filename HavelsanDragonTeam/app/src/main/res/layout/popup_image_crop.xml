@@ -3,45 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
+    android:background="#444"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/components_top_margin">
 
-        <ImageView
-            android:id="@+id/button_rotate"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/rotate"/>
-        <Button
-            android:id="@+id/button_crop"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="32dp"
-            android:background="@color/black"
-            android:gravity="center"
-            android:text="@string/apply"
-            android:textColor="@color/white" />
-        <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="@dimen/components_left_margin"
-            android:src="@drawable/close"
-            app:tint="@color/white"></ImageView>
-    </LinearLayout>
 
     <com.theartofdev.edmodo.cropper.CropImageView
         android:id="@+id/imageview_profile_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/components_top_margin"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:adjustViewBounds="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="@dimen/frame_horizontal_margin"
+        android:background="#444">
 
+        <ImageView
+            android:id="@+id/img_rotate"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="@dimen/components_left_margin"
+            android:layout_gravity="center"
+            app:tint="@color/white"
+            android:src="@drawable/rotate"/>
+        <ImageView
+            android:id="@+id/img_tick"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            app:tint="@color/white"
+            android:src="@drawable/tick"/>
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="@dimen/components_left_margin"
+            android:layout_gravity="center"
+            android:src="@drawable/close"
+            app:tint="@color/white"></ImageView>
+    </LinearLayout>
 
 </LinearLayout>

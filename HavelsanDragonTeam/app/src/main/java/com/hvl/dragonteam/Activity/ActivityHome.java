@@ -213,21 +213,25 @@ public class ActivityHome extends AppCompatActivity {
                 }
             }
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ActivityHome.this);
-            builder.setMessage(getString(R.string.question_exit))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+            if (getIntent().getStringExtra("from") == null || !getIntent().getStringExtra("from").equals("activityTeam")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityHome.this);
+                builder.setMessage(getString(R.string.question_exit))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                finish();
+            }
         }
     }
 

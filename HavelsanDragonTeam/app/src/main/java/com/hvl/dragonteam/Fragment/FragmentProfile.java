@@ -52,7 +52,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.Activity.ActivityLogin;
-import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.DataService.NotificationService;
 import com.hvl.dragonteam.DataService.PersonService;
 import com.hvl.dragonteam.Interface.VolleyCallback;
@@ -64,7 +63,6 @@ import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.CustomTypingEditText;
 import com.hvl.dragonteam.Utilities.ImageProcess;
-import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.URLs;
 import com.hvl.dragonteam.Utilities.Util;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -113,6 +111,7 @@ public class FragmentProfile extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.profile));
+        toolbar.setSubtitle("");
 
         imgProfile = (CircleImageView) view.findViewById(R.id.img_profile);
         editTextName = (CustomTypingEditText) view.findViewById(R.id.txt_name);
@@ -473,9 +472,9 @@ public class FragmentProfile extends Fragment {
         popupCropPhoto.setElevation(5.0f);
 
         final CropImageView imgProfilePhoto = popupView.findViewById(R.id.imageview_profile_photo);
-        final Button btnCrop = popupView.findViewById(R.id.button_crop);
-        final ImageView btnRotate = popupView.findViewById(R.id.button_rotate);
-        final ImageView btnBack = popupView.findViewById(R.id.button_back);
+        final ImageView btnCrop = popupView.findViewById(R.id.img_tick);
+        final ImageView btnRotate = popupView.findViewById(R.id.img_rotate);
+        final ImageView btnBack = popupView.findViewById(R.id.img_back);
 
         File file = new File(imagePath);
         final Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

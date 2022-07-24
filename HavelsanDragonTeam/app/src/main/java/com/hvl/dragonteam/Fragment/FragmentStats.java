@@ -64,6 +64,7 @@ public class FragmentStats extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.stats));
+        toolbar.setSubtitle("");
         anyChartView = view.findViewById(R.id.chart);
         getStats();
 

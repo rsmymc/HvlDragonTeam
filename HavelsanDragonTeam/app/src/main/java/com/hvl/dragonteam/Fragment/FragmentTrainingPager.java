@@ -202,6 +202,7 @@ public class FragmentTrainingPager extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle(getString(R.string.training));
+        toolbar.setSubtitle("");
 
         super.onResume();
 

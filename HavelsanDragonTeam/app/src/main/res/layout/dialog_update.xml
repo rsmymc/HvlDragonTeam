@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:background="@color/bgColor">
     <LinearLayout
@@ -42,6 +43,7 @@
                 android:layout_height="30dp"
                 android:layout_marginRight="@dimen/components_left_margin"
                 android:background="@drawable/button_action"
+                app:backgroundTint="@color/colorSecondary"
                 android:text="@string/exit"
                 android:textColor="@color/secondaryTextColor" />
 
@@ -54,6 +56,7 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/components_left_margin"
                 android:background="@drawable/button_action"
+                app:backgroundTint="@color/colorSecondary"
                 android:textColor="@color/secondaryTextColor"/>
         </LinearLayout>
         <CheckBox

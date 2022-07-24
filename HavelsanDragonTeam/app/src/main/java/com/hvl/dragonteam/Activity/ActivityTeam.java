@@ -240,9 +240,9 @@ public class ActivityTeam extends AppCompatActivity {
 
                                     SharedPrefHelper.getInstance(getApplicationContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM,  Constants.personTeamView.getTeamId());
 
-                                    Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+                                    Intent intent = new Intent(getApplicationContext(), ActivityHome.class).putExtra("from", "activityTeam");;
                                     startActivity(intent);
-                                    finish();
+                                   // finish();
 
                                 }
                             });

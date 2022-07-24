@@ -112,6 +112,7 @@
         android:layout_marginVertical="@dimen/components_bottom_margin"
         style="?android:attr/borderlessButtonStyle"
         android:background="@drawable/button_action"
+        app:backgroundTint="@color/colorSecondary"
         android:textColor="@color/secondaryTextColor"
         android:textSize="@dimen/action_button_text_size"
         android:text="@string/set_location"/>

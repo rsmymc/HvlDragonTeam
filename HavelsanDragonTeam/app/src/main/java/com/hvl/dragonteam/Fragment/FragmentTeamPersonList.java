@@ -84,7 +84,7 @@ public class FragmentTeamPersonList extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.team));
-
+        toolbar.setSubtitle("");
         listView = view.findViewById(R.id.listView_team);
         listView.setFastScrollEnabled(true);
 

@@ -76,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/components_top_margin"
                 android:background="@drawable/button_action"
+                app:backgroundTint="@color/colorSecondary"
                 android:text="@string/send_code"
                 android:textColor="@color/secondaryTextColor"></Button>
         </LinearLayout>
@@ -129,6 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/components_top_margin"
                 android:background="@drawable/button_action"
+                app:backgroundTint="@color/colorSecondary"
                 android:text="@string/verify"
                 android:textColor="@color/secondaryTextColor"></Button>
         </LinearLayout>

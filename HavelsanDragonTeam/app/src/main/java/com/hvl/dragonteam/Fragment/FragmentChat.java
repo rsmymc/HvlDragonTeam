@@ -114,6 +114,7 @@ public class FragmentChat extends Fragment {
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.chat));
+        toolbar.setSubtitle("");
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.message_swipe_layout);
         listViewMessages = view.findViewById(R.id.messages_list);
@@ -388,9 +389,9 @@ public class FragmentChat extends Fragment {
         popupCropPhoto.setElevation(5.0f);
 
         final CropImageView imgProfilePhoto = popupView.findViewById(R.id.imageview_profile_photo);
-        final Button btnCrop = popupView.findViewById(R.id.button_crop);
-        final ImageView btnRotate = popupView.findViewById(R.id.button_rotate);
-        final ImageView btnBack = popupView.findViewById(R.id.button_back);
+        final Button btnCrop = popupView.findViewById(R.id.img_tick);
+        final ImageView btnRotate = popupView.findViewById(R.id.img_rotate);
+        final ImageView btnBack = popupView.findViewById(R.id.img_back);
 
         File file = new File(imagePath);
         final Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

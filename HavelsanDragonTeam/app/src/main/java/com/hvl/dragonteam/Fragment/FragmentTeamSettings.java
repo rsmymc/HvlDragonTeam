@@ -136,7 +136,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.settings));
-
+        toolbar.setSubtitle("");
         listView = view.findViewById(R.id.listView_location);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         imgLogo = (ImageView) view.findViewById(R.id.img_logo);
@@ -645,9 +645,9 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
         popupCropPhoto.setElevation(5.0f);
 
         final CropImageView imgProfilePhoto = popupView.findViewById(R.id.imageview_profile_photo);
-        final Button btnCrop = popupView.findViewById(R.id.button_crop);
-        final ImageView btnRotate = popupView.findViewById(R.id.button_rotate);
-        final ImageView btnBack = popupView.findViewById(R.id.button_back);
+        final Button btnCrop = popupView.findViewById(R.id.img_tick);
+        final ImageView btnRotate = popupView.findViewById(R.id.img_rotate);
+        final ImageView btnBack = popupView.findViewById(R.id.img_back);
 
         File file = new File(imagePath);
         final Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -777,6 +777,7 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
                 SharedPrefHelper.getInstance(getContext()).saveString(Constants.TAG_LAST_SELECTED_TEAM, null);
                 Intent intent = new Intent(getContext(), ActivityTeam.class);
                 startActivity(intent);
+                getActivity().finish();
                 break;
             }
         }

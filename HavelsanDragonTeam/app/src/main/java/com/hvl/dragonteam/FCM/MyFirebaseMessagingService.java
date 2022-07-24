@@ -14,9 +14,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.hvl.dragonteam.Activity.ActivityHome;
 import com.hvl.dragonteam.Activity.ActivitySplashScreen;
-import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
-import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
 

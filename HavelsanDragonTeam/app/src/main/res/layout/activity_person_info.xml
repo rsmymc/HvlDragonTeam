@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/components_top_margin"
     android:orientation="vertical"
     android:gravity="center"
@@ -152,6 +153,7 @@
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
         android:layout_marginTop="@dimen/components_top_margin"
         android:background="@drawable/button_action"
+        app:backgroundTint="@color/colorSecondary"
         android:text="@string/save"
         android:textColor="@color/secondaryTextColor"></Button>
 </LinearLayout>

@@ -80,6 +80,7 @@ public class FragmentAnnouncement extends Fragment {
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.announcement));
+        toolbar.setSubtitle("");
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.announcement_swipe_layout);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
