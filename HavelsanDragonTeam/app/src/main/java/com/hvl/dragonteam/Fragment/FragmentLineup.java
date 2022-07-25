@@ -89,10 +89,10 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private TextView txtWeightLeft;
     private TextView txtWeightRight;
     private ImageView imgFilter;
-    private Button btnDraft;
-    private Button btnPublish;
-    private Button btnReset;
-    private Button btnLoad;
+    private TextView btnDraft;
+    private TextView btnPublish;
+    private TextView btnReset;
+    private TextView btnLoad;
     private RecyclerView listViewLineup;
     private RecyclerView listViewPerson;
     private CardView layoutTeam;

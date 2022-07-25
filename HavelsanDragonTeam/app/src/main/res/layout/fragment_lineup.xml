@@ -271,43 +271,54 @@
         android:id="@+id/layout_action_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/components_top_margin"
         android:background="@color/lightGray">
 
-        <Button
+        <TextView
             android:id="@+id/btn_reset"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:backgroundTint="@color/lightGray"
+            android:gravity="center"
+            android:background="@color/lightGray"
+            android:textAllCaps="true"
             android:text="@string/reset"
-            android:textColor="@color/colorSecondary"></Button>
-
-        <Button
+            android:textSize="@dimen/bordered_text_size"
+            android:textColor="@color/colorSecondary"></TextView>
+        <TextView
             android:id="@+id/btn_load"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:backgroundTint="@color/lightGray"
+            android:gravity="center"
+            android:background="@color/lightGray"
+            android:textAllCaps="true"
             android:text="@string/load"
-            android:textColor="@color/chat_sender_color2"></Button>
-
-        <Button
+            android:textSize="@dimen/bordered_text_size"
+            android:textColor="@color/chat_sender_color2"></TextView>
+        <TextView
             android:id="@+id/btn_draft"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:backgroundTint="@color/lightGray"
+            android:gravity="center"
+            android:background="@color/lightGray"
+            android:textAllCaps="true"
             android:text="@string/save"
-            android:textColor="@color/colorPrimary"></Button>
+            android:textSize="@dimen/bordered_text_size"
+            android:textColor="@color/colorPrimary"></TextView>
 
-        <Button
+        <TextView
             android:id="@+id/btn_publish"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:backgroundTint="@color/lightGray"
+            android:gravity="center"
+            android:background="@color/lightGray"
+            android:textAllCaps="true"
             android:text="@string/publish"
-            android:textColor="@color/chat_sender_color10"></Button>
+            android:textSize="@dimen/bordered_text_size"
+            android:textColor="@color/chat_sender_color10"></TextView>
 
     </LinearLayout>
 </LinearLayout>

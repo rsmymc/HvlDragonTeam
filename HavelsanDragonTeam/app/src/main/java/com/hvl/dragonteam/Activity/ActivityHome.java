@@ -138,6 +138,8 @@ public class ActivityHome extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, fragmentAnnouncement, "fragmentAnnouncement").addToBackStack("fragmentAnnouncement")
                         .commit();
+            } else {
+                Constants.bottomBar.setSelectedItemId(R.id.action_training);
             }
 
         }  else {

@@ -106,9 +106,11 @@
     <string name="info_team_leaved">Takımdan ayrılıdı</string>
     <string name="info_profile_updated">Profil bilgisi güncellendi</string>
     <string name="info_load">Yerleşimini yüklemek istediğiniz antrenmanı seçiniz</string>
+    <string name="info_notify_lineup">Katılım hatırlatma bildirimi takıma gönderildi</string>
     <string name="notifications">Bildirimler</string>
     <string name="publish_notification">Yerleşim yayınlandı</string>
     <string name="draft_notification">Yerleşim XXX tarafında taslak olarak kaydedildi.</string>
+    <string name="attendance_notification">XXX antrenmanı için katılım durumunu belirt</string>
     <string name="question_join_team">XXX takımna katılmak istiyor musun?</string>
     <string name="code_sent">Doğrulama kodu gönderildi</string>
     <string name="resending">Kodu tekrar gönder</string>

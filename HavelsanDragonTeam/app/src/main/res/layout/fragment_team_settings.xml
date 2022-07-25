@@ -12,7 +12,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
         android:layout_marginVertical="@dimen/components_top_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_logo"
@@ -46,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bordered_text_height"
         android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-        android:layout_marginBottom="@dimen/components_bottom_margin"
+        android:layout_marginVertical="@dimen/components_bottom_margin"
         android:orientation="vertical">
 
         <TextView
