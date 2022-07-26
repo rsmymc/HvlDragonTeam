@@ -42,7 +42,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.txtTime.setText(Util.parseDate(listTraining.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm));
         holder.txtLocation.setText(listTraining.get(position).getLocation().getName());
-        holder.txtLocation.setOnClickListener(new View.OnClickListener() {
+        /*holder.txtLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String uri = "geo:" + listTraining.get(position).getLocation().getLat() + "," + listTraining.get(position).getLocation().getLon()
@@ -50,7 +50,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.ViewHo
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 context.startActivity(intent);
             }
-        });
+        });*/
     }
 
     @Override

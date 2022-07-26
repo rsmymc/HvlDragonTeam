@@ -96,10 +96,12 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
             holder.txtLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String uri = "geo:" + listTraining.get(position).getLat() + "," + listTraining.get(position).getLon()
-                            + "?q="+ listTraining.get(position).getLat()+","+listTraining.get(position).getLon() +"("+listTraining.get(position).getLocationName()+")";
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    context.startActivity(intent);
+                    if (listTraining.get(position).getLocationName() != null) {
+                        String uri = "geo:" + listTraining.get(position).getLat() + "," + listTraining.get(position).getLon()
+                                + "?q=" + listTraining.get(position).getLat() + "," + listTraining.get(position).getLon() + "(" + listTraining.get(position).getLocationName() + ")";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        context.startActivity(intent);
+                    }
                 }
             });
 
@@ -234,7 +236,7 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", tokens);
-        params.put("body",   message);
+        params.put("body", message);
         params.put("title", Constants.personTeamView.getTeamName());
         params.put("notificationModel", json);
         Util.postRequest(context, URLs.urlSendNotification, params, null);
@@ -259,10 +261,10 @@ public class TrainingAttendanceAdapter extends RecyclerView.Adapter<TrainingAtte
                                     JSONArray tokens = new JSONArray();
                                     tokens.put(personNotification.getToken());
 
-                                    String time =  Util.parseDate(training.getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm);
-                                    sendMessageNotify(tokens.toString(),  Util.getLocalizedString(context,
+                                    String time = Util.parseDate(training.getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm);
+                                    sendMessageNotify(tokens.toString(), Util.getLocalizedString(context,
                                             new Locale(LanguageEnum.toLanguageEnum(personNotification.getLanguageType()).getLocale()),
-                                            R.string.attendance_notification).replace("XXX", time + " "  + training.getLocationName()).replace("null",""));
+                                            R.string.attendance_notification).replace("XXX", time + " " + training.getLocationName()).replace("null", ""));
                                 }
                             }
 

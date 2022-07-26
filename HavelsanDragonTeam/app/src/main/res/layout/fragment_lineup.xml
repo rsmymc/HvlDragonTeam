@@ -271,7 +271,7 @@
         android:id="@+id/layout_action_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/components_top_margin"
+        android:paddingVertical="5dp"
         android:background="@color/lightGray">
 
         <TextView
@@ -281,7 +281,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@color/lightGray"
-            android:textAllCaps="true"
             android:text="@string/reset"
             android:textSize="@dimen/switch_text_size"
             android:textColor="@color/colorSecondary"></TextView>
@@ -292,7 +291,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@color/lightGray"
-            android:textAllCaps="true"
             android:text="@string/load"
             android:textSize="@dimen/switch_text_size"
             android:textColor="@color/chat_sender_color2"></TextView>
@@ -303,7 +301,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@color/lightGray"
-            android:textAllCaps="true"
             android:text="@string/save"
             android:textSize="@dimen/switch_text_size"
             android:textColor="@color/colorPrimary"></TextView>
@@ -315,7 +312,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@color/lightGray"
-            android:textAllCaps="true"
             android:text="@string/publish"
             android:textSize="@dimen/switch_text_size"
             android:textColor="@color/chat_sender_color10"></TextView>

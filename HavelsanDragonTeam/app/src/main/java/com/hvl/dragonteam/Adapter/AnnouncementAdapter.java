@@ -33,7 +33,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listAnnouncement = listAnnouncement;
-        SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
+        SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST, null);
         util = new Util();
     }
 
@@ -47,15 +47,16 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.txtTime.setText(Util.parseDate(listAnnouncement.get(position).getTime(),Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm_ss));
+        holder.txtTime.setText(Util.parseDate(listAnnouncement.get(position).getTime(), Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss, Util.DATE_FORMAT_dd_MMM_yyyy_EEE_HH_mm_ss));
         holder.txtContext.setText(listAnnouncement.get(position).getContext());
 
-        String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
+        String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST, null);
 
-        if(jsonList !=null ) {
-            List<Integer> list = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {}.getType());
-            if(list.contains(listAnnouncement.get(position).getId())){
-               holder.imgUnread.setVisibility(View.GONE);
+        if (jsonList != null) {
+            List<Integer> list = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {
+            }.getType());
+            if (list.contains(listAnnouncement.get(position).getId())) {
+                holder.imgUnread.setVisibility(View.GONE);
             } else {
                 holder.imgUnread.setVisibility(View.VISIBLE);
             }
@@ -69,7 +70,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         return listAnnouncement.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder  {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtTime;
         TextView txtContext;
@@ -84,19 +85,30 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST,null);
+                    String jsonList = SharedPrefHelper.getInstance(context).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST, null);
 
                     List<Integer> list;
-                    if(jsonList !=null ) {
-                        list = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {}.getType());
+                    if (jsonList != null) {
+                        list = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {
+                        }.getType());
                     } else {
                         list = new ArrayList<>();
                     }
-                    if(!list.contains(listAnnouncement.get(getAdapterPosition()).getId())){
+                    if (!list.contains(listAnnouncement.get(getAdapterPosition()).getId())) {
                         list.add(listAnnouncement.get(getAdapterPosition()).getId());
                         imgUnread.setVisibility(View.GONE);
                         String json = new Gson().toJson(list, List.class);
                         SharedPrefHelper.getInstance(context).saveString(Constants.TAG_ANNOUNCEMENT_READ_LIST, json);
+
+                        boolean unread = false;
+
+                        for (Announcement announcement : listAnnouncement) {
+                            if (!list.contains(announcement.getId())) {
+                                unread = true;
+                                break;
+                            }
+                        }
+                        Constants.bottomBar.getOrCreateBadge(R.id.action_announcement).setVisible(unread);
                     }
                 }
             });

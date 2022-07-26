@@ -8,6 +8,7 @@
     <string name="no">Hayır</string>
     <string name="error">Bir hata oluştu</string>
     <string name="share">Paylaş</string>
+    <string name="share_lineup">Yerleşimi Paylaş</string>
     <string name="send_code">Kod Gönder</string>
     <string name="verify">Onayla</string>
     <string name="phone">Telefon</string>

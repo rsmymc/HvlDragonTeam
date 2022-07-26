@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
 import com.hvl.dragonteam.Fragment.FragmentChat;
 import com.hvl.dragonteam.Fragment.FragmentProfile;
 import com.hvl.dragonteam.Fragment.FragmentStats;
@@ -25,13 +26,13 @@ public class Constants {
     public static String frgTagTeamPager = "fragment_team_pager";
     public static String frgTagChat = "fragment_chat";
     public static String frgTagProfile = "fragment_profile";
-    public static String frgTagStats = "fragment_stats";
+    public static String frgTagAnnouncement = "fragment_announcement";
     public static String frgTagEquipment = "fragment_equipment";
     public static Fragment frgTrainingPager;
     public static Fragment frgTeamPager;
     public static Fragment frgChat;
     public static Fragment frgProfile;
-    public static Fragment frgStats;
+    public static Fragment frgAnnouncement;
     public static Fragment frgEquipment;
     public static List<String> mainFragmentTags;
     public static List<Fragment> mainFragments;
@@ -57,20 +58,20 @@ public class Constants {
         mainFragmentTags = new ArrayList<>();
         mainFragmentTags.add(frgTagTrainingPager);
         mainFragmentTags.add(frgTagTeamPager);
-        mainFragmentTags.add(frgTagStats);
+        mainFragmentTags.add(frgTagAnnouncement);
         mainFragmentTags.add(frgTagChat);
         mainFragmentTags.add(frgTagProfile);
 
         frgTrainingPager = new FragmentTrainingPager();
         frgTeamPager = new FragmentTeamPager();
-        frgStats = new FragmentStats();
+        frgAnnouncement = new FragmentAnnouncement();
         frgChat = new FragmentChat();
         frgProfile = new FragmentProfile();
 
         mainFragments = new ArrayList<>();
         mainFragments.add(frgTrainingPager);
         mainFragments.add(frgTeamPager);
-        mainFragments.add(frgStats);
+        mainFragments.add(frgAnnouncement);
         mainFragments.add(frgChat);
         mainFragments.add(frgProfile);
     }

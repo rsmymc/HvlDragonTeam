@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.hvl.dragonteam.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -215,7 +217,7 @@ public class ImageProcess {
         intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
         intent.putExtra(Intent.EXTRA_STREAM, photoURI);
         try {
-            context.startActivity(Intent.createChooser(intent, "Share Screenshot"));
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_lineup)));
         } catch (ActivityNotFoundException e) {
             Util.toastError(context);
         }

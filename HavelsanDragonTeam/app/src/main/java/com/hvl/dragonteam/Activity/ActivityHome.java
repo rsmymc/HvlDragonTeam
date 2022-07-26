@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,20 +16,28 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.hvl.dragonteam.DataService.AnnouncementService;
 import com.hvl.dragonteam.Fragment.FragmentAnnouncement;
 import com.hvl.dragonteam.Fragment.FragmentLineup;
 import com.hvl.dragonteam.Interface.MyFunction;
+import com.hvl.dragonteam.Interface.VolleyCallback;
+import com.hvl.dragonteam.Model.Announcement;
 import com.hvl.dragonteam.Model.Enum.NotificationTypeEnum;
 import com.hvl.dragonteam.Model.NotificationModel;
+import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.Model.Training;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Redis.ChatHistory;
-import com.hvl.dragonteam.Redis.ChatMessage;
 import com.hvl.dragonteam.Redis.RedisGroupChatProcess;
 import com.hvl.dragonteam.Utilities.BottomNavigationViewHelper;
 import com.hvl.dragonteam.Utilities.Constants;
 import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.URLs;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +45,7 @@ import java.util.List;
 
 public class ActivityHome extends AppCompatActivity {
 
+    private ArrayList<Announcement> announcementList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +88,11 @@ public class ActivityHome extends AppCompatActivity {
                     }
                 }
 
-                if (item.getItemId() == R.id.action_stats) {
-                    if (!Constants.frgStats.isAdded()) {
+                if (item.getItemId() == R.id.action_announcement) {
+                    if (!Constants.frgAnnouncement.isAdded()) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, Constants.frgStats, Constants.frgTagStats)
-                                .addToBackStack(Constants.frgTagStats)
+                                .replace(R.id.container, Constants.frgAnnouncement, Constants.frgTagAnnouncement)
+                                .addToBackStack(Constants.frgTagAnnouncement)
                                 .commit();
                     }
                 }
@@ -142,7 +149,7 @@ public class ActivityHome extends AppCompatActivity {
                 Constants.bottomBar.setSelectedItemId(R.id.action_training);
             }
 
-        }  else {
+        } else {
             Constants.bottomBar.setSelectedItemId(R.id.action_training);
         }
 
@@ -151,7 +158,60 @@ public class ActivityHome extends AppCompatActivity {
             Places.initialize(this, apiKey);
         }
 
+        getAnnouncements();
+
         registerChat();
+    }
+
+    public void getAnnouncements() {
+        AnnouncementService announcementService = new AnnouncementService();
+
+        try {
+            Team team = new Team();
+            team.setId(Constants.personTeamView.getTeamId());
+            announcementService.getAnnouncementList(ActivityHome.this, team,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                            List<Announcement> list = new Gson().fromJson(result.toString(), new TypeToken<List<Announcement>>() {
+                            }.getType());
+
+                            announcementList.clear();
+                            announcementList.addAll(list);
+
+                            boolean unread = false;
+
+                            String jsonList = SharedPrefHelper.getInstance(ActivityHome.this).getString(Constants.TAG_ANNOUNCEMENT_READ_LIST, null);
+                            List<Integer> readList = null;
+
+                            if (jsonList != null) {
+                                readList = new Gson().fromJson(jsonList, new TypeToken<List<Integer>>() {
+                                }.getType());
+                            }
+
+                            if (readList != null) {
+                                for (Announcement announcement : announcementList) {
+                                    if (!readList.contains(announcement.getId())) {
+                                        unread = true;
+                                        break;
+                                    }
+                                }
+                            } else if (announcementList.size()>0){
+                                unread = true;
+                            }
+                            Constants.bottomBar.getOrCreateBadge(R.id.action_announcement).setVisible(unread);
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                        }
+                    });
+        } catch (JSONException e) {
+        }
     }
 
     private void registerChat() {
@@ -169,7 +229,7 @@ public class ActivityHome extends AppCompatActivity {
 
                         if (result == true) {
                             long lastSeen = SharedPrefHelper.getInstance(ActivityHome.this).getLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            if(lastSeen < chatHistory.getOrderedChatMessageList().last().getTime()){
+                            if (lastSeen < chatHistory.getOrderedChatMessageList().last().getTime()) {
                                 Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(true);
 
                             } else {

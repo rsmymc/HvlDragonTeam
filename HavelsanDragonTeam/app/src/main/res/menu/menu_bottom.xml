@@ -20,10 +20,10 @@
         android:title="@string/team"
         app:showAsAction="withText" />
     <item
-        android:id="@+id/action_stats"
+        android:id="@+id/action_announcement"
         android:enabled="true"
-        android:icon="@drawable/stats"
-        android:title="@string/stats"
+        android:icon="@drawable/bell"
+        android:title="@string/announcement"
         app:showAsAction="withText" />
     <item
         android:id="@+id/action_chat"
