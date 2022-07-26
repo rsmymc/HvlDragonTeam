@@ -339,16 +339,17 @@ public class ActivitySplashScreen extends AppCompatActivity {
         PersonTeam _personTeam = new PersonTeam();
         _personTeam.setPersonId(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        if(bundle != null) {
-            NotificationModel notificationModel = new Gson().fromJson(bundle.getString("notificationModel"), NotificationModel.class);
-            _personTeam.setTeamId(notificationModel.getTraining().getTeamId());
-        } else {
-            _personTeam.setTeamId(teamId);
-        }
-
         PersonTeamService personTeamService = new PersonTeamService();
 
         try {
+
+            if(bundle != null) {
+                NotificationModel notificationModel = new Gson().fromJson(bundle.getString("notificationModel"), NotificationModel.class);
+                _personTeam.setTeamId(notificationModel.getTraining().getTeamId());
+            } else {
+                _personTeam.setTeamId(teamId);
+            }
+
             personTeamService.getPersonTeam(ActivitySplashScreen.this,
                     _personTeam,
                     new VolleyCallback() {

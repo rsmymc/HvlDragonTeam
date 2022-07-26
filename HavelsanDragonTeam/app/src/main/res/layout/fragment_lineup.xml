@@ -283,7 +283,7 @@
             android:background="@color/lightGray"
             android:textAllCaps="true"
             android:text="@string/reset"
-            android:textSize="@dimen/bordered_text_size"
+            android:textSize="@dimen/switch_text_size"
             android:textColor="@color/colorSecondary"></TextView>
         <TextView
             android:id="@+id/btn_load"
@@ -294,7 +294,7 @@
             android:background="@color/lightGray"
             android:textAllCaps="true"
             android:text="@string/load"
-            android:textSize="@dimen/bordered_text_size"
+            android:textSize="@dimen/switch_text_size"
             android:textColor="@color/chat_sender_color2"></TextView>
         <TextView
             android:id="@+id/btn_draft"
@@ -305,7 +305,7 @@
             android:background="@color/lightGray"
             android:textAllCaps="true"
             android:text="@string/save"
-            android:textSize="@dimen/bordered_text_size"
+            android:textSize="@dimen/switch_text_size"
             android:textColor="@color/colorPrimary"></TextView>
 
         <TextView
@@ -317,7 +317,7 @@
             android:background="@color/lightGray"
             android:textAllCaps="true"
             android:text="@string/publish"
-            android:textSize="@dimen/bordered_text_size"
+            android:textSize="@dimen/switch_text_size"
             android:textColor="@color/chat_sender_color10"></TextView>
 
     </LinearLayout>

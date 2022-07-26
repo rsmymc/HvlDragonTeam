@@ -170,8 +170,9 @@ public class FragmentTrainingPager extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_announcement, menu);
         this.menu = menu;
-        getAnnouncements();
         super.onCreateOptionsMenu(menu, inflater);
+        getAnnouncements();
+        this.menu = menu;
     }
 
     @Override
