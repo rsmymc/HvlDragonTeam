@@ -55,12 +55,14 @@
     <string name="create_team">Create Team</string>
     <string name="my_teams">My Teams</string>
     <string name="joining_code">Joining Code</string>
+    <string name="set_role">Set Role</string>
     <string name="default_role">Default</string>
     <string name="chart_title_by_person">Training Attendance Count</string>
     <string name="locations">Training Locations</string>
     <string name="set_location">Set Location</string>
     <string name="team_members">Team Members</string>
     <string name="team_info">Team Info</string>
+    <string name="remove_from_team">Remove from Team</string>
     <string name="privacy">Privacy Policy </string>
     <string name="privacy_warning">By signing in, you have read and accept our </string>
 

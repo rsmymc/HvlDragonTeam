@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/action_set_role"
+        android:icon="@drawable/role"
+        android:title="@string/set_role"
+        app:iconTint="@color/colorPrimary"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_remove_from_team"
+        android:icon="@drawable/leave_team"
+        android:title="@string/remove_from_team"
+        app:showAsAction="always" />
+</menu>

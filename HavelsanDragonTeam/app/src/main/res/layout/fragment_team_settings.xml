@@ -110,19 +110,18 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edit_text_border"
+            android:background="@drawable/code_text_border"
             android:elevation="-1dp"
             android:gravity="center_vertical"
             android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/txt_team_id"
-                android:layout_width="123dp"
+                android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
-                android:background="@drawable/code_text_border"
+                android:layout_marginLeft="@dimen/components_left_margin"
                 android:gravity="center"
-                android:paddingHorizontal="5dp"
+                android:textSize="@dimen/bordered_text_size"
                 android:text="A12CDA1234"
                 android:textColor="@color/textColor" />
 

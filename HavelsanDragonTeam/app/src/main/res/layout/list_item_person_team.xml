@@ -74,5 +74,14 @@
             android:src="@drawable/call"
             android:tint="@color/colorPrimary">
         </ImageView>
+        <ImageView
+            android:id="@+id/img_more"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="@dimen/components_left_margin"
+            android:layout_gravity="center"
+            android:src="@drawable/more"
+            android:tint="@color/colorPrimary">
+        </ImageView>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

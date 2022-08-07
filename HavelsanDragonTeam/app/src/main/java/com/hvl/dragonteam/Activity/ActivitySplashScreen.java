@@ -276,14 +276,12 @@ public class ActivitySplashScreen extends AppCompatActivity {
                                                     startActivity(intent);
 
                                                 } else {
+                                                    String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
 
                                                     Bundle bundle = getIntent().getExtras();
                                                     if (bundle != null){
-                                                        getPersonTeam(null, bundle );
+                                                        getPersonTeam(lastSelectedTeamId, bundle );
                                                     } else {
-
-                                                        String lastSelectedTeamId = SharedPrefHelper.getInstance(getApplicationContext()).getString(Constants.TAG_LAST_SELECTED_TEAM, null);
-
                                                         if (lastSelectedTeamId == null) {
                                                             Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
                                                             startActivity(intent);
@@ -345,7 +343,11 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
             if(bundle != null) {
                 NotificationModel notificationModel = new Gson().fromJson(bundle.getString("notificationModel"), NotificationModel.class);
-                _personTeam.setTeamId(notificationModel.getTraining().getTeamId());
+                if(notificationModel != null && notificationModel.getTraining() != null){
+                    _personTeam.setTeamId(notificationModel.getTraining().getTeamId());
+                } else if (notificationModel.getTraining().getTeamId() == null) {
+                    _personTeam.setTeamId(teamId);
+                }
             } else {
                 _personTeam.setTeamId(teamId);
             }
@@ -383,7 +385,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                         public void onSuccessList(JSONArray result) {
                         }
                     });
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Intent intent = new Intent(getApplicationContext(), ActivityTeam.class);
             startActivity(intent);

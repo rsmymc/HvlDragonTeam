@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,24 +18,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.Adapter.PersonTeamByTeamAdapter;
 import com.hvl.dragonteam.DataService.PersonTeamService;
-import com.hvl.dragonteam.DataService.TeamService;
+import com.hvl.dragonteam.Interface.OnLineupChangeListener;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.PersonTeam;
@@ -59,7 +53,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class FragmentTeamPersonList extends Fragment {
+public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeamAdapter.OnPersonTeamChangeListener {
 
     private View view;
     private Activity activity;
@@ -87,8 +81,7 @@ public class FragmentTeamPersonList extends Fragment {
         toolbar.setSubtitle("");
         listView = view.findViewById(R.id.listView_team);
         listView.setFastScrollEnabled(true);
-
-        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
+        /*if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
             SwipeMenuCreator creator = new SwipeMenuCreator() {
 
                 @Override
@@ -160,8 +153,8 @@ public class FragmentTeamPersonList extends Fragment {
                     return false;
                 }
             });
-            listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-        }
+            listView.setSwipeDirection(DIRECTION_LEFT);
+        }*/
 
         EditText myFilter = (EditText) view.findViewById(R.id.txt_filter);
         myFilter.addTextChangedListener(new TextWatcher() {
@@ -224,7 +217,7 @@ public class FragmentTeamPersonList extends Fragment {
                                 mSections += letter;
                             }
 
-                            personTeamAdapter = new PersonTeamByTeamAdapter(context, personTeamList, mSections);
+                            personTeamAdapter = new PersonTeamByTeamAdapter(context, personTeamList, mSections,FragmentTeamPersonList.this);
                             listView.setAdapter(personTeamAdapter);
 
                             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
@@ -378,6 +371,11 @@ public class FragmentTeamPersonList extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void personTeamChange() {
+        getTeamPersons();
     }
 }
 

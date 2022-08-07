@@ -11,8 +11,8 @@ android {
         applicationId "com.hvl.dragonteam"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 13
-        versionName "1.1.3"
+        versionCode 15
+        versionName "1.1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

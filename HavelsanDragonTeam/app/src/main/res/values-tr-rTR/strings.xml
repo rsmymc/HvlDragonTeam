@@ -55,6 +55,7 @@
     <string name="create_team">Takım oluştur</string>
     <string name="my_teams">Takımlarım</string>
     <string name="joining_code">Katılım Kodu</string>
+    <string name="set_role">Rol Ata</string>
     <string name="default_role">Varsayılan</string>
     <string name="chart_title_by_person">Antereman Katılım Sayısı</string>
     <string name="locations">Antrenman Konumu</string>
@@ -81,6 +82,7 @@
     <string name="training">Antrenman</string>
     <string name="team_members">Takım Üyeleri</string>
     <string name="team_info">Takım Bilgileri</string>
+    <string name="remove_from_team">Takımdan Çıkar</string>
     <string name="question_delete_photo">Fotoğrafı kaldır?</string>
     <string name="question_exit">Çıkmak istiyor musun?</string>
     <string name="warning_cant_empty">boş olamaz</string>
