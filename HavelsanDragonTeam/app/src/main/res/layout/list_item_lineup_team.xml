@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_lineup"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginHorizontal="@dimen/frame_horizontal_margin"
     android:layout_marginBottom="@dimen/frame_horizontal_margin"
     android:orientation="vertical">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
             <ImageView
                 android:id="@+id/img_profile"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/uniform2" />
+            <CheckBox
+                android:id="@+id/checkbox_attendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </CheckBox>
+        </LinearLayout>
+
 
             <TextView
                 android:id="@+id/txt_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingVertical="2dp"
                 android:background="@drawable/background_lineup"
                 android:paddingHorizontal="5dp"
-                android:textSize="@dimen/frame_horizontal_margin"
+                android:textSize="@dimen/lineup_team_text_size"
                 android:text="Rasim , L , 80Kg"
                 android:textAlignment="center"
                 android:textColor="@color/white"></TextView>

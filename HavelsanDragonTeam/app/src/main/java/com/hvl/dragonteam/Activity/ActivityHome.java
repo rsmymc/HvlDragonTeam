@@ -251,24 +251,43 @@ public class ActivityHome extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+
+
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount > 1) {
             getSupportFragmentManager().popBackStack();
             if (backStackCount > 1) {
                 String tag = getSupportFragmentManager().getBackStackEntryAt(backStackCount - 2).getName();
 
-                if (Constants.mainFragmentTags.contains(tag)) {
-                    Constants.bottomBar.getMenu().getItem(Constants.mainFragmentTags.indexOf(tag)).setChecked(true);
-                    getSupportFragmentManager().beginTransaction()
-                            .show(Constants.mainFragments.get(Constants.mainFragmentTags.indexOf(tag))).commit();
-                    Constants.mainFragments.get(Constants.mainFragmentTags.indexOf(tag)).onResume();
-                } else {
+                boolean isBack = true;
+
+                String lineupTag = getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1).getName();
+                if(lineupTag.equals("fragmentLineup")) {
                     for (Fragment frg : getSupportFragmentManager().getFragments()) {
                         if (frg != null) {
-                            if (frg.getTag().equals(tag)) {
-                                getSupportFragmentManager().beginTransaction()
-                                        .show(frg).commit();
-                                frg.onResume();
+                            if (frg.getTag().equals(lineupTag)) {
+                                isBack = false;
+                                ((FragmentLineup)frg).showUnsavedDialog();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if(isBack) {
+                    if (Constants.mainFragmentTags.contains(tag)) {
+                        Constants.bottomBar.getMenu().getItem(Constants.mainFragmentTags.indexOf(tag)).setChecked(true);
+                        getSupportFragmentManager().beginTransaction()
+                                .show(Constants.mainFragments.get(Constants.mainFragmentTags.indexOf(tag))).commit();
+                        Constants.mainFragments.get(Constants.mainFragmentTags.indexOf(tag)).onResume();
+                    } else {
+                        for (Fragment frg : getSupportFragmentManager().getFragments()) {
+                            if (frg != null) {
+                                if (frg.getTag().equals(tag)) {
+                                    getSupportFragmentManager().beginTransaction()
+                                            .show(frg).commit();
+                                    frg.onResume();
+                                }
                             }
                         }
                     }

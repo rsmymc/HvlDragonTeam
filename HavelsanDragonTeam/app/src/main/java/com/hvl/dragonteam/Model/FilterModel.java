@@ -6,15 +6,17 @@ public class FilterModel {
     boolean right= true;
     boolean both = true;
     boolean hideDontAttend = false;
+    boolean hideImage = false;
 
     public FilterModel() {
     }
 
-    public FilterModel(boolean left, boolean right, boolean both, boolean hideDontAttend) {
+    public FilterModel(boolean left, boolean right, boolean both, boolean hideDontAttend, boolean hideImage) {
         this.left = left;
         this.right = right;
         this.both = both;
         this.hideDontAttend = hideDontAttend;
+        this.hideImage = hideImage;
     }
 
     public boolean isLeft() {
@@ -47,5 +49,13 @@ public class FilterModel {
 
     public void setHideDontAttend(boolean hideDontAttend) {
         this.hideDontAttend = hideDontAttend;
+    }
+
+    public boolean isHideImage() {
+        return hideImage;
+    }
+
+    public void setHideImage(boolean hideImage) {
+        this.hideImage = hideImage;
     }
 }

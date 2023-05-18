@@ -4,7 +4,7 @@ public enum LineupEnum {
 	L1(0), R1(1), L2(2), R2(3),
 	L3(4), R3(5), L4(6), R4(7),
 	L5(8), R5(9), L6(10), R6(11),
-	L7(12), R7(13), L8(14), R8(15),NONE (101);
+	L7(12), R7(13), L8(14), R8(15);
 
 	int value;
 
@@ -51,7 +51,7 @@ public enum LineupEnum {
 		} else if (value == R8.value) {
 			return R8;
 		} else {
-			return NONE;
+			return null;
 		}
 	}
 }

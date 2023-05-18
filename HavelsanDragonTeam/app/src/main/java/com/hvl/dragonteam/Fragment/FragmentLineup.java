@@ -102,6 +102,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private CheckBox checkBoxRight;
     private CheckBox checkBoxBoth;
     private CheckBox checkBoxHideDontAttend;
+    private CheckBox checkBoxHideImage;
     private LinearLayout layoutActionButtons;
     private ArrayList<LineupItem> lineupList = new ArrayList<>();
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
@@ -109,6 +110,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
     private FilterModel filterModel = new FilterModel();
+    private  Lineup lineup;
     private final static int WRITE_PERMISSION_REQUEST = 102;
 
     @Override
@@ -141,6 +143,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         checkBoxRight = view.findViewById(R.id.checkbox_right);
         checkBoxBoth = view.findViewById(R.id.checkbox_both);
         checkBoxHideDontAttend = view.findViewById(R.id.checkbox_hide_dont_attend);
+        checkBoxHideImage = view.findViewById(R.id.checkbox_hide_image);
 
         checkBoxLeft.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -161,6 +164,12 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
             }
         });
         checkBoxHideDontAttend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                filterList();
+            }
+        });
+        checkBoxHideImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 filterList();
@@ -254,10 +263,15 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
         filterModel.setRight(checkBoxRight.isChecked());
         filterModel.setBoth(checkBoxBoth.isChecked());
         filterModel.setHideDontAttend(checkBoxHideDontAttend.isChecked());
+        filterModel.setHideImage(checkBoxHideImage.isChecked());
 
         lineupTeamAdapter.setFilterModel(filterModel);
         lineupTeamAdapter.notifyDataSetChanged();
+        lineupAdapter.setFilterModel(filterModel);
+        lineupAdapter.notifyDataSetChanged();
     }
+
+   private List<LineupItem> lineupItemList;
 
     public void getLineup(Training training) {
         LineupService lineupService = new LineupService();
@@ -271,7 +285,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
                         @Override
                         public void onSuccess(JSONObject result) {
-                            Lineup lineup = new Gson().fromJson(result.toString(), Lineup.class);
+                            lineup = new Gson().fromJson(result.toString(), Lineup.class);
 
                             lineupList.clear();
 
@@ -293,31 +307,31 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
                             LineupItem lineupItemR7 = new LineupItem(LineupEnum.R7.getValue(), find(lineup.getR7()));
                             LineupItem lineupItemR8 = new LineupItem(LineupEnum.R8.getValue(), find(lineup.getR8()));
 
-                            List<LineupItem> list = new ArrayList<>();
-                            list.add(LineupEnum.L1.getValue(), lineupItemL1);
-                            list.add(LineupEnum.R1.getValue(), lineupItemR1);
-                            list.add(LineupEnum.L2.getValue(), lineupItemL2);
-                            list.add(LineupEnum.R2.getValue(), lineupItemR2);
-                            list.add(LineupEnum.L3.getValue(), lineupItemL3);
-                            list.add(LineupEnum.R3.getValue(), lineupItemR3);
-                            list.add(LineupEnum.L4.getValue(), lineupItemL4);
-                            list.add(LineupEnum.R4.getValue(), lineupItemR4);
-                            list.add(LineupEnum.L5.getValue(), lineupItemL5);
-                            list.add(LineupEnum.R5.getValue(), lineupItemR5);
-                            list.add(LineupEnum.L6.getValue(), lineupItemL6);
-                            list.add(LineupEnum.R6.getValue(), lineupItemR6);
-                            list.add(LineupEnum.L7.getValue(), lineupItemL7);
-                            list.add(LineupEnum.R7.getValue(), lineupItemR7);
-                            list.add(LineupEnum.L8.getValue(), lineupItemL8);
-                            list.add(LineupEnum.R8.getValue(), lineupItemR8);
+                            lineupItemList = new ArrayList<>();
+                            lineupItemList.add(LineupEnum.L1.getValue(), lineupItemL1);
+                            lineupItemList.add(LineupEnum.R1.getValue(), lineupItemR1);
+                            lineupItemList.add(LineupEnum.L2.getValue(), lineupItemL2);
+                            lineupItemList.add(LineupEnum.R2.getValue(), lineupItemR2);
+                            lineupItemList.add(LineupEnum.L3.getValue(), lineupItemL3);
+                            lineupItemList.add(LineupEnum.R3.getValue(), lineupItemR3);
+                            lineupItemList.add(LineupEnum.L4.getValue(), lineupItemL4);
+                            lineupItemList.add(LineupEnum.R4.getValue(), lineupItemR4);
+                            lineupItemList.add(LineupEnum.L5.getValue(), lineupItemL5);
+                            lineupItemList.add(LineupEnum.R5.getValue(), lineupItemR5);
+                            lineupItemList.add(LineupEnum.L6.getValue(), lineupItemL6);
+                            lineupItemList.add(LineupEnum.R6.getValue(), lineupItemR6);
+                            lineupItemList.add(LineupEnum.L7.getValue(), lineupItemL7);
+                            lineupItemList.add(LineupEnum.R7.getValue(), lineupItemR7);
+                            lineupItemList.add(LineupEnum.L8.getValue(), lineupItemL8);
+                            lineupItemList.add(LineupEnum.R8.getValue(), lineupItemR8);
 
-                            lineupList.addAll(list);
+                            lineupList.addAll(lineupItemList);
 
-                            lineupAdapter = new LineupAdapter(context, lineupList, FragmentLineup.this);
+                            lineupAdapter = new LineupAdapter(context, lineupList, filterModel,FragmentLineup.this);
                             listViewLineup.setAdapter(lineupAdapter);
                             listViewLineup.setOnDragListener(lineupAdapter.getDragInstance());
 
-                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList, filterModel, FragmentLineup.this);
+                            lineupTeamAdapter = new LineupTeamAdapter(context, personTrainingAttendanceList,training, filterModel, FragmentLineup.this);
                             listViewPerson.setAdapter(lineupTeamAdapter);
                             listViewPerson.setOnDragListener(lineupTeamAdapter.getDragInstance());
 
@@ -657,5 +671,74 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
 
     }
 
+    public void showUnsavedDialog(){
+        List<LineupItem> adapterListLineup = lineupAdapter.getListLineup();
+
+        for(LineupEnum i : LineupEnum.values() ){
+            if(!adapterListLineup.get(i.getValue()).getPersonTrainingAttendance().getPersonId()
+                    .equals(lineupItemList.get(i.getValue()).getPersonTrainingAttendance().getPersonId())) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //deleteTeam();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //deleteTeam();
+                                FragmentLineup.super.onStop();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(false);
+                builder.setMessage(context.getString(R.string.warning_delete_team))
+                        .setPositiveButton(context.getString(R.string.delete), dialogClickListener)
+                        .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
+                break;
+            }
+        }
+    }
+
+
+/*
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        List<LineupItem> adapterListLineup = lineupAdapter.getListLineup();
+
+         for(LineupEnum i : LineupEnum.values() ){
+            if(!adapterListLineup.get(i.getValue()).getPersonTrainingAttendance().getPersonId()
+                    .equals(lineupItemList.get(i.getValue()).getPersonTrainingAttendance().getPersonId())) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //deleteTeam();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //deleteTeam();
+                                FragmentLineup.super.onStop();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(false);
+                builder.setMessage(context.getString(R.string.warning_delete_team))
+                        .setPositiveButton(context.getString(R.string.delete), dialogClickListener)
+                        .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
+                break;
+            }
+        }
+    }*/
 }
 

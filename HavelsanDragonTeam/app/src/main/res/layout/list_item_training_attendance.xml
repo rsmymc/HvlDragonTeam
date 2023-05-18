@@ -34,14 +34,18 @@
 
             <TextView
                 android:id="@+id/txt_context"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/components_top_margin"
                 android:layout_marginLeft="@dimen/components_left_margin"
                 android:text="Maltepe"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/img_notify"
                 android:layout_width="32dp"

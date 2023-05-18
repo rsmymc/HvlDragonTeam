@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hvl.dragonteam.Model.Enum.LineupEnum;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.Enum.SideEnum;
+import com.hvl.dragonteam.Model.FilterModel;
 import com.hvl.dragonteam.Model.LineupItem;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
@@ -41,15 +42,17 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
     private ItemClickListener mClickListener;
     private OnLineupChangeListener listener;
     private ArrayList<LineupItem> listLineup = new ArrayList<>();
+    private FilterModel filterModel;
     private Context context;
 
     private static final int LAYOUT_LEFT = 1;
     private static final int LAYOUT_RIGHT = 2;
 
-    public LineupAdapter(Context context, ArrayList<LineupItem> listLineup, OnLineupChangeListener listener) {
+    public LineupAdapter(Context context, ArrayList<LineupItem> listLineup, FilterModel filterModel, OnLineupChangeListener listener) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listLineup = listLineup;
+        this.filterModel = filterModel;
         this.listener = listener;
     }
 
@@ -112,6 +115,12 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
         holder.layoutLineup.setTag(position);
         holder.layoutLineup.setOnTouchListener(this);
         holder.layoutLineup.setOnDragListener(new DragListener(listener));
+
+        if(filterModel.isHideImage()){
+            holder.imgProfile.setVisibility(View.GONE);
+        } else {
+            holder.imgProfile.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -186,4 +195,11 @@ public class LineupAdapter extends RecyclerView.Adapter<LineupAdapter.ViewHolder
         this.listLineup = list;
     }
 
+    public FilterModel getFilterModel() {
+        return filterModel;
+    }
+
+    public void setFilterModel(FilterModel filterModel) {
+        this.filterModel = filterModel;
+    }
 }

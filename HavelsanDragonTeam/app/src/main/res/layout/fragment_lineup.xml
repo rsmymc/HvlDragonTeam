@@ -194,6 +194,14 @@
                                 android:layout_marginBottom="@dimen/components_bottom_margin"
                                 android:text="@string/dont_attend"
                                 android:textColor="@color/colorPrimary"></CheckBox>
+
+                            <CheckBox
+                                android:id="@+id/checkbox_hide_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/components_bottom_margin"
+                                android:text="@string/hide_image"
+                                android:textColor="@color/colorPrimary"></CheckBox>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
