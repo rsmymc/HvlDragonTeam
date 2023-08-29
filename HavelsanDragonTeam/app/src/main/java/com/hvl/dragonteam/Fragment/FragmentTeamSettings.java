@@ -118,12 +118,12 @@ public class FragmentTeamSettings extends Fragment implements LocationAdapter.On
     private LocationAdapter locationAdapter;
     private RecyclerView listView;
     private ArrayList<LocationModel> locationModelList = new ArrayList<>();
-    private final static int PICK_PHOTO_REQUEST = 100;
-    private final static int TAKE_PHOTO_REQUEST = 101;
-    private final static int WRITE_PERMISSION_REQUEST = 102;
+    private final static int PICK_PHOTO_REQUEST = 200;
+    private final static int TAKE_PHOTO_REQUEST = 201;
+    private final static int WRITE_PERMISSION_REQUEST = 202;
+    private final static int PERMISSIONS_REQUEST = 203;
+    public static final int PLACE_PICKER_REQUEST = 204;
     private FusedLocationProviderClient fusedLocationClient;
-    public static final int PLACE_PICKER_REQUEST = 9000;
-    private final static int PERMISSIONS_REQUEST = 103;
     private PopupWindow popupCropPhoto;
     private Util util = new Util();
 

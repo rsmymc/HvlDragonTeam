@@ -84,6 +84,7 @@
     <string name="team_members">Takım Üyeleri</string>
     <string name="team_info">Takım Bilgileri</string>
     <string name="remove_from_team">Takımdan Çıkar</string>
+    <string name="edit_person">Düzenle</string>
     <string name="question_delete_photo">Fotoğrafı kaldır?</string>
     <string name="question_exit">Çıkmak istiyor musun?</string>
     <string name="warning_cant_empty">boş olamaz</string>

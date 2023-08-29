@@ -111,7 +111,7 @@ public class FragmentLineup extends Fragment implements OnLineupChangeListener {
     private Toolbar toolbar;
     private FilterModel filterModel = new FilterModel();
     private  Lineup lineup;
-    private final static int WRITE_PERMISSION_REQUEST = 102;
+    private final static int WRITE_PERMISSION_REQUEST = 502;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -96,8 +96,8 @@ public class FragmentTrainingNext extends Fragment {
     private ArrayList<PersonTrainingAttendance> personTrainingAttendanceList = new ArrayList<>();
     private ArrayList<LocationModel> locationModelList = new ArrayList<>();
     private FusedLocationProviderClient fusedLocationClient;
-    public static final int PLACE_PICKER_REQUEST = 9000;
-    private final static int PERMISSIONS_REQUEST = 103;
+    public static final int PLACE_PICKER_REQUEST = 600;
+    private final static int PERMISSIONS_REQUEST = 603;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -142,14 +142,15 @@ public class FragmentTrainingNext extends Fragment {
     }
 
     public void getTrainings() {
-        view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
-        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
-        PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
-        personTrainingAttendance.setPersonId(Constants.person.getId());
-        personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(new Date()));
-        personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
+
         try {
+            view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
+            view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            PersonTrainingAttendanceService personTrainingAttendanceService = new PersonTrainingAttendanceService();
+            PersonTrainingAttendance personTrainingAttendance = new PersonTrainingAttendance();
+            personTrainingAttendance.setPersonId(Constants.person.getId());
+            personTrainingAttendance.setTime(new SimpleDateFormat(Util.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss).format(new Date()));
+            personTrainingAttendance.setTeamId(Constants.personTeamView.getTeamId());
             personTrainingAttendanceService.getPersonTrainingAttendanceListByPersonNext(context, personTrainingAttendance,
                     new VolleyCallback() {
                         @Override

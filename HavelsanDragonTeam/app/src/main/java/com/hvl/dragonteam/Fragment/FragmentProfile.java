@@ -113,12 +113,14 @@ public class FragmentProfile extends Fragment {
         toolbar.setTitle(getString(R.string.profile));
         toolbar.setSubtitle("");
 
-        imgProfile = (CircleImageView) view.findViewById(R.id.img_profile);
-        editTextName = (CustomTypingEditText) view.findViewById(R.id.txt_name);
-        editTextPhone = (TextView) view.findViewById(R.id.txt_phone);
-        editTextHeight = (CustomTypingEditText) view.findViewById(R.id.txt_height);
-        editTextWeight = (CustomTypingEditText) view.findViewById(R.id.txt_weight);
-        spinnerSide = (Spinner) view.findViewById(R.id.spinner_side);
+        View layoutEditProfile = view.findViewById(R.id.layout_edit_profile);
+
+        imgProfile = (CircleImageView) layoutEditProfile.findViewById(R.id.img_profile);
+        editTextName = (CustomTypingEditText) layoutEditProfile.findViewById(R.id.txt_name);
+        editTextPhone = (TextView) layoutEditProfile.findViewById(R.id.txt_phone);
+        editTextHeight = (CustomTypingEditText) layoutEditProfile.findViewById(R.id.txt_height);
+        editTextWeight = (CustomTypingEditText) layoutEditProfile.findViewById(R.id.txt_weight);
+        spinnerSide = (Spinner) layoutEditProfile.findViewById(R.id.spinner_side);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.side_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSide.setAdapter(adapter);

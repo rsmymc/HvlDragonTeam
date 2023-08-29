@@ -100,9 +100,9 @@ public class FragmentChat extends Fragment {
 
     private ProgressDialog progressDialog;
     private PopupWindow popupCropPhoto;
-    private final static int PICK_PHOTO_REQUEST = 100;
-    private final static int TAKE_PHOTO_REQUEST = 101;
-    private final static int WRITE_PERMISSION_REQUEST = 102;
+    private final static int PICK_PHOTO_REQUEST = 400;
+    private final static int TAKE_PHOTO_REQUEST = 401;
+    private final static int WRITE_PERMISSION_REQUEST = 402;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

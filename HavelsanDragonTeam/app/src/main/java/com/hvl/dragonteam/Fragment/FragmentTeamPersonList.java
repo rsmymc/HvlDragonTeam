@@ -2,15 +2,13 @@ package com.hvl.dragonteam.Fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.Adapter.PersonTeamByTeamAdapter;
 import com.hvl.dragonteam.DataService.PersonTeamService;
-import com.hvl.dragonteam.Interface.OnLineupChangeListener;
+import com.hvl.dragonteam.Interface.OnIntentReceived;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
 import com.hvl.dragonteam.Model.PersonTeam;
@@ -53,17 +51,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static android.app.Activity.RESULT_OK;
+
 public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeamAdapter.OnPersonTeamChangeListener {
 
     private View view;
     private Activity activity;
     private FragmentManager fragmentManager;
     private FragmentActivity context;
-
     private PersonTeamByTeamAdapter personTeamAdapter;
     private SwipeMenuListView listView;
     private ArrayList<PersonTeamView> personTeamList = new ArrayList<>();
     private ArrayList<String> listLetters = new ArrayList<>();
+    private OnIntentReceived mIntentListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -178,11 +178,6 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
         return view;
     }
 
-    public static int dipToPixels(Context context, float dipValue) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
-    }
-
     public void getTeamPersons() {
         view.findViewById(R.id.resultPanel).setVisibility(View.GONE);
         PersonTeamService personTeamService = new PersonTeamService();
@@ -218,6 +213,8 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
                             }
 
                             personTeamAdapter = new PersonTeamByTeamAdapter(context, personTeamList, mSections,FragmentTeamPersonList.this);
+                            mIntentListener = personTeamAdapter;
+
                             listView.setAdapter(personTeamAdapter);
 
                             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
@@ -292,40 +289,13 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
         }
     }
 
-    private void savePersonTeam(PersonTeamView personTeamView, int role) {
-        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        PersonTeamService personTeamService = new PersonTeamService();
-        PersonTeam personTeam = new PersonTeam(personTeamView.getPersonId(), personTeamView.getTeamId(), role);
-
-        try {
-            personTeamService.savePersonTeam(context,
-                    personTeam,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            Util.toastInfo(context, getString(R.string.info_team_updated));
-                            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                            Constants.personTeamView.setRole(role);
-                            getTeamPersons();
-                        }
-
-                        @Override
-                        public void onError(String result) {
-                            Util.toastError(context);
-                            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccessList(JSONArray result) {
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Util.toastError(context);
-            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            mIntentListener.onIntent(requestCode , resultCode, data);
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -371,6 +341,17 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == personTeamAdapter.WRITE_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                personTeamAdapter.onRequestPermissionsResult(requestCode,permissions,grantResults);
+            } else {
+            }
+        }
     }
 
     @Override

@@ -215,44 +215,45 @@ public class ActivityHome extends AppCompatActivity {
     }
 
     private void registerChat() {
-        String channel = Constants.REDIS_CHAT_PREFIX + Constants.personTeamView.getTeamId();
-        ChatHistory chatHistory = new ChatHistory(channel);
-        MyFunction<Collection<?>, Boolean> callback = new MyFunction<Collection<?>, Boolean>() {
-            @Override
-            public Boolean apply(Collection<?> chatList) {
+        try {
+            String channel = Constants.REDIS_CHAT_PREFIX + Constants.personTeamView.getTeamId();
+            ChatHistory chatHistory = new ChatHistory(channel);
+            MyFunction<Collection<?>, Boolean> callback = new MyFunction<Collection<?>, Boolean>() {
+                @Override
+                public Boolean apply(Collection<?> chatList) {
 
-                boolean result = chatHistory.add((List<String>) chatList);
+                    boolean result = chatHistory.add((List<String>) chatList);
 
-                ActivityHome.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    ActivityHome.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                        if (result == true) {
-                            long lastSeen = SharedPrefHelper.getInstance(ActivityHome.this).getLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            if (lastSeen < chatHistory.getOrderedChatMessageList().last().getTime()) {
-                                Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(true);
+                            if (result == true) {
+                                long lastSeen = SharedPrefHelper.getInstance(ActivityHome.this).getLong(Constants.REDIS_CHAT_LAST_SEEN_PREFIX + Constants.personTeamView.getTeamId() + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                if (lastSeen < chatHistory.getOrderedChatMessageList().last().getTime()) {
+                                    Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(true);
 
-                            } else {
-                                Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(false);
+                                } else {
+                                    Constants.bottomBar.getOrCreateBadge(R.id.action_chat).setVisible(false);
+                                }
                             }
                         }
-                    }
-                });
-                return result;
-            }
-        };
+                    });
+                    return result;
+                }
+            };
 
-        RedisGroupChatProcess chatProcess = new RedisGroupChatProcess(URLs.redisAddress);
-        chatProcess.init();
-        chatProcess.subscribe(channel, callback);
+            RedisGroupChatProcess chatProcess = new RedisGroupChatProcess(URLs.redisAddress);
+            chatProcess.init();
+            chatProcess.subscribe(channel, callback);
 
+        }  catch (Exception e) {
+
+        }
     }
 
     @Override
     public void onBackPressed() {
-
-
-
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount > 1) {
             getSupportFragmentManager().popBackStack();

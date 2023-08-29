@@ -64,6 +64,7 @@
     <string name="team_members">Team Members</string>
     <string name="team_info">Team Info</string>
     <string name="remove_from_team">Remove from Team</string>
+    <string name="edit_person">Edit</string>
     <string name="privacy">Privacy Policy </string>
     <string name="privacy_warning">By signing in, you have read and accept our </string>
 

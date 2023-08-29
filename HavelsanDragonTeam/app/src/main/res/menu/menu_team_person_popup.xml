@@ -13,4 +13,9 @@
         android:icon="@drawable/leave_team"
         android:title="@string/remove_from_team"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_edit_person"
+        android:icon="@drawable/role"
+        android:title="@string/edit_person"
+        app:showAsAction="always" />
 </menu>
