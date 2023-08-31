@@ -251,7 +251,6 @@ public class ActivityLogin extends AppCompatActivity {
         // [END auth_test_phone_auto]
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

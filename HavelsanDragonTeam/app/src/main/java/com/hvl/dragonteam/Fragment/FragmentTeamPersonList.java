@@ -2,6 +2,7 @@ package com.hvl.dragonteam.Fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -27,15 +32,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hvl.dragonteam.Activity.ActivityTeam;
 import com.hvl.dragonteam.Adapter.PersonTeamByTeamAdapter;
+import com.hvl.dragonteam.DataService.PersonService;
 import com.hvl.dragonteam.DataService.PersonTeamService;
 import com.hvl.dragonteam.Interface.OnIntentReceived;
 import com.hvl.dragonteam.Interface.VolleyCallback;
 import com.hvl.dragonteam.Model.Enum.RoleEnum;
+import com.hvl.dragonteam.Model.Enum.SideEnum;
+import com.hvl.dragonteam.Model.Person;
 import com.hvl.dragonteam.Model.PersonTeam;
 import com.hvl.dragonteam.Model.PersonTeamView;
 import com.hvl.dragonteam.Model.Team;
 import com.hvl.dragonteam.R;
 import com.hvl.dragonteam.Utilities.Constants;
+import com.hvl.dragonteam.Utilities.CustomTypingEditText;
 import com.hvl.dragonteam.Utilities.SharedPrefHelper;
 import com.hvl.dragonteam.Utilities.Util;
 
@@ -51,6 +60,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.app.Activity.RESULT_OK;
 
 public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeamAdapter.OnPersonTeamChangeListener {
@@ -61,6 +72,7 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
     private FragmentActivity context;
     private PersonTeamByTeamAdapter personTeamAdapter;
     private SwipeMenuListView listView;
+    private ProgressDialog progressDialog;
     private ArrayList<PersonTeamView> personTeamList = new ArrayList<>();
     private ArrayList<String> listLetters = new ArrayList<>();
     private OnIntentReceived mIntentListener;
@@ -289,6 +301,119 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
         }
     }
 
+    private void showAddDialog() {
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View editProfileView = inflater.inflate(R.layout.layout_edit_profile, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(editProfileView);
+        builder.setCancelable(false);
+
+        RelativeLayout imgProfile = (RelativeLayout) editProfileView.findViewById(R.id.lyt_img_profile);
+        CustomTypingEditText editTextName = (CustomTypingEditText) editProfileView.findViewById(R.id.txt_name);
+        TextView editTextPhone = (TextView) editProfileView.findViewById(R.id.txt_phone);
+        CustomTypingEditText editTextHeight = (CustomTypingEditText) editProfileView.findViewById(R.id.txt_height);
+        CustomTypingEditText editTextWeight = (CustomTypingEditText) editProfileView.findViewById(R.id.txt_weight);
+        Spinner spinnerSide = (Spinner) editProfileView.findViewById(R.id.spinner_side);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.side_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSide.setAdapter(adapter);
+
+        imgProfile.setVisibility(View.INVISIBLE);
+
+        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                if(editTextName.getText().toString().trim().equals("")){
+                    Util.toastWarning(context, getString(R.string.name) + " "  + getString(R.string.warning_cant_empty));
+                } else if(editTextHeight.getText().toString().trim().equals("")){
+                    Util.toastWarning(context, getString(R.string.height) + " "  + getString(R.string.warning_cant_empty));
+                } else if(editTextWeight.getText().toString().trim().equals("")){
+                    Util.toastWarning(context, getString(R.string.weight) + " "  + getString(R.string.warning_cant_empty));
+                } else {
+                    Person person = new Person("",
+                            editTextName.getText().toString(),
+                            editTextPhone.getText().toString(),
+                            Integer.parseInt(editTextHeight.getText().toString()),
+                            Integer.parseInt(editTextWeight.getText().toString()),
+                            SideEnum.toSideEnum(spinnerSide.getSelectedItemPosition()).getValue(),
+                            null);
+
+                    saveUser(person);
+                }
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void saveUser(Person person) {
+        PersonService personService = new PersonService();
+        progressDialog = ProgressDialog.show(context, context.getString(R.string.processing), context.getString(R.string.wait), false, false);
+        try {
+            personService.savePerson(context,
+                    person,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Person _person = new Gson().fromJson(result.toString(), Person.class);
+                            PersonTeam personTeam = new PersonTeam(_person.getId(), Constants.personTeamView.getTeamId(), RoleEnum.DEFAULT.getValue());
+                            savePersonTeam(personTeam);
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            progressDialog.dismiss();
+                            Util.toastError(context);
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void savePersonTeam(PersonTeam personTeam) {
+
+        PersonTeamService personTeamService = new PersonTeamService();
+
+        try {
+            personTeamService.savePersonTeam(context,
+                    personTeam,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            PersonTeam _personTeam = new Gson().fromJson(result.toString(), PersonTeam.class);
+                            progressDialog.dismiss();
+                            getTeamPersons();
+                            Util.toastInfo(context, R.string.info_team_joined);
+                        }
+
+                        @Override
+                        public void onError(String result) {
+                            Util.toastError(context);
+                        }
+
+                        @Override
+                        public void onSuccessList(JSONArray result) {
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Util.toastError(context);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -306,6 +431,12 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
         menu.clear();
         inflater.inflate(R.menu.menu_team_person_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem menuAddPerson = menu.findItem(R.id.action_add_person);
+        if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue()) {
+            menuAddPerson.setVisible(true);
+        }  else {
+            menuAddPerson.setVisible(false);
+        }
     }
 
     @Override
@@ -338,6 +469,9 @@ public class FragmentTeamPersonList extends Fragment implements PersonTeamByTeam
                             .setNegativeButton(context.getString(R.string.cancel), dialogClickListener).show();
                     break;
                 }
+            }
+            case (R.id.action_add_person): {
+                    showAddDialog();
             }
         }
         return super.onOptionsItemSelected(item);

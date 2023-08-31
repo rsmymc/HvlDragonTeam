@@ -79,9 +79,9 @@ public class FragmentTeamPager extends Fragment {
         @Override
         public Fragment getItem(int num) {
             if (num == 0) {
-                return new FragmentTeamSettings();
-            } else if (num == 1) {
                 return new FragmentTeamPersonList();
+            } else if (num == 1) {
+                return new FragmentTeamSettings();
             }
             return null;
         }
@@ -97,12 +97,13 @@ public class FragmentTeamPager extends Fragment {
             switch (position) {
                 case 0:
                     if (isAdded())
-                        title = getString(R.string.team_info);
+                        title = getString(R.string.team_members);
                     break;
                 case 1:
                     if (isAdded())
-                        title = getString(R.string.team_members);
+                        title = getString(R.string.team_info);
                     break;
+
             }
             return title;
         }

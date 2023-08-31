@@ -134,7 +134,7 @@ public class PersonTeamByTeamAdapter extends ArrayAdapter<PersonTeamView> implem
         if (Constants.personTeamView.getRole() == RoleEnum.ADMIN.getValue() && !personTeamView.getPersonId().equals(Constants.personTeamView.getPersonId())) {
             imgMore.setVisibility(View.VISIBLE);
         } else {
-            imgMore.setVisibility(View.GONE);
+            imgMore.setVisibility(View.INVISIBLE);
         }
 
         imgMore.setOnClickListener(new View.OnClickListener() {
